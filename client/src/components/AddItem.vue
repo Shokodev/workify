@@ -15,55 +15,102 @@
                     <v-btn icon dark @click="dialog = false">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
-                    <v-toolbar-title>Settings</v-toolbar-title>
+                    <v-toolbar-title>Editing</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
                         <v-btn dark text @click="dialog = false">Save</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
+
                 <v-list three-line subheader>
-                    <v-subheader>User Controls</v-subheader>
+                    <v-subheader>Sofia</v-subheader>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title>Content filtering</v-list-item-title>
-                            <v-list-item-subtitle>Set the content filtering level to restrict apps that can be downloaded</v-list-item-subtitle>
+                          <v-text-field
+                              v-model="graphic"
+                              :counter="10"
+                              :rules="graphicRules"
+                              label="Graphic Name"
+                              required
+                          ></v-text-field>
                         </v-list-item-content>
                     </v-list-item>
                     <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title>Password</v-list-item-title>
-                            <v-list-item-subtitle>Require password for purchase or use password to restrict purchase</v-list-item-subtitle>
+                          <v-select
+                              v-model="select"
+                              :items="itemsType"
+                              :rules="[v => !!v || 'Type is required']"
+                              label="Type"
+                              required
+                          ></v-select>
                         </v-list-item-content>
                     </v-list-item>
-                </v-list>
-                <v-divider></v-divider>
-                <v-list three-line subheader>
-                    <v-subheader>General</v-subheader>
-                    <v-list-item>
-                        <v-list-item-action>
-                            <v-checkbox v-model="notifications"></v-checkbox>
-                        </v-list-item-action>
+                  <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title>Notifications</v-list-item-title>
-                            <v-list-item-subtitle>Notify me about updates to apps or games that I downloaded</v-list-item-subtitle>
+                          <v-text-field
+                              v-model="regulations"
+                              label="Regulations"
+                              required
+                          ></v-text-field>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item>
-                        <v-list-item-action>
-                            <v-checkbox v-model="sound"></v-checkbox>
-                        </v-list-item-action>
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-menu
+                          ref="menu"
+                          v-model="menu"
+                          :close-on-content-click="false"
+                          :return-value.sync="date"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="290px"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                              v-model="date"
+                              label="Picker in menu"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="date" no-title scrollable>
+                          <v-spacer></v-spacer>
+                          <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                          <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </v-list-item-content>
+                    </v-list-item>
+                  <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title>Sound</v-list-item-title>
-                            <v-list-item-subtitle>Auto-update apps at any time. Data charges may apply</v-list-item-subtitle>
+                          <v-text-field
+                              v-model="editor"
+                              :rules="editorRules"
+                              label="Editor"
+                              required
+                          ></v-text-field>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item>
-                        <v-list-item-action>
-                            <v-checkbox v-model="widgets"></v-checkbox>
-                        </v-list-item-action>
+                  <v-list-item>
                         <v-list-item-content>
-                            <v-list-item-title>Auto-add widgets</v-list-item-title>
-                            <v-list-item-subtitle>Automatically add home screen widgets</v-list-item-subtitle>
+                          <v-select
+                              v-model="select"
+                              :items="itemsState"
+                              :rules="[v => !!v || 'Item is required']"
+                              label="State"
+                              required
+                          ></v-select>
+                        </v-list-item-content>
+                    </v-list-item>
+                  <v-list-item>
+                        <v-list-item-content>
+                          <v-text-field
+                              v-model="comments"
+                              label="Comments"
+                              required
+                          ></v-text-field>
                         </v-list-item-content>
                     </v-list-item>
                 </v-list>
@@ -76,7 +123,30 @@
         name: "AddItem",
         data() {
             return {
-                dialog: false,
+              valid: true,
+              graphic: '',
+              graphicRules: [
+                v => !!v || 'Name is required',
+                v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+              ],
+              editorRules: [
+                v => !!v || 'Name is required',
+                v => (v && v.length >= 10) || 'Name must be more than 10 characters',
+              ],
+              select: null,
+              itemsType: [
+                'Anlagenbild',
+                'Grundrissbild',
+                'Navigationsbild',
+              ],
+              itemsState: [
+                'No Start',
+                'In Progress',
+                'Finish',
+                'Issus',
+              ],
+              date: new Date().toISOString().substr(0, 10),
+              menu: false,
             }
         }
     }

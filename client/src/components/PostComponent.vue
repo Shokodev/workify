@@ -30,7 +30,7 @@ export default {
       text: '',
       headers: [
         {
-          text: 'Graphic', value: 'text',
+          text: 'Graphic', value: 'graphic',
           align: 'start'
         },
         {text: 'Type', value: 'type'},
