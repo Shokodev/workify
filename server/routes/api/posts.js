@@ -32,8 +32,13 @@ router.delete('/:id', async (req, res) => {
 // Update Post
 
 
+
+// LCOAL MONGODB Server: mongodb://localhost:27017/workfly
+
+
+// Load PostCollection
 async function loadPostsCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb://localhost:27017/workfly', {
+    const client = await mongodb.MongoClient.connect('mongodb+srv://workify123:workify123@workify.iukfu.gcp.mongodb.net/workify?retryWrites=true&w=majority', {
         useNewUrlParser: true, useUnifiedTopology: true
     });
     return client.db('vue_express').collection('posts');
