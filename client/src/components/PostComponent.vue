@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Latest Posts</h1>
+    <h1>Graphics Management BB12</h1>
     <div class="create-post">
       <label for="create-post">Say Something...</label>
       <input type="text" id="create-post" v-model="text" placeholder="Create a post">
@@ -8,18 +8,12 @@
     </div>
     <hr>
     <p class="error" v-if="error">{{error}}</p>
-    <div class="post-container">
-      <div class="post" v-for="(post, index) in posts"
-            v-bind:item="post"
-            v-bind:index="index"
-            v-bind:key="post._id"
-            v-on:dblclick="deletePost(post._id)"
-      >
-        <div class="post"></div>
-        {{`${post.createdAt.getDate()}/${post.createdAt.getMonth()}/${post.createdAt.getFullYear()}`}}
-        <p class="text">{{post.text}}</p>
-      </div>
-    </div>
+
+    <v-data-table
+      :headers="headers"
+      :items="posts"
+      item-key="text"
+    ></v-data-table>
   </div>
 
 </template>
@@ -34,6 +28,55 @@ export default {
       posts: [],
       error: '',
       text: '',
+      headers: [
+        {
+          text: 'Graphic', value: 'text',
+          align: 'start'
+        },
+        {text: 'Type', value: 'type'},
+        {
+          text: 'Regulations', value: 'regulations'
+        },
+        {
+          text: 'Date', value: 'date'
+        },
+        {
+          text: 'Editor', value: 'editor'
+        },
+        {
+          text: 'State', value: 'state'
+        },
+        {
+          text: 'Comments', value: 'comments'
+        },
+        {
+          text: 'Date', value: 'dateSiemens'
+        },
+        {
+          text: 'Tested', value: 'testedSiemens'
+        },
+        {
+          text: 'Editor', value: 'editorSiemens'
+        },
+        {
+          text: 'Comments', value: 'commentsSiemens'
+        },
+        {
+          text: 'Date', value: 'datePlanner'
+        },
+        {
+          text: 'Tested', value: 'testedPlanner'
+        },
+        {
+          text: 'Editor', value: 'editorPlanner'
+        },
+        {
+          text: 'Comments', value: 'commentsPlanner'
+        },
+        {
+          text: 'Edit', value: 'edit'
+        },
+      ]
     }
   },
   async created() {
@@ -55,11 +98,13 @@ export default {
   },
   },
 }
+
+// {{`${post.createdAt.getDate()}/${post.createdAt.getMonth()}/${post.createdAt.getFullYear()}`}}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  div.container { max-width: 800px; margin: 0 auto; }
+  div.container { max-width: 1400px; margin: 0 auto; }
 
   p.error { border: 1px solid #ff5b5f; background-color: #ffc5c1; padding: 10px; margin-bottom: 15px; }
 

@@ -1,17 +1,21 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <PostComponent></PostComponent>
-  </div>
+  <v-app id="app">
+    <AddItem></AddItem>
+    <v-card>
+      <PostComponent></PostComponent>
+    </v-card>
+  </v-app>
 </template>
 
 <script>
 import PostComponent from './components/PostComponent.vue'
+import AddItem from "./components/AddItem";
 
 export default {
   name: 'App',
   components: {
-    PostComponent
+    PostComponent,
+    AddItem
   }
 }
 </script>
