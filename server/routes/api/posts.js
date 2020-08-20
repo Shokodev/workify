@@ -47,9 +47,8 @@ router.put('/:id', async (req, res) =>{
     logger.info('update graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
-        await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)}).then(result=>{
-            res.status(200).send();
-        });
+        await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)});
+        res.status(200).send();
     } catch (err){
         res.status(500).send(err.message);
     }
