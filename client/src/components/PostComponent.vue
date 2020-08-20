@@ -7,7 +7,7 @@
     <v-data-table
       :headers="headers"
       :items="posts"
-      item-key="item"
+      item-key="posts._id"
     ></v-data-table>
   </div>
 
@@ -25,51 +25,51 @@ export default {
       text: '',
       headers: [
         {
-          text: 'Graphic', value: 'graphic',
+          text: 'Graphic', value: 'item.graphic',
           align: 'start'
         },
-        {text: 'Type', value: 'selectType'},
+        {text: 'Type', value: 'item.selectType'},
         {
-          text: 'Regulations', value: 'regulations'
+          text: 'Regulations', value: 'item.regulations'
         },
         {
-          text: 'Date', value: 'date'
+          text: 'Date', value: 'item.date'
         },
         {
-          text: 'Editor', value: 'editor'
+          text: 'Editor', value: 'item.editor'
         },
         {
-          text: 'State', value: 'selectState'
+          text: 'State', value: 'item.selectState'
         },
         {
-          text: 'Comments', value: 'comments'
+          text: 'Comments', value: 'item.comments'
         },
         {
-          text: 'Date', value: 'dateSiemens'
+          text: 'Date', value: 'item.dateSiemens'
         },
         {
-          text: 'Tested', value: 'testedSiemens'
+          text: 'Tested', value: 'item.testedSiemens'
         },
         {
-          text: 'Editor', value: 'editorSiemens'
+          text: 'Editor', value: 'item.editorSiemens'
         },
         {
-          text: 'Comments', value: 'commentsSiemens'
+          text: 'Comments', value: 'item.commentsSiemens'
         },
         {
-          text: 'Date', value: 'datePlanner'
+          text: 'Date', value: 'item.datePlanner'
         },
         {
-          text: 'Tested', value: 'testedPlanner'
+          text: 'Tested', value: 'item.testedPlanner'
         },
         {
-          text: 'Editor', value: 'editorPlanner'
+          text: 'Editor', value: 'item.editorPlanner'
         },
         {
-          text: 'Comments', value: 'commentsPlanner'
+          text: 'Comments', value: 'item.commentsPlanner'
         },
         {
-          text: 'Edit', value: 'edit'
+          text: 'Edit', value: 'item.edit'
         },
       ]
     }
@@ -77,7 +77,6 @@ export default {
   async created() {
     try {
       this.posts = await PostService.getPosts();
-      console.log(this.posts)
     } catch (e) {
       this.error = e.message;
     }

@@ -6,10 +6,9 @@ class PostService{
     //Get Posts
     static getPosts(){
         return new Promise(((resolve, reject) =>
-        axios.get(url).then((res) => {
-            const data = res.data;
+            axios.get(url).then((res) => {
             resolve(
-                console.log(data)
+                res.data
             );
         }).catch((err) => {
             reject(err);
