@@ -125,7 +125,7 @@
             return {
 
             newItem: {
-                valid: true,
+
                 graphic: '',
                 selectType: null,
                 selectState: null,
@@ -154,15 +154,11 @@
                     'Finish',
                     'Issus',
                 ],
+              valid: true,
               menu: false,
               dialog: false,
             }
         },
-      methods: {
-        createItem: function () {
-          console.log("hoi")
-          }
-      }
     }
 </script>
 

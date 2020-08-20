@@ -7,7 +7,7 @@
     <v-data-table
       :headers="headers"
       :items="posts"
-      item-key="text"
+      item-key="item"
     ></v-data-table>
   </div>
 
@@ -28,7 +28,7 @@ export default {
           text: 'Graphic', value: 'graphic',
           align: 'start'
         },
-        {text: 'Type', value: 'type'},
+        {text: 'Type', value: 'selectType'},
         {
           text: 'Regulations', value: 'regulations'
         },
@@ -39,7 +39,7 @@ export default {
           text: 'Editor', value: 'editor'
         },
         {
-          text: 'State', value: 'state'
+          text: 'State', value: 'selectState'
         },
         {
           text: 'Comments', value: 'comments'
@@ -77,6 +77,7 @@ export default {
   async created() {
     try {
       this.posts = await PostService.getPosts();
+      console.log(this.posts)
     } catch (e) {
       this.error = e.message;
     }

@@ -20,13 +20,14 @@ export default {
     PostComponent,
     AddItem
   },
+
   methods: {
     async createPost(item) {
       await PostService.insertPost(item);
       console.log('send new item', item)
       //this.posts = await PostService.getPosts()
     },
-  }
+      }
 }
 </script>
 
