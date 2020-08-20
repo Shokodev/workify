@@ -9,10 +9,7 @@ class PostService{
         axios.get(url).then((res) => {
             const data = res.data;
             resolve(
-                data.map(post => ({
-                    ...post,
-                    createdAt: new Date(post.createdAt)
-                }))
+                console.log(data)
             );
         }).catch((err) => {
             reject(err);
@@ -21,9 +18,9 @@ class PostService{
     }
 
     // Create Posts
-    static insertPost(text){
+    static insertPost(item){
         return axios.post(url, {
-            text
+            item
         });
     }
 

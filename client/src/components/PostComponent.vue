@@ -1,11 +1,6 @@
 <template>
   <div class="container">
     <h1>Graphics Management BB12</h1>
-    <div class="create-post">
-      <label for="create-post">Say Something...</label>
-      <input type="text" id="create-post" v-model="text" placeholder="Create a post">
-      <button v-on:click.prevent="createPost">Post!</button>
-    </div>
     <hr>
     <p class="error" v-if="error">{{error}}</p>
 

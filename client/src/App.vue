@@ -1,6 +1,8 @@
 <template>
   <v-app id="app">
-    <AddItem></AddItem>
+    <AddItem
+    v-on:add-item="createPost($event)"
+    ></AddItem>
     <v-card>
       <PostComponent></PostComponent>
     </v-card>
@@ -9,6 +11,7 @@
 
 <script>
 import PostComponent from './components/PostComponent.vue'
+import PostService from "./PostService";
 import AddItem from "./components/AddItem";
 
 export default {
@@ -16,6 +19,13 @@ export default {
   components: {
     PostComponent,
     AddItem
+  },
+  methods: {
+    async createPost(item) {
+      await PostService.insertPost(item);
+      console.log('send new item', item)
+      //this.posts = await PostService.getPosts()
+    },
   }
 }
 </script>

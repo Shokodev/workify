@@ -18,7 +18,7 @@
                     <v-toolbar-title>Editing</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark text v-on:click="createItem">Save</v-btn>
+                        <v-btn dark text v-on:click="$emit('add-item', newItem)">Save</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
 
@@ -27,7 +27,7 @@
                     <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="graphic"
+                              v-model="newItem.graphic"
                               :counter="10"
                               :rules="graphicRules"
                               label="Graphic Name"
@@ -38,7 +38,7 @@
                     <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="selectType"
+                              v-model="newItem.selectType"
                               :items="itemsType"
                               :rules="[v => !!v || 'Type is required']"
                               label="Type"
@@ -49,7 +49,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="regulations"
+                              v-model="newItem.regulations"
                               label="Regulations"
                               required
                           ></v-text-field>
@@ -61,24 +61,24 @@
                           ref="menu"
                           v-model="menu"
                           :close-on-content-click="false"
-                          :return-value.sync="date"
+                          :return-value.sync="newItem.date"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                              v-model="date"
+                              v-model="newItem.date"
                               label="Picker in menu"
                               readonly
                               v-bind="attrs"
                               v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker v-model="date" no-title scrollable>
+                        <v-date-picker v-model="newItem.date" no-title scrollable>
                           <v-spacer></v-spacer>
                           <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                          <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+                          <v-btn text color="primary" @click="$refs.menu.save(newItem.date)">OK</v-btn>
                         </v-date-picker>
                       </v-menu>
                     </v-list-item-content>
@@ -86,7 +86,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="editor"
+                              v-model="newItem.editor"
                               :rules="editorRules"
                               label="Editor"
                               required
@@ -96,7 +96,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="selectState"
+                              v-model="newItem.selectState"
                               :items="itemsState"
                               :rules="[v => !!v || 'Item is required']"
                               label="State"
@@ -107,7 +107,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="comments"
+                              v-model="newItem.comments"
                               label="Comments"
                               required
                           ></v-text-field>
@@ -123,30 +123,37 @@
         name: "AddItem",
         data() {
             return {
-              valid: true,
-              graphic: '',
-              graphicRules: [
-                v => !!v || 'Name is required',
-                v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-              ],
-              editorRules: [
-                v => !!v || 'Name is required',
-                v => (v && v.length >= 10) || 'Name must be more than 10 characters',
-              ],
-              selectType: null,
-              selectState: null,
-              itemsType: [
-                'Anlagenbild',
-                'Grundrissbild',
-                'Navigationsbild',
-              ],
-              itemsState: [
-                'No Start',
-                'In Progress',
-                'Finish',
-                'Issus',
-              ],
-              date: new Date().toISOString().substr(0, 10),
+
+            newItem: {
+                valid: true,
+                graphic: '',
+                selectType: null,
+                selectState: null,
+
+                regulations: "",
+                date: new Date().toISOString().substr(0, 10),
+                editor: null,
+                comments: null,
+            },
+                graphicRules: [
+                    v => !!v || 'Name is required',
+                    v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+                ],
+                editorRules: [
+                    v => !!v || 'Name is required',
+                    v => (v && v.length >= 10) || 'Name must be more than 10 characters',
+                ],
+                itemsType: [
+                    'Anlagenbild',
+                    'Grundrissbild',
+                    'Navigationsbild',
+                ],
+                itemsState: [
+                    'No Start',
+                    'In Progress',
+                    'Finish',
+                    'Issus',
+                ],
               menu: false,
               dialog: false,
             }
