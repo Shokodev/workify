@@ -20,9 +20,8 @@ router.post('/', async (req, res) => {
     logger.info('add new graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
-        await posts.insertOne({
-            item: req.body
-        });
+        await posts.insertOne(
+            req.body);
         res.status(201).send();
     } catch (err){
         res.status(500).send(err.message);

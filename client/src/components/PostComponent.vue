@@ -82,11 +82,6 @@ export default {
     }
   },
   methods:{
-    async createPost() {
-      await PostService.insertPost(this.text);
-      this.posts = await PostService.getPosts()
-    },
-
   async deletePost(id) {
     await PostService.deletePost(id);
     this.posts = await PostService.getPosts()
