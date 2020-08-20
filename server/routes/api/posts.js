@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
 
 // Add Post
 router.post('/', async (req, res) => {
+    logger.info('add new graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
         await posts.insertOne({
@@ -31,6 +32,7 @@ router.post('/', async (req, res) => {
 // Delete Post
 
 router.delete('/:id', async (req, res) => {
+    logger.info('delete graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
         await posts.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
@@ -43,6 +45,7 @@ router.delete('/:id', async (req, res) => {
 
 // Update Post
 router.put('/:id', async (req, res) =>{
+    logger.info('update graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
         await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)}).then(result=>{
