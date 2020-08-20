@@ -18,7 +18,7 @@
                     <v-toolbar-title>Editing</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark text @click="dialog = false">Save</v-btn>
+                        <v-btn dark text v-on:click="createItem">Save</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
 
@@ -38,7 +38,7 @@
                     <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="select"
+                              v-model="selectType"
                               :items="itemsType"
                               :rules="[v => !!v || 'Type is required']"
                               label="Type"
@@ -96,7 +96,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="select"
+                              v-model="selectState"
                               :items="itemsState"
                               :rules="[v => !!v || 'Item is required']"
                               label="State"
@@ -133,7 +133,8 @@
                 v => !!v || 'Name is required',
                 v => (v && v.length >= 10) || 'Name must be more than 10 characters',
               ],
-              select: null,
+              selectType: null,
+              selectState: null,
               itemsType: [
                 'Anlagenbild',
                 'Grundrissbild',
@@ -147,8 +148,14 @@
               ],
               date: new Date().toISOString().substr(0, 10),
               menu: false,
+              dialog: false,
             }
-        }
+        },
+      methods: {
+        createItem: function () {
+          console.log("hoi")
+          }
+      }
     }
 </script>
 
