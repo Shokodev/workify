@@ -1,14 +1,17 @@
 <template>
   <div class="container">
+    <p class="error" v-if="error">{{error}}</p>
     <h1>Graphics Management BB12</h1>
     <hr>
-    <p class="error" v-if="error">{{error}}</p>
+
 
     <v-data-table
       :headers="headers"
       :items="posts"
       item-key="posts._id"
-    ></v-data-table>
+
+    >
+    </v-data-table>
   </div>
 
 </template>

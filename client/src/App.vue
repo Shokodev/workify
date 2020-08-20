@@ -1,9 +1,9 @@
 <template>
   <v-app id="app">
-    <AddItem
-    v-on:add-item="createPost($event)"
-    ></AddItem>
+    <div v-on:add-item="createPost($event)"></div>
+
     <v-card>
+      <AddItem></AddItem>
       <PostComponent></PostComponent>
     </v-card>
   </v-app>
