@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+//import fs from 'fs';
 const url = 'api/posts/';
 
 class PostService{
@@ -26,6 +26,19 @@ class PostService{
     // Delete Posts
     static deletePost(id){
         return axios.delete(`${url}${id}`)
+    }
+
+    // Delete Posts
+    static createExcel(){
+        return new Promise(((resolve, reject) =>
+            axios.get(url + 'excel',).then((res) => {
+                resolve(
+                    res
+                );
+            }).catch((err) => {
+                    reject(err);
+                }
+            )))
     }
 
 }

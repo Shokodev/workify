@@ -1,4 +1,5 @@
-
+const path = require('path');
+const excel = require('exceljs');
 const express = require('express');
 const mongodb = require('mongodb');
 const router = express.Router();
@@ -40,7 +41,6 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-
 // Update Post
 router.put('/:id', async (req, res) =>{
     logger.info('update graphic: ' + req.body.item.graphic);
@@ -66,6 +66,29 @@ async function loadPostsCollection()  {
         throw new Error('cant connect to db: ' + err);
     }
 }
+
+// Get data in excel sheet
+router.get('/excel',async (req, res) => {
+    logger.info('fetch all posts in excel sheet');
+    try{
+        const posts = await loadPostsCollection();
+        const dataArray = await posts.find({}).toArray();
+        let workbook = new excel.Workbook();
+        let worksheet = workbook.addWorksheet('Graphics');
+        worksheet.columns = [
+            { header: 'ID', key: '_id', width: 10 },
+        ];
+        worksheet.addRows(dataArray);
+        workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function() {
+            console.log("file saved!");
+        });
+        let x = path.join(__dirname, '../../../exports/graphics.xlsx');
+        logger.info(x);
+        res.sendFile(x);
+    } catch (err){
+        res.status(500).send(err.message);
+    }
+});
 
 
 module.exports = router;

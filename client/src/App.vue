@@ -1,9 +1,14 @@
 <template>
   <v-app id="app">
-    <div v-on:add-item="createPost($event)"></div>
-
+    <AddItem
+    v-on:add-item="createPost($event)"
+    ></AddItem>
+    <v-btn
+    v-on:click="createExcel"
+    >
+      Create Excel
+    </v-btn>
     <v-card>
-      <AddItem></AddItem>
       <PostComponent></PostComponent>
     </v-card>
   </v-app>
@@ -25,6 +30,10 @@ export default {
     async createPost(item) {
       await PostService.insertPost(item);
       console.log('send new item', item)
+      //this.posts = await PostService.getPosts()
+    },
+    async createExcel() {
+      await PostService.createExcel();
       //this.posts = await PostService.getPosts()
     },
       }
