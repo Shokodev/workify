@@ -30,7 +30,6 @@ router.post('/', async (req, res) => {
 });
 
 // Delete Post
-
 router.delete('/:id', async (req, res) => {
     logger.info('delete graphic: ' + req.body.item.graphic);
     try {
