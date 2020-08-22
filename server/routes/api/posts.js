@@ -72,20 +72,28 @@ router.get('/excel',async (req, res) => {
     logger.info('fetch all posts in excel sheet');
     try{
         const posts = await loadPostsCollection();
-        const dataArray = await posts.find({}).toArray();
+        const excelContentData = await posts.find({}).toArray();
+        res.setHeader(
+            "Content-Type",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        res.setHeader(
+            "Content-Disposition",
+            "attachment; filename=" + "graphics.xlsx"
+        );
         let workbook = new excel.Workbook();
         let worksheet = workbook.addWorksheet('Graphics');
         worksheet.columns = [
-            { header: 'ID', key: '_id', width: 10 },
+            { header: 'ID', key: '_id', width: 50 },
+            { header: 'Graphic', key: 'item', width: 50 },
         ];
-        worksheet.addRows(dataArray);
-        workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function() {
-            console.log("file saved!");
+        await worksheet.addRows(excelContentData);
+        await workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function () {
+            logger.info('Excel file saved');
+            res.download(path.join(__dirname, '../../../exports/graphics.xlsx'));
         });
-        let x = path.join(__dirname, '../../../exports/graphics.xlsx');
-        logger.info(x);
-        res.sendFile(x);
     } catch (err){
+        logger.error('failed to create excel: ' + err.message);
         res.status(500).send(err.message);
     }
 });

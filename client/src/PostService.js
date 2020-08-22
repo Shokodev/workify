@@ -28,18 +28,28 @@ class PostService{
         return axios.delete(`${url}${id}`)
     }
 
-    // Delete Posts
+    // Get Excel sheet of all graphics
     static createExcel(){
         return new Promise(((resolve, reject) =>
-            axios.get(url + 'excel',).then((res) => {
+            axios.get(url + 'excel',{responseType: 'arraybuffer'}).then((res) => {
                 resolve(
-                    res
+                    this.forceFileDownload(res)
                 );
             }).catch((err) => {
                     reject(err);
                 }
             )))
     }
+
+    static forceFileDownload(response){
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', 'graphics.xlsx') //or any other extension
+        document.body.appendChild(link)
+        link.click()
+    }
+
 
 }
 
