@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
     try{
         const posts = await loadPostsCollection();
         res.send(await posts.find({}).toArray());
+        posts.db.close();
     } catch (err){
         res.status(500).send(err.message);
     }
@@ -23,6 +24,7 @@ router.post('/', async (req, res) => {
         const posts = await loadPostsCollection();
         await posts.insertOne(
             req.body);
+        posts.db.close();
         res.status(201).send();
     } catch (err){
         res.status(500).send(err.message);
@@ -35,6 +37,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const posts = await loadPostsCollection();
         await posts.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
+        posts.db.close();
         res.status(200).send();
     } catch (err){
         res.status(500).send(err.message);
@@ -47,6 +50,7 @@ router.put('/:id', async (req, res) =>{
     try {
         const posts = await loadPostsCollection();
         await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)});
+        posts.db.close();
         res.status(200).send();
     } catch (err){
         res.status(500).send(err.message);
@@ -91,6 +95,7 @@ router.get('/excel',async (req, res) => {
         await workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function () {
             logger.info('Excel file saved');
             res.download(path.join(__dirname, '../../../exports/graphics.xlsx'));
+            posts.db.close();
         });
     } catch (err){
         logger.error('failed to create excel: ' + err.message);
