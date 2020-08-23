@@ -3,7 +3,8 @@
             <template v-slot:activator="{ on, attrs}">
                 <v-btn
                         class="mx-2"
-                        fab dark color="indigo"
+                        dark
+                        color="indigo"
                         v-bind="attrs"
                         v-on="on"
                 >

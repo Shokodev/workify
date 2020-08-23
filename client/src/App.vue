@@ -1,40 +1,47 @@
 <template>
   <v-app id="app">
-    <AddItem
-    v-on:add-item="createPost($event)"
-    ></AddItem>
-    <v-btn
-    v-on:click="createExcel"
-    >
-      Create Excel
-    </v-btn>
-    <v-card>
-      <PostComponent></PostComponent>
-    </v-card>
+    <AppBar></AppBar>
+    <v-container>
+      <p class="error" v-if="error">{{error}}</p>
+      <Datatable :posts="posts"></Datatable>
+    </v-container>
   </v-app>
 </template>
 
 <script>
-import PostComponent from './components/PostComponent.vue'
 import PostService from "./PostService";
-import AddItem from "./components/AddItem";
+import AppBar from "./layouts/home/AppBar";
+import Datatable from "./components/Datatable";
 
 export default {
   name: 'App',
   components: {
-    PostComponent,
-    AddItem
+    AppBar,
+    Datatable,
+  },
+  data() {
+    return {
+      posts: [],
+      error: '',
+    }
+  },
+  async created() {
+    try {
+      this.posts = await PostService.getPosts();
+    } catch (e) {
+      this.error = e.message;
+    }
   },
 
   methods: {
     async createPost(item) {
       await PostService.insertPost(item);
       console.log('send new item', item)
-      //this.posts = await PostService.getPosts()
+      this.posts = await PostService.getPosts()
     },
-    async createExcel() {
-      await PostService.createExcel();
-      //this.posts = await PostService.getPosts()
+    async deletePost(id) {
+      await PostService.deletePost(id);
+      this.posts = await PostService.getPosts()
     },
       }
 }

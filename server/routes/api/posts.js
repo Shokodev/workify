@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 
 // Delete Post
 router.delete('/:id', async (req, res) => {
-    logger.info('delete graphic: ' + req.body.item.graphic);
+    //logger.info('delete graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
         await posts.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
@@ -95,7 +95,9 @@ router.get('/excel',async (req, res) => {
         await workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function () {
             logger.info('Excel file saved');
             res.download(path.join(__dirname, '../../../exports/graphics.xlsx'));
-            posts.db.close();
+
+            //TODO error db is undefined?
+            //posts.db.close();
         });
     } catch (err){
         logger.error('failed to create excel: ' + err.message);
