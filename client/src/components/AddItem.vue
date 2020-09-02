@@ -25,16 +25,15 @@
 
               <div class="pa-3">
               <v-card
-                  color="blue lighten-5"
+                  color="GECC"
                   class="pa-3 mx-auto"
                   max-width="800">
                   <v-subheader
-                      class="text-h6">Sofia</v-subheader>
+                      class="text-h6">GECC</v-subheader>
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
                               v-model="newItem.graphic"
-                              :counter="10"
                               :rules="graphicRules"
                               label="Graphic Name"
                               required
@@ -57,6 +56,7 @@
                           <v-text-field
                               v-model="newItem.regulations"
                               label="Regulations"
+                              :rules="numberRules"
                               required
                           ></v-text-field>
                         </v-list-item-content>
@@ -75,7 +75,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
                               v-model="newItem.date"
-                              label="Picker in menu"
+                              label="Date"
                               readonly
                               v-bind="attrs"
                               v-on="on"
@@ -92,9 +92,9 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="newItem.editor"
-                              :rules="editorRules"
-                              label="Editor"
+                              v-model="newItem.creator"
+                              :rules="creatorRules"
+                              label="Creator"
                               required
                           ></v-text-field>
                         </v-list-item-content>
@@ -123,7 +123,7 @@
               </div>
               <div class="pa-3">
               <v-card
-                  color="teal lighten-5"
+                  color="Siemens"
                   class="mx-auto"
                   max-width="800">
                 <v-subheader
@@ -143,7 +143,7 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                             v-model="newItem.siemensDate"
-                            label="Picker in menu"
+                            label="Date"
                             readonly
                             v-bind="attrs"
                             v-on="on"
@@ -162,18 +162,15 @@
                     <v-select
                         v-model="newItem.selectSiemensTested"
                         :items="itemsTested"
-                        :rules="[v => !!v || 'Type is required']"
-                        label="Type"
-                        required
+                        label="Audit"
                     ></v-select>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="newItem.siemensEditor"
-                        label="Editor"
-                        required
+                        v-model="newItem.siemensAuditor"
+                        label="Auditor"
                     ></v-text-field>
                   </v-list-item-content>
                 </v-list-item>
@@ -182,7 +179,6 @@
                     <v-text-field
                         v-model="newItem.siemensComments"
                         label="Comments"
-                        required
                     ></v-text-field>
                   </v-list-item-content>
                 </v-list-item>
@@ -191,11 +187,11 @@
               </div>
               <div class="pa-3">
               <v-card
-                  color="cyan lighten-5"
+                  color="Planer"
                   class="mx-auto"
                   max-width="800">
                 <v-subheader
-                    class="text-h6">Fachplanung</v-subheader>
+                    class="text-h6">Planer</v-subheader>
                 <v-list-item>
                   <v-list-item-content>
                     <v-menu
@@ -210,7 +206,7 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                             v-model="newItem.planerDate"
-                            label="Picker in menu"
+                            label="Date"
                             readonly
                             v-bind="attrs"
                             v-on="on"
@@ -229,18 +225,15 @@
                     <v-select
                         v-model="newItem.selectPlanerTested"
                         :items="itemsTested"
-                        :rules="[v => !!v || 'Type is required']"
-                        label="Type"
-                        required
+                        label="Audit"
                     ></v-select>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="newItem.planerEditor"
-                        label="Editor"
-                        required
+                        v-model="newItem.planer"
+                        label="Planer"
                     ></v-text-field>
                   </v-list-item-content>
                 </v-list-item>
@@ -249,7 +242,6 @@
                     <v-text-field
                         v-model="newItem.planerComments"
                         label="Comments"
-                        required
                     ></v-text-field>
                   </v-list-item-content>
                 </v-list-item>
@@ -277,36 +269,37 @@
                 selectState: null,
                 regulations: "",
                 date: new Date().toISOString().substr(0, 10),
-                editor: null,
+                creator: null,
                 comments: null,
-                siemensDate: new Date().toISOString().substr(0, 10),
+                siemensDate: null,
                 selectSiemensTested: null,
-                siemensEditor: null,
+                siemensAuditor: null,
                 siemensComments: null,
-                planerDate: new Date().toISOString().substr(0, 10),
+                planerDate: null,
                 selectPlanerTested: null,
-                planerEditor: null,
+                planer: null,
                 planerComments: null,
 
             },
                 graphicRules: [
                     v => !!v || 'Name is required',
-                    v => (v && v.length <= 10) || 'Name must be less than 10 characters',
                 ],
-                editorRules: [
+                numberRules: [
+                  v => Number.isInteger(Number(v)) || 'The input has to be a number',
+                ],
+                creatorRules: [
                     v => !!v || 'Name is required',
-                    v => (v && v.length >= 10) || 'Name must be more than 10 characters',
                 ],
                 itemsType: [
-                    'Anlagenbild',
-                    'Grundrissbild',
-                    'Navigationsbild',
+                    'Plant graphic',
+                    'Floor plan',
+                    'Navigation graphic',
                 ],
                 itemsState: [
                     'No Start',
                     'In Progress',
                     'Finish',
-                    'Issus',
+                    'Issues',
                 ],
                 itemsTested:[
                   'Correct',

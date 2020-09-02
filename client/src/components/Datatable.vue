@@ -1,4 +1,15 @@
 <template>
+  <div>
+  <v-overlay
+  :value="loadingActive"
+  >
+    <v-progress-circular
+    size="128"
+    indeterminate
+    >
+
+    </v-progress-circular>
+  </v-overlay>
     <v-data-table
             :headers="headers"
             :items="posts"
@@ -41,6 +52,7 @@
             </v-icon>
         </template>
     </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -51,62 +63,62 @@
         components: {
             AddItem,
         },
-
-
         props: {
             posts: {
-                type: Array,
+                type: Array[Object],
             }
         },
         data() {
             return {
+              loadingActive: false,
                 headers: [
                     {
                         text: 'Graphic', value: 'item.graphic',
-                        align: 'start'
+                        align: 'start', class:'GECC',
                     },
-                    {text: 'Type', value: 'item.selectType'},
-                    {
-                        text: 'Regulations', value: 'item.regulations'
+                    {text: 'Type', value: 'item.selectType', class: 'GECC'
                     },
                     {
-                        text: 'Date', value: 'item.date'
+                        text: 'Regulations', value: 'item.regulations', class:'GECC'
                     },
                     {
-                        text: 'Editor', value: 'item.editor'
+                        text: 'Date', value: 'item.date', class:'GECC'
                     },
                     {
-                        text: 'State', value: 'item.selectState'
+                        text: 'Creator', value: 'item.creator', class:'GECC'
                     },
                     {
-                        text: 'Comments', value: 'item.comments'
+                        text: 'State', value: 'item.selectState', class:'GECC'
                     },
                     {
-                        text: 'Date', value: 'item.siemensDate'
+                        text: 'Comments', value: 'item.comments', class:'GECC'
                     },
                     {
-                        text: 'Tested', value: 'item.selectSiemensTested'
+                        text: 'Date', value: 'item.siemensDate', class:'Siemens'
                     },
                     {
-                        text: 'Editor', value: 'item.siemensEditor'
+                        text: 'Tested', value: 'item.selectSiemensTested', class:'Siemens'
                     },
                     {
-                        text: 'Comments', value: 'item.siemensComments'
+                        text: 'Auditor', value: 'item.siemensAuditor', class:'Siemens'
                     },
                     {
-                        text: 'Date', value: 'item.planerDate'
+                        text: 'Comments', value: 'item.siemensComments', class:'Siemens'
                     },
                     {
-                        text: 'Tested', value: 'item.selectPlanerTested'
+                        text: 'Date', value: 'item.planerDate', class: 'Planer'
                     },
                     {
-                        text: 'Editor', value: 'item.planerEditor'
+                        text: 'Tested', value: 'item.selectPlanerTested', class: 'Planer'
                     },
                     {
-                        text: 'Comments', value: 'item.planerComments'
+                        text: 'Planer', value: 'item.planer', class: 'Planer'
                     },
                     {
-                        text: 'Actions', value: 'item.actions'
+                        text: 'Comments', value: 'item.planerComments', class: 'Planer'
+                    },
+                    {
+                        text: 'Actions', value: 'item.actions', class: 'accent'
                     },
                 ]
             }
@@ -115,18 +127,21 @@
             async createPost(item) {
                 await PostService.insertPost(item);
                 console.log('send new item', item)
-                this.posts = await PostService.getPosts()
+                this.posts = await PostService.getPosts();
             },
             async createExcel() {
-                await PostService.createExcel();
-                //this.posts = await PostService.getPosts()
+              this.loadingActive = true;
+              await PostService.createExcel();
+              this.loadingActive = false;
             },
             editItem(item){
                 console.log(item)
             },
             async deleteItem(item){
                 await PostService.deletePost(item._id);
-                this.posts = await PostService.getPosts()
+                this.loadingActive = true;
+                this.posts = await PostService.getPosts();
+                this.loadingActive = false;
             },
         }
     }

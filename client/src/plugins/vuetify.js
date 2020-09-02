@@ -5,7 +5,17 @@ import "vuetify/dist/vuetify.min.css";
 Vue.use(Vuetify);
 const opts = {
     theme: {
-        dark: false
+        options: {
+          customProperties: true,
+        },
+        themes: {
+          light: {
+              GECC: '#d9adad',
+              Siemens: '#009999',
+              Planer: '#bfdcae',
+              accent: '#f1f3f8'
+          }
+        },
     },
     options: {
         customProperties: true
@@ -13,6 +23,7 @@ const opts = {
     icons: {
         iconfont: "mdi"
     }
+
 };
 
 export default new Vuetify(opts);
