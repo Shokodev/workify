@@ -19,12 +19,12 @@
                     <v-toolbar-title>Editing</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark text v-on:click="$emit('add-item', newItem), dialog = false">Save</v-btn>
+                        <v-btn dark text :disabled="!valid" v-on:click="saveItem(newItem)">Save</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
-
               <div class="pa-3">
-              <v-card
+                <v-form ref="from" v-model="valid">
+                  <v-card
                   color="GECC"
                   class="pa-3 mx-auto"
                   max-width="800">
@@ -120,6 +120,7 @@
                         </v-list-item-content>
                     </v-list-item>
               </v-card>
+                </v-form>
               </div>
               <div class="pa-3">
               <v-card
@@ -261,7 +262,6 @@
         },
         data() {
             return {
-
             newItem: {
 
                 graphic: '',
@@ -281,6 +281,7 @@
                 planerComments: null,
 
             },
+
                 graphicRules: [
                     v => !!v || 'Name is required',
                 ],
@@ -306,7 +307,6 @@
                     'Wrong',
                     'Faults',
               ],
-
               valid: true,
                 date1: false,
                 date2: false,
@@ -314,6 +314,17 @@
               dialog: false,
             }
         },
+      methods:{
+          saveItem(newItem){
+            this.$emit('add-item', newItem)
+            this.dialog = false
+            this.reset();
+          },
+
+          reset(){
+          this.$refs.form.reset();
+        }
+      },
     }
 </script>
 
