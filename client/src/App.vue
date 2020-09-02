@@ -34,15 +34,7 @@ export default {
   },
 
   methods: {
-    async createPost(item) {
-      await PostService.insertPost(item);
-      console.log('send new item', item)
-      this.posts = await PostService.getPosts()
-    },
-    async deletePost(id) {
-      await PostService.deletePost(id);
-      this.posts = await PostService.getPosts()
-    },
+
       }
 }
 </script>

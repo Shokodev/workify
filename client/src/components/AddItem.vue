@@ -19,7 +19,7 @@
                     <v-toolbar-title>Editing</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark text v-on:click="$emit('add-item', newItem)">Save</v-btn>
+                        <v-btn dark text v-on:click="$emit('add-item', newItem), dialog = false">Save</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
 
@@ -65,7 +65,7 @@
                     <v-list-item-content>
                       <v-menu
                           ref="menu"
-                          v-model="menu"
+                          v-model="date1"
                           :close-on-content-click="false"
                           :return-value.sync="newItem.date"
                           transition="scale-transition"
@@ -83,8 +83,8 @@
                         </template>
                         <v-date-picker v-model="newItem.date" no-title scrollable>
                           <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                          <v-btn text color="primary" @click="$refs.menu.save(newItem.date)">OK</v-btn>
+                          <v-btn text color="primary" @click="date1 = false">Cancel</v-btn>
+                          <v-btn text color="primary" @click="$refs.date1.save(newItem.date)">OK</v-btn>
                         </v-date-picker>
                       </v-menu>
                     </v-list-item-content>
@@ -133,7 +133,7 @@
                   <v-list-item-content>
                     <v-menu
                         ref="menu"
-                        v-model="menu"
+                        v-model="date2"
                         :close-on-content-click="false"
                         :return-value.sync="newItem.siemensDate"
                         transition="scale-transition"
@@ -151,8 +151,8 @@
                       </template>
                       <v-date-picker v-model="newItem.siemensDate" no-title scrollable>
                         <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.menu.save(newItem.siemensDate)">OK</v-btn>
+                        <v-btn text color="primary" @click="date2 = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.date2.save(newItem.siemensDate)">OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-list-item-content>
@@ -200,7 +200,7 @@
                   <v-list-item-content>
                     <v-menu
                         ref="menu"
-                        v-model="menu"
+                        v-model="date3"
                         :close-on-content-click="false"
                         :return-value.sync="newItem.planerDate"
                         transition="scale-transition"
@@ -218,8 +218,8 @@
                       </template>
                       <v-date-picker v-model="newItem.planerDate" no-title scrollable>
                         <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.menu.save(newItem.planerDate)">OK</v-btn>
+                        <v-btn text color="primary" @click="date3 = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.date3.save(newItem.planerDate)">OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-list-item-content>
@@ -262,6 +262,11 @@
 <script>
     export default {
         name: "AddItem",
+        props: {
+            post: {
+                type: Object,
+            }
+        },
         data() {
             return {
 
@@ -310,7 +315,9 @@
               ],
 
               valid: true,
-              menu: false,
+                date1: false,
+                date2: false,
+                date3: false,
               dialog: false,
             }
         },

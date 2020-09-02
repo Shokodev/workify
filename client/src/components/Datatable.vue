@@ -115,7 +115,7 @@
             async createPost(item) {
                 await PostService.insertPost(item);
                 console.log('send new item', item)
-                //this.posts = await PostService.getPosts()
+                this.posts = await PostService.getPosts()
             },
             async createExcel() {
                 await PostService.createExcel();
@@ -124,9 +124,7 @@
             editItem(item){
                 console.log(item)
             },
-
             async deleteItem(item){
-                console.log(item._id)
                 await PostService.deletePost(item._id);
                 this.posts = await PostService.getPosts()
             },
