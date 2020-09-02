@@ -82,28 +82,28 @@
                         text: 'Comments', value: 'item.comments'
                     },
                     {
-                        text: 'Date', value: 'item.dateSiemens'
+                        text: 'Date', value: 'item.siemensDate'
                     },
                     {
-                        text: 'Tested', value: 'item.testedSiemens'
+                        text: 'Tested', value: 'item.selectSiemensTested'
                     },
                     {
-                        text: 'Editor', value: 'item.editorSiemens'
+                        text: 'Editor', value: 'item.siemensEditor'
                     },
                     {
-                        text: 'Comments', value: 'item.commentsSiemens'
+                        text: 'Comments', value: 'item.siemensComments'
                     },
                     {
-                        text: 'Date', value: 'item.datePlanner'
+                        text: 'Date', value: 'item.planerDate'
                     },
                     {
-                        text: 'Tested', value: 'item.testedPlanner'
+                        text: 'Tested', value: 'item.selectPlanerTested'
                     },
                     {
-                        text: 'Editor', value: 'item.editorPlanner'
+                        text: 'Editor', value: 'item.planerEditor'
                     },
                     {
-                        text: 'Comments', value: 'item.commentsPlanner'
+                        text: 'Comments', value: 'item.planerComments'
                     },
                     {
                         text: 'Actions', value: 'item.actions'

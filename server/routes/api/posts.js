@@ -11,7 +11,6 @@ router.get('/', async (req, res) => {
     try{
         const posts = await loadPostsCollection();
         res.send(await posts.find({}).toArray());
-        posts.db.close();
     } catch (err){
         res.status(500).send(err.message);
     }
@@ -24,7 +23,6 @@ router.post('/', async (req, res) => {
         const posts = await loadPostsCollection();
         await posts.insertOne(
             req.body);
-        posts.db.close();
         res.status(201).send();
     } catch (err){
         res.status(500).send(err.message);
@@ -37,7 +35,6 @@ router.delete('/:id', async (req, res) => {
     try {
         const posts = await loadPostsCollection();
         await posts.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
-        posts.db.close();
         res.status(200).send();
     } catch (err){
         res.status(500).send(err.message);
@@ -50,7 +47,6 @@ router.put('/:id', async (req, res) =>{
     try {
         const posts = await loadPostsCollection();
         await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)});
-        posts.db.close();
         res.status(200).send();
     } catch (err){
         res.status(500).send(err.message);
@@ -87,17 +83,58 @@ router.get('/excel',async (req, res) => {
         );
         let workbook = new excel.Workbook();
         let worksheet = workbook.addWorksheet('Graphics');
+        worksheet.addTable({
+            name: 'graphics',
+            ref: 'A3',
+            headerRow: true,
+            totalsRow: false,
+            style: {
+                theme: 'TableStyleMedium6',
+                showRowStripes: true,
+            },
+            columns: [
+                {name: 'Graphics', filterButton: true},
+                {name: 'Type', filterButton: true,},
+                {name: 'Regulations', filterButton:true},
+                {name: 'Date', filterButton: true},
+                {name: 'Editor', filterButton: true},
+                {name: 'State', filterButton: true},
+                {name: 'Comments', filterButton: true},
+            ],
+            rows:[
+                [' ', ' '],
+            ],
+        });
+        const graphicsTable = worksheet.getTable('graphics');
+        console.log(excelContentData.length);
+        excelContentData.forEach(data => {
+            graphicsTable.addRow([
+                                        data.item.graphic,
+                                        data.item.selectType,
+                                        data.item.regulations,
+                                        data.item.date,
+                                        data.item.editor,
+                                        data.item.selectState,
+                                        data.item.comments,
+                                        ],0);
+        });
+        graphicsTable.commit();
+        worksheet.getCell('A1').value = 'Total graphics:';
+        worksheet.getCell('B1').value = excelContentData.length;
+        worksheet.mergeCells('A2:G2');
+        worksheet.getCell('G2').value = 'Sofia';
         worksheet.columns = [
-            { header: 'ID', key: '_id', width: 50 },
-            { header: 'Graphic', key: 'item', width: 50 },
+            {key: 'Graphics', width: 35 },
+            {key: 'Type', width: 35 },
+            {key: 'Regulations', width: 15 },
+            {key: 'Date', width: 20 },
+            {key: 'Editor', width: 20 },
+            {key: 'State', width: 25 },
+            {key: 'Comments', width: 50 },
         ];
-        await worksheet.addRows(excelContentData);
         await workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function () {
             logger.info('Excel file saved');
             res.download(path.join(__dirname, '../../../exports/graphics.xlsx'));
-
-            //TODO error db is undefined?
-            //posts.db.close();
         });
     } catch (err){
         logger.error('failed to create excel: ' + err.message);
