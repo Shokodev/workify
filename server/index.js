@@ -6,6 +6,7 @@ const {deleteAllEntries, generateRandomEntries } = require('./routes/api/testAPI
 
 
 //Middleware
+
 app.use(express.json());
 app.use(cors());
 
@@ -22,19 +23,23 @@ if(process.env.NODE_ENV === 'production') {
     logger.info('Production mode active');
 } else if(process.env.NODE_ENV === 'startAndCreateRandomDbEntries') {
     logger.info('Create random db entries');
-    generateRandomEntries(500).then(
-        logger.info("Db entries successful generated")
-    ).catch(reason => {
-        logger.error("Failed to create db entries: " + reason)
+    generateRandomEntries(500).then(res=>{
+        logger.info("Db entries successful generated: " + res);
+        process.exit(0);
+    }).catch(reason => {
+        logger.error("Failed to create db entries: " + reason);
+        process.exit(0);
     });
 } else if(process.env.NODE_ENV === 'startAndDeleteRandomDbEntries') {
     logger.info('Delete all db entries');
-    deleteAllEntries().then(
-        logger.info("Db entries successful deleted"),
+    deleteAllEntries().then(res =>{
+            logger.info("Db entries successful deleted: " + res);
+            process.exit(0);
+        }
     ).catch(reason => {
-        logger.error("Failed to delete db entries: " + reason)
+        logger.error("Failed to delete db entries: " + reason);
+        process.exit(0);
     });
-    process.abort();
 }
 
 const port = process.env.PORT || 5000;

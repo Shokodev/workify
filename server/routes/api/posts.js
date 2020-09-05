@@ -8,18 +8,19 @@ const logger=require('../../logger/logger');
 
 
 // Get Posts
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
     logger.info('fetch all posts from db');
     try{
         const posts = await loadPostsCollection();
         res.send(await posts.find({}).toArray());
     } catch (err){
         res.status(500).send(err.message);
+        next(err);
     }
 });
 
 // Add Post
-router.post('/', async (req, res) => {
+router.post('/', async (req, res,next) => {
     logger.info('add new graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
@@ -29,11 +30,12 @@ router.post('/', async (req, res) => {
     } catch (err){
         logger.error("Add post DB failed: " + err.message);
         res.status(500).send(err.message);
+        next(err);
     }
 });
 
 // Delete Post
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res,next) => {
     logger.info('delete graphic: ' + req.params.id);
     try {
         const posts = await loadPostsCollection();
@@ -42,11 +44,12 @@ router.delete('/:id', async (req, res) => {
     } catch (err){
         logger.error("Delete post failed: " + err.message);
         res.status(500).send(err.message);
+        next(err);
     }
 });
 
 // Update Post
-router.put('/:id', async (req, res) =>{
+router.put('/:id', async (req, res,next) =>{
     logger.info('update graphic: ' + req.body.post.item.graphic);
     try {
         const posts = await loadPostsCollection();
@@ -55,47 +58,31 @@ router.put('/:id', async (req, res) =>{
     } catch (err){
         logger.error("Update DB failed: " + err.message);
         res.status(500).send(err.message);
+        next(err);
     }
 });
 
 // Get Dashboard
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', async (req, res,next) => {
     logger.info('fetch data from db for dashboard');
-    let data = [];
     let dashBoard = {};
     try{
         const posts = await loadPostsCollection();
-        data  = await posts.find({}).toArray();
+        let data = await posts.find({}).toArray();
+        dashBoard.totoalGraphics = data.length
+        dashBoard.floorPlans = await posts.countDocuments({"item.selectType": "Floor plan"});
+        dashBoard.plantGrahpics = await posts.countDocuments({"item.selectType": "Plant graphic"});
+        dashBoard.navigationGraphics = await posts.countDocuments({"item.selectType": "Navigation graphic"});
+        dashBoard.gecc = {};
+        dashBoard.gecc.finish = await posts.countDocuments({"item.selectState": "Finish"});
+        dashBoard.gecc.inProgress = await posts.countDocuments({"item.selectState": "Not started"});
+        dashBoard.gecc.issues = await posts.countDocuments({"item.selectState": "Issues"});
+        res.send(dashBoard);
     } catch (err){
         res.status(500).send(err.message);
+        next(err);
     }
-    dashBoard.totoalGraphics = data.length
-    dashBoard.gecc = {
-        finished: 0
-    };
-    dashBoard.siemensCH = {};
-    dashBoard.planer = {};
-    data.forEach(post=>{
-        if (post.item.selectState === "Finish"){
-            dashBoard.gecc.finished++
-        }
-    });
-    res.send(dashBoard);
 });
-
-// Load PostCollection from DB
-async function loadPostsCollection()  {
-    try {
-        const dbInstance = await mongodb.MongoClient.connect('mongodb+srv://workify123:workify123@workify.iukfu.gcp.mongodb.net/workify?retryWrites=true&w=majority', {
-            useNewUrlParser: true, useUnifiedTopology: true
-        });
-        logger.info('connect to mongodb: ' + dbInstance.isConnected());
-        return dbInstance.db('vue_express').collection('posts');
-    } catch (err){
-        logger.error('cant connect to db: ' + err);
-        throw new Error('cant connect to db: ' + err);
-    }
-}
 
 // Get data in excel sheet
 router.get('/excel',async (req, res) => {
@@ -172,6 +159,19 @@ router.get('/excel',async (req, res) => {
     }
 });
 
+// Load PostCollection from DB
+async function loadPostsCollection() {
+    try {
+        const dbInstance = await mongodb.MongoClient.connect('mongodb+srv://workify123:workify123@workify.iukfu.gcp.mongodb.net/workify?retryWrites=true&w=majority', {
+            useNewUrlParser: true, useUnifiedTopology: true
+        });
+        logger.info('connect to mongodb: ' + dbInstance.isConnected());
+        return dbInstance.db('vue_express').collection('posts');
+    } catch (err){
+        logger.error('cant connect to db: ' + err);
+        throw new Error('cant connect to db: ' + err);
+    }
+}
+
 
 module.exports = router;
-module.exports = {loadPostsCollection}

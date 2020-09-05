@@ -1,7 +1,20 @@
-const {loadPostsCollection} = require('./posts');
+const mongodb = require("mongodb");
+const logger = require("../../logger/logger");
 const { uniqueNamesGenerator, adjectives, colors, animals, starWars, countries, names } = require('unique-names-generator');
 
-
+// Load PostCollection from DB
+async function loadPostsCollection() {
+    try {
+        const dbInstance = await mongodb.MongoClient.connect('mongodb+srv://workify123:workify123@workify.iukfu.gcp.mongodb.net/workify?retryWrites=true&w=majority', {
+            useNewUrlParser: true, useUnifiedTopology: true
+        });
+        logger.info('connect to mongodb: ' + dbInstance.isConnected());
+        return dbInstance.db('vue_express').collection('posts');
+    } catch (err){
+        logger.error('cant connect to db: ' + err);
+        throw new Error('cant connect to db: ' + err);
+    }
+}
 async function generateRandomEntries(countOfRandomEntries) {
     const posts = await loadPostsCollection();
     for (let i = 0; i < countOfRandomEntries; i++) {
@@ -9,15 +22,13 @@ async function generateRandomEntries(countOfRandomEntries) {
             generateRandomObject()
         );
     }
+    return true;
 }
 
 async function deleteAllEntries() {
-    try {
-        const posts = await loadPostsCollection();
-        await posts.drop();
-    } catch (err) {
-        throw new Error('cant delete db entries: ' + err);
-    }
+    const posts = await loadPostsCollection();
+    await posts.drop();
+    return true;
 }
 
 
@@ -67,9 +78,9 @@ function generateRandomObject(){
 }
 
 function getRandomSelectType(){
-    let str1 = "Floor plan"
-    let str2 = "Plant graphic"
-    let str3 = "Navigation graphic"
+    let str1 = "Floor plan";
+    let str2 = "Plant graphic";
+    let str3 = "Navigation graphic";
     let x = Math.random();
     if(x<0.2){
         return str1;
@@ -78,10 +89,10 @@ function getRandomSelectType(){
     } else return str3;
 }
 function getRandomSelectState(){
-    let str1 = "Not started"
-    let str2 = "In Progress"
-    let str3 = "Finish"
-    let str4 = "Issues"
+    let str1 = "Not started";
+    let str2 = "In Progress";
+    let str3 = "Finish";
+    let str4 = "Issues";
     let x = Math.random();
     if(x<0.25){
         return str1;
@@ -105,9 +116,9 @@ function randomSiemensDate(start, end) {
     } else return calcDate.getFullYear()+'-'+(calcDate.getMonth()+1)+'-'+calcDate.getDate();
 }
 function getSelectAuditTested(){
-    let str1 = "Correct"
-    let str2 = "Wrong"
-    let str3 = "Faults"
+    let str1 = "Correct";
+    let str2 = "Wrong";
+    let str3 = "Faults";
 
     let x = Math.random();
     if(x<0.25){
