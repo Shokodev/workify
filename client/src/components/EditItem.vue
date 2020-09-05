@@ -297,7 +297,7 @@
           changeItem(item){
             this.$emit('change-item', item);
             this.dialog = false;
-            this.$nextTick(() => this.$refs.form.reset())
+            //this.$nextTick(() => this.$refs.form.reset())
           },
       },
     }

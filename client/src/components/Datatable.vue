@@ -138,7 +138,6 @@
             },
             async editItem(item){
                 this.loadingActive = true;
-                console.log(item);
                 await PostService.editPost(item);
                 this.loadingActive = false;
             },
