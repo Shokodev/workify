@@ -1,15 +1,13 @@
 <template>
         <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
             <template v-slot:activator="{ on, attrs}">
-                <v-btn
-                        class="mx-2"
-                        dark
-                        color="indigo"
-                        v-bind="attrs"
-                        v-on="on"
-                >
-                    <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
+                    <v-icon
+                            v-bind="attrs"
+                            v-on="on"
+                            small
+                            class="mr-2"
+                    >mdi-pencil
+                    </v-icon>
             </template>
             <v-card>
                 <v-toolbar dark color="primary">
@@ -19,7 +17,7 @@
                     <v-toolbar-title>Editing</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark text :disabled="!valid" v-on:click="saveItem(newItem)">Save</v-btn>
+                        <v-btn dark text :disabled="!valid" v-on:click="changeItem(item)">Save</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
               <div class="pa-3">
@@ -33,7 +31,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="newItem.graphic"
+                              v-model="item.graphic"
                               :rules="graphicRules"
                               label="Graphic Name"
                               required
@@ -43,7 +41,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="newItem.selectType"
+                              v-model="item.selectType"
                               :items="itemsType"
                               :rules="[v => !!v || 'Type is required']"
                               label="Type"
@@ -54,7 +52,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="newItem.regulations"
+                              v-model="item.regulations"
                               label="Regulations"
                               :rules="numberRules"
                               required
@@ -67,24 +65,24 @@
                           ref="date1"
                           v-model="date1"
                           :close-on-content-click="false"
-                          :return-value.sync="newItem.date"
+                          :return-value.sync="item.date"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                              v-model="newItem.date"
+                              v-model="item.date"
                               label="Date"
                               readonly
                               v-bind="attrs"
                               v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker v-model="newItem.date" no-title scrollable>
+                        <v-date-picker v-model="item.date" no-title scrollable>
                           <v-spacer></v-spacer>
                           <v-btn text color="primary" @click="date1 = false">Cancel</v-btn>
-                          <v-btn text color="primary" @click="$refs.date1.save(newItem.date)">OK</v-btn>
+                          <v-btn text color="primary" @click="$refs.date1.save(item.date)">OK</v-btn>
                         </v-date-picker>
                       </v-menu>
                     </v-list-item-content>
@@ -92,7 +90,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="newItem.creator"
+                              v-model="item.creator"
                               :rules="creatorRules"
                               label="Creator"
                               required
@@ -102,7 +100,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="newItem.selectState"
+                              v-model="item.selectState"
                               :items="itemsState"
                               :rules="[v => !!v || 'Item is required']"
                               label="State"
@@ -113,7 +111,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="newItem.comments"
+                              v-model="item.comments"
                               label="Comments"
                               required
                           ></v-text-field>
@@ -136,24 +134,24 @@
                         ref="date2"
                         v-model="date2"
                         :close-on-content-click="false"
-                        :return-value.sync="newItem.siemensDate"
+                        :return-value.sync="item.siemensDate"
                         transition="scale-transition"
                         offset-y
                         min-width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model="newItem.siemensDate"
+                            v-model="item.siemensDate"
                             label="Date"
                             readonly
                             v-bind="attrs"
                             v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="newItem.siemensDate" no-title scrollable>
+                      <v-date-picker v-model="item.siemensDate" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="date2 = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.date2.save(newItem.siemensDate)">OK</v-btn>
+                        <v-btn text color="primary" @click="$refs.date2.save(item.siemensDate)">OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-list-item-content>
@@ -161,7 +159,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-select
-                        v-model="newItem.selectSiemensTested"
+                        v-model="item.selectSiemensTested"
                         :items="itemsTested"
                         label="Audit"
                     ></v-select>
@@ -170,7 +168,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="newItem.siemensAuditor"
+                        v-model="item.siemensAuditor"
                         label="Auditor"
                     ></v-text-field>
                   </v-list-item-content>
@@ -178,7 +176,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="newItem.siemensComments"
+                        v-model="item.siemensComments"
                         label="Comments"
                     ></v-text-field>
                   </v-list-item-content>
@@ -199,24 +197,24 @@
                         ref="date3"
                         v-model="date3"
                         :close-on-content-click="false"
-                        :return-value.sync="newItem.planerDate"
+                        :return-value.sync="item.planerDate"
                         transition="scale-transition"
                         offset-y
                         min-width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model="newItem.planerDate"
+                            v-model="item.planerDate"
                             label="Date"
                             readonly
                             v-bind="attrs"
                             v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="newItem.planerDate" no-title scrollable>
+                      <v-date-picker v-model="item.planerDate" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="date3 = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.date3.save(newItem.planerDate)">OK</v-btn>
+                        <v-btn text color="primary" @click="$refs.date3.save(item.planerDate)">OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-list-item-content>
@@ -224,7 +222,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-select
-                        v-model="newItem.selectPlanerTested"
+                        v-model="item.selectPlanerTested"
                         :items="itemsTested"
                         label="Audit"
                     ></v-select>
@@ -233,7 +231,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="newItem.planer"
+                        v-model="item.planer"
                         label="Planer"
                     ></v-text-field>
                   </v-list-item-content>
@@ -241,7 +239,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="newItem.planerComments"
+                        v-model="item.planerComments"
                         label="Comments"
                     ></v-text-field>
                   </v-list-item-content>
@@ -254,33 +252,13 @@
 
 <script>
     export default {
-        name: "AddItem",
+        name: "EditItem",
         props: {
-            post: {
-                type: Object,
-            }
+            editItem: Object,
         },
         data() {
             return {
-            newItem: {
-
-                graphic: '',
-                selectType: null,
-                selectState: null,
-                regulations: "",
-                date: new Date().toISOString().substr(0, 10),
-                creator: null,
-                comments: null,
-                siemensDate: null,
-                selectSiemensTested: null,
-                siemensAuditor: null,
-                siemensComments: null,
-                planerDate: null,
-                selectPlanerTested: null,
-                planer: null,
-                planerComments: null,
-
-            },
+            item: this.editItem.item,
 
                 graphicRules: [
                     v => !!v || 'Name is required',
@@ -297,28 +275,29 @@
                     'Navigation graphic',
                 ],
                 itemsState: [
-                    'Not started',
-                    'In progress',
+                    'Not Started',
+                    'In Progress',
                     'Finished',
                     'Issues',
                 ],
                 itemsTested:[
-                    'OK',
+                  'Correct',
+                    'Wrong',
                     'Faults',
               ],
-              valid: true,
+                valid: true,
                 date1: false,
                 date2: false,
                 date3: false,
               dialog: false,
             }
         },
+
       methods:{
-            saveItem(newItem){
-            this.$emit('add-item', newItem);
+          changeItem(item){
+            this.$emit('change-item', item);
             this.dialog = false;
             this.$nextTick(() => this.$refs.form.reset())
-
           },
       },
     }

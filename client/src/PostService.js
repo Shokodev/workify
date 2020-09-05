@@ -23,6 +23,11 @@ class PostService{
         });
     }
 
+
+    static editPost(item){
+        return axios.put(`${url}${item._id}`, item )
+    }
+
     // Delete Posts
     static deletePost(id){
         return axios.delete(`${url}${id}`)

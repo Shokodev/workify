@@ -38,12 +38,12 @@
             </v-toolbar>
         </template>
         <template v-slot:item.item.actions = "{item}">
-            <v-icon
-                    small
-                    class="mr-2"
-                    @click="editItem(item)"
-            >mdi-pencil
-            </v-icon>
+            <EditItem
+                :edit-item="item"
+                v-on:change-item="editItem($event)"
+            >
+
+            </EditItem>
             <v-icon
                     small
                     @click="deleteItem(item)"
@@ -58,10 +58,12 @@
 <script>
     import PostService from "../PostService";
     import AddItem from "./AddItem";
+    import EditItem from "./EditItem";
     export default {
         name: "Datatable",
         components: {
             AddItem,
+            EditItem
         },
         props: {
             posts: {
@@ -134,8 +136,11 @@
               await PostService.createExcel();
               this.loadingActive = false;
             },
-            editItem(item){
-                console.log(item)
+            async editItem(item){
+                this.loadingActive = true;
+                console.log(item);
+                await PostService.editPost(item);
+                this.loadingActive = false;
             },
             async deleteItem(item){
                 await PostService.deletePost(item._id);
