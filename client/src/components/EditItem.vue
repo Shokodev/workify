@@ -17,7 +17,7 @@
                     <v-toolbar-title>Editing</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn dark text :disabled="!valid" v-on:click="changeItem(item)">Save</v-btn>
+                        <v-btn dark text :disabled="!valid" v-on:click="changeItem(post)">Save</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
               <div class="pa-3">
@@ -31,7 +31,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="item.graphic"
+                              v-model="post.item.graphic"
                               :rules="graphicRules"
                               label="Graphic Name"
                               required
@@ -41,7 +41,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="item.selectType"
+                              v-model="post.item.selectType"
                               :items="itemsType"
                               :rules="[v => !!v || 'Type is required']"
                               label="Type"
@@ -52,7 +52,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="item.regulations"
+                              v-model="post.item.regulations"
                               label="Regulations"
                               :rules="numberRules"
                               required
@@ -65,24 +65,24 @@
                           ref="date1"
                           v-model="date1"
                           :close-on-content-click="false"
-                          :return-value.sync="item.date"
+                          :return-value.sync="post.item.date"
                           transition="scale-transition"
                           offset-y
                           min-width="290px"
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                              v-model="item.date"
+                              v-model="post.item.date"
                               label="Date"
                               readonly
                               v-bind="attrs"
                               v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker v-model="item.date" no-title scrollable>
+                        <v-date-picker v-model="post.item.date" no-title scrollable>
                           <v-spacer></v-spacer>
                           <v-btn text color="primary" @click="date1 = false">Cancel</v-btn>
-                          <v-btn text color="primary" @click="$refs.date1.save(item.date)">OK</v-btn>
+                          <v-btn text color="primary" @click="$refs.date1.save(post.item.date)">OK</v-btn>
                         </v-date-picker>
                       </v-menu>
                     </v-list-item-content>
@@ -90,7 +90,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="item.creator"
+                              v-model="post.item.creator"
                               :rules="creatorRules"
                               label="Creator"
                               required
@@ -100,7 +100,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-select
-                              v-model="item.selectState"
+                              v-model="post.item.selectState"
                               :items="itemsState"
                               :rules="[v => !!v || 'Item is required']"
                               label="State"
@@ -111,7 +111,7 @@
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
-                              v-model="item.comments"
+                              v-model="post.item.comments"
                               label="Comments"
                               required
                           ></v-text-field>
@@ -134,24 +134,24 @@
                         ref="date2"
                         v-model="date2"
                         :close-on-content-click="false"
-                        :return-value.sync="item.siemensDate"
+                        :return-value.sync="post.item.siemensDate"
                         transition="scale-transition"
                         offset-y
                         min-width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model="item.siemensDate"
+                            v-model="post.item.siemensDate"
                             label="Date"
                             readonly
                             v-bind="attrs"
                             v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="item.siemensDate" no-title scrollable>
+                      <v-date-picker v-model="post.item.siemensDate" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="date2 = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.date2.save(item.siemensDate)">OK</v-btn>
+                        <v-btn text color="primary" @click="$refs.date2.save(post.item.siemensDate)">OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-list-item-content>
@@ -159,7 +159,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-select
-                        v-model="item.selectSiemensTested"
+                        v-model="post.item.selectSiemensTested"
                         :items="itemsTested"
                         label="Audit"
                     ></v-select>
@@ -168,7 +168,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="item.siemensAuditor"
+                        v-model="post.item.siemensAuditor"
                         label="Auditor"
                     ></v-text-field>
                   </v-list-item-content>
@@ -176,7 +176,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="item.siemensComments"
+                        v-model="post.item.siemensComments"
                         label="Comments"
                     ></v-text-field>
                   </v-list-item-content>
@@ -197,24 +197,24 @@
                         ref="date3"
                         v-model="date3"
                         :close-on-content-click="false"
-                        :return-value.sync="item.planerDate"
+                        :return-value.sync="post.item.planerDate"
                         transition="scale-transition"
                         offset-y
                         min-width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                            v-model="item.planerDate"
+                            v-model="post.item.planerDate"
                             label="Date"
                             readonly
                             v-bind="attrs"
                             v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="item.planerDate" no-title scrollable>
+                      <v-date-picker v-model="post.item.planerDate" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="date3 = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.date3.save(item.planerDate)">OK</v-btn>
+                        <v-btn text color="primary" @click="$refs.date3.save(post.item.planerDate)">OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-list-item-content>
@@ -222,7 +222,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-select
-                        v-model="item.selectPlanerTested"
+                        v-model="post.item.selectPlanerTested"
                         :items="itemsTested"
                         label="Audit"
                     ></v-select>
@@ -231,7 +231,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="item.planer"
+                        v-model="post.item.planer"
                         label="Planer"
                     ></v-text-field>
                   </v-list-item-content>
@@ -239,7 +239,7 @@
                 <v-list-item>
                   <v-list-item-content>
                     <v-text-field
-                        v-model="item.planerComments"
+                        v-model="post.item.planerComments"
                         label="Comments"
                     ></v-text-field>
                   </v-list-item-content>
@@ -258,8 +258,7 @@
         },
         data() {
             return {
-            item: this.editItem.item,
-
+                post: this.editItem,
                 graphicRules: [
                     v => !!v || 'Name is required',
                 ],
@@ -291,11 +290,12 @@
                 date3: false,
               dialog: false,
             }
+
         },
 
       methods:{
-          changeItem(item){
-            this.$emit('change-item', item);
+          changeItem(post){
+            this.$emit('change-item', post);
             this.dialog = false;
             //this.$nextTick(() => this.$refs.form.reset())
           },

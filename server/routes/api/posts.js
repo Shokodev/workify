@@ -5,7 +5,9 @@ const mongodb = require('mongodb');
 const router = express.Router();
 const logger=require('../../logger/logger');
 
-// Get Post
+
+
+// Get Posts
 router.get('/', async (req, res) => {
     logger.info('fetch all posts from db');
     try{
@@ -25,32 +27,60 @@ router.post('/', async (req, res) => {
             req.body);
         res.status(201).send();
     } catch (err){
+        logger.error("Add post DB failed: " + err.message);
         res.status(500).send(err.message);
     }
 });
 
 // Delete Post
 router.delete('/:id', async (req, res) => {
-    //logger.info('delete graphic: ' + req.body.item.graphic);
+    logger.info('delete graphic: ' + req.params.id);
     try {
         const posts = await loadPostsCollection();
         await posts.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
         res.status(200).send();
     } catch (err){
+        logger.error("Delete post failed: " + err.message);
         res.status(500).send(err.message);
     }
 });
 
 // Update Post
 router.put('/:id', async (req, res) =>{
-    logger.info('update graphic: ' + req.body.item.graphic);
+    logger.info('update graphic: ' + req.body.post.item.graphic);
     try {
         const posts = await loadPostsCollection();
-        await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)});
+        await posts.replaceOne({_id: new mongodb.ObjectID(req.params.id)},req.body.post.item);
         res.status(200).send();
+    } catch (err){
+        logger.error("Update DB failed: " + err.message);
+        res.status(500).send(err.message);
+    }
+});
+
+// Get Dashboard
+router.get('/dashboard', async (req, res) => {
+    logger.info('fetch data from db for dashboard');
+    let data = [];
+    let dashBoard = {};
+    try{
+        const posts = await loadPostsCollection();
+        data  = await posts.find({}).toArray();
     } catch (err){
         res.status(500).send(err.message);
     }
+    dashBoard.totoalGraphics = data.length
+    dashBoard.gecc = {
+        finished: 0
+    };
+    dashBoard.siemensCH = {};
+    dashBoard.planer = {};
+    data.forEach(post=>{
+        if (post.item.selectState === "Finish"){
+            dashBoard.gecc.finished++
+        }
+    });
+    res.send(dashBoard);
 });
 
 // Load PostCollection from DB
@@ -144,3 +174,4 @@ router.get('/excel',async (req, res) => {
 
 
 module.exports = router;
+module.exports = {loadPostsCollection}

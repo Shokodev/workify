@@ -137,11 +137,13 @@
               this.loadingActive = false;
             },
             async editItem(item){
+              console.log(item);
                 this.loadingActive = true;
                 await PostService.editPost(item);
                 this.loadingActive = false;
             },
             async deleteItem(item){
+              console.log(item);
                 await PostService.deletePost(item._id);
                 this.loadingActive = true;
                 this.posts = await PostService.getPosts();

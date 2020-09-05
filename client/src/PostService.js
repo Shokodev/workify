@@ -24,8 +24,8 @@ class PostService{
     }
 
 
-    static editPost(item){
-        return axios.put(`${url}${item._id}`, item )
+    static editPost(post){
+        return axios.put(`${url}${post._id}`, {post} )
     }
 
     // Delete Posts
