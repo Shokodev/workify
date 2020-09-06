@@ -69,14 +69,23 @@ router.get('/dashboard', async (req, res,next) => {
     try{
         const posts = await loadPostsCollection();
         let data = await posts.find({}).toArray();
+        let today = new Date();
+       // dashBoard.firstDbRecord = await posts.find().sort({ "item.date" : 1 }).limit(1);
         dashBoard.totoalGraphics = data.length
         dashBoard.floorPlans = await posts.countDocuments({"item.selectType": "Floor plan"});
         dashBoard.plantGrahpics = await posts.countDocuments({"item.selectType": "Plant graphic"});
         dashBoard.navigationGraphics = await posts.countDocuments({"item.selectType": "Navigation graphic"});
         dashBoard.gecc = {};
         dashBoard.gecc.finish = await posts.countDocuments({"item.selectState": "Finish"});
-        dashBoard.gecc.inProgress = await posts.countDocuments({"item.selectState": "Not started"});
+        dashBoard.gecc.inProgress = await posts.countDocuments({"item.selectState": "In Progress"});
         dashBoard.gecc.issues = await posts.countDocuments({"item.selectState": "Issues"});
+        dashBoard.gecc.notStarted = await posts.countDocuments({"item.selectState": "Not started"});
+        dashBoard.siemens = {};
+        dashBoard.siemens.auditFaults = await posts.countDocuments({"item.selectSiemensTested": "Faults"});
+        dashBoard.siemens.auditOK = await posts.countDocuments({"item.selectSiemensTested": "OK"});
+        dashBoard.planer = {};
+        dashBoard.planer.auditFaults = await posts.countDocuments({"item.selectPlanerTested": "Faults"});
+        dashBoard.planer.auditOK = await posts.countDocuments({"item.selectPlanerTested": "OK"});
         res.send(dashBoard);
     } catch (err){
         res.status(500).send(err.message);

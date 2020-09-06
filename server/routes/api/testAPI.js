@@ -15,6 +15,7 @@ async function loadPostsCollection() {
         throw new Error('cant connect to db: ' + err);
     }
 }
+
 async function generateRandomEntries(countOfRandomEntries) {
     const posts = await loadPostsCollection();
     for (let i = 0; i < countOfRandomEntries; i++) {
@@ -30,8 +31,6 @@ async function deleteAllEntries() {
     await posts.drop();
     return true;
 }
-
-
 
 function generateRandomObject(){
     let object = {}
@@ -88,6 +87,7 @@ function getRandomSelectType(){
         return str2;
     } else return str3;
 }
+
 function getRandomSelectState(){
     let str1 = "Not started";
     let str2 = "In Progress";
@@ -103,6 +103,7 @@ function getRandomSelectState(){
     } else return str4
 
 }
+
 function randomDate(start, end) {
     let calcDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     return calcDate.getFullYear()+'-'+(calcDate.getMonth()+1)+'-'+calcDate.getDate();
@@ -115,16 +116,15 @@ function randomSiemensDate(start, end) {
         return null
     } else return calcDate.getFullYear()+'-'+(calcDate.getMonth()+1)+'-'+calcDate.getDate();
 }
+
 function getSelectAuditTested(){
-    let str1 = "Correct";
-    let str2 = "Wrong";
-    let str3 = "Faults";
+    let str1 = "OK";
+    let str2 = "Faults";
 
     let x = Math.random();
-    if(x<0.25){
+    if(x<0.5){
         return str1;
-    } else if(x<0.76){
-        return str2;
-    } else return str3
+    } else return str2
 }
+
 module.exports = {deleteAllEntries, generateRandomEntries}
