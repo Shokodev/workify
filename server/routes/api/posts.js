@@ -51,7 +51,8 @@ router.put('/:id', async (req, res,next) =>{
     logger.info('update graphic: ' + req.body.post.item.graphic);
     try {
         const posts = await loadPostsCollection();
-        await posts.replaceOne({_id: new mongodb.ObjectID(req.params.id)},req.body.post.item);
+        await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:
+                {item: req.body.post.item}});
         res.status(200).send();
     } catch (err){
         logger.error("Update DB failed: " + err.message);
