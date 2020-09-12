@@ -11,10 +11,13 @@
     </v-progress-circular>
   </v-overlay>
     <v-data-table
+            height="800"
             :headers="headers"
             :items="posts"
             item-key="posts._id"
-            dense
+            :search="search"
+            fixed-header
+
     >
         <template v-slot:top>
             <v-toolbar flat color="white">
@@ -24,6 +27,15 @@
             vertical
             inset></v-divider>
             <v-spacer></v-spacer>
+
+                <v-text-field
+                        v-model="search"
+                        append-icon="mdi-magnify"
+                        label="Search"
+                        single-line
+                        hide-details
+                ></v-text-field>
+                <v-spacer></v-spacer>
                 <v-btn
                         class="mx-2"
                         dark
@@ -72,7 +84,8 @@
         },
         data() {
             return {
-              loadingActive: false,
+                search: '',
+                loadingActive: false,
                 headers: [
                     {
                         text: 'Graphic', value: 'item.graphic',
@@ -153,6 +166,9 @@
     }
 </script>
 
-<style scoped>
+<style>
+    .v-data-table th[role="columnheader"] {
+        white-space: nowrap;
+    }
 
 </style>

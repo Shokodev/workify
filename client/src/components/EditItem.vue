@@ -288,7 +288,7 @@
                 date1: false,
                 date2: false,
                 date3: false,
-              dialog: false,
+                dialog: false,
             }
 
         },

@@ -3,7 +3,7 @@
     <AppBar></AppBar>
     <v-container>
       <p class="error" v-if="error">{{error}}</p>
-      <Datatable :posts="posts"></Datatable>
+      <router-view :posts="posts"></router-view>
     </v-container>
   </v-app>
 </template>
@@ -11,13 +11,11 @@
 <script>
 import PostService from "./PostService";
 import AppBar from "./layouts/home/AppBar";
-import Datatable from "./components/Datatable";
 
 export default {
   name: 'App',
   components: {
     AppBar,
-    Datatable,
   },
   data() {
     return {

@@ -6,6 +6,7 @@
                 color="white"
                 elevation="1"
                 height="60"
+                hide-on-scroll
         >
 
             <div>
@@ -13,6 +14,27 @@
                 class="heading"
                 min-width="96"
                 >WORKIFY</v-toolbar-title>
+            </div>
+            <v-spacer />
+            <div>
+                <v-tabs
+                        class="hidden-sm-and-down"
+                        optional
+                >
+                    <v-tab
+                            v-for="(name, i) in items"
+                            :key="i"
+                            :to="{ name }"
+                            :exact="name === 'Dashboard'"
+                            :ripple="false"
+                            active-class="text--primary"
+                            class="font-weight-bold"
+                            min-width="96"
+                            text
+                    >
+                        {{ name }}
+                    </v-tab>
+                </v-tabs>
             </div>
         </v-app-bar>
 
@@ -26,7 +48,9 @@
 
         data: () => ({
             items: [
-                'Contact',
+                'dashboard',
+                'datatable',
+                'settings',
             ],
         }),
     }
