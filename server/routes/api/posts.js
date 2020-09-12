@@ -3,9 +3,7 @@ const excel = require('exceljs');
 const express = require('express');
 const mongodb = require('mongodb');
 const router = express.Router();
-const logger=require('../../logger/logger');
-
-
+const logger=require('../../serverlog/logger');
 
 // Get Posts
 router.get('/', async (req, res, next) => {

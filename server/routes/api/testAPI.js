@@ -1,5 +1,5 @@
 const mongodb = require("mongodb");
-const logger = require("../../logger/logger");
+const logger = require("../../serverlog/logger");
 const { uniqueNamesGenerator, adjectives, colors, animals, starWars, countries, names } = require('unique-names-generator');
 
 // Load PostCollection from DB

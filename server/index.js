@@ -1,27 +1,13 @@
 const express = require('express');
-const cors = require('cors');
-const logger = require('./logger/logger');
-const app = express();
-const {deleteAllEntries, generateRandomEntries } = require('./routes/api/testAPI');
+const logger = require('./serverlog/logger');
+const app = require('./app');
+require('dotenv').config();
+const {deleteAllEntries, generateRandomEntries} = require('./routes/api/testAPI');
+const port = process.env.PORT;
 
 
-//Middleware
-
-app.use(express.json());
-app.use(cors());
-
-const posts = require('./routes/api/posts');
-
-app.use('/api/posts', posts);
-
-// Handle production
-if(process.env.NODE_ENV === 'production') {
-    // Static folder
-    app.use(express.static(__dirname + '/public/'))
-    // Handle SPA
-    app.get(/.*!/, (req, res) => res.sendFile(__dirname + '/public/index.html'));
-    logger.info('Production mode active');
-} else if(process.env.NODE_ENV === 'startAndCreateRandomDbEntries') {
+// Handle dummy db
+if(process.env.NODE_ENV === 'startAndCreateRandomDbEntries') {
     logger.info('Create random db entries');
     generateRandomEntries(500).then(res=>{
         logger.info("Db entries successful generated: " + res);
@@ -42,7 +28,9 @@ if(process.env.NODE_ENV === 'production') {
     });
 }
 
-const port = process.env.PORT || 5000;
-app.listen(port, () => logger.info(`Server started on port ${port}`));
-
+app.listen(port, () => {
+    /* eslint-disable no-console */
+    logger.info(`Listening: http://localhost:${port}`);
+    /* eslint-enable no-console */
+});
 
