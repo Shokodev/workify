@@ -5,6 +5,34 @@ const mongodb = require('mongodb');
 const router = express.Router();
 const logger=require('../../serverlog/logger');
 
+Date.prototype.getWeek = function (dowOffset) {
+    /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
+
+    dowOffset = typeof(dowOffset) == 'int' ? dowOffset : 0; //default dowOffset to zero
+    let newYear = new Date(this.getFullYear(),0,1);
+    let day = newYear.getDay() - dowOffset; //the day of week the year begins on
+    day = (day >= 0 ? day : day + 7);
+    let daynum = Math.floor((this.getTime() - newYear.getTime() -
+        (this.getTimezoneOffset()-newYear.getTimezoneOffset())*60000)/86400000) + 1;
+    let weeknum;
+    //if the year starts before the middle of a week
+    if(day < 4) {
+        weeknum = Math.floor((daynum+day-1)/7) + 1;
+        if(weeknum > 52) {
+            nYear = new Date(this.getFullYear() + 1,0,1);
+            nday = nYear.getDay() - dowOffset;
+            nday = nday >= 0 ? nday : nday + 7;
+            /*if the next year starts before the middle of
+              the week, it is week #1 of that year*/
+            weeknum = nday < 4 ? 1 : 53;
+        }
+    }
+    else {
+        weeknum = Math.floor((daynum+day-1)/7);
+    }
+    return weeknum;
+};
+
 // Get Posts
 router.get('/', async (req, res, next) => {
     logger.info('fetch all posts from db');
@@ -22,6 +50,7 @@ router.post('/', async (req, res,next) => {
     logger.info('add new graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
+        req.body.created_at = new Date();
         await posts.insertOne(
             req.body);
         res.status(201).send();
@@ -51,6 +80,7 @@ router.put('/:id', async (req, res,next) =>{
     logger.info('update graphic: ' + req.body.post.item.graphic);
     try {
         const posts = await loadPostsCollection();
+        req.body.post.item.updated_at = new Date();
         await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:
                 {item: req.body.post.item}});
         res.status(200).send();
@@ -68,14 +98,31 @@ router.get('/dashboard', async (req, res,next) => {
     try{
         const posts = await loadPostsCollection();
         let data = await posts.find({}).toArray();
+        let firstPost = await posts.find({}).sort({ "item.created_at" : 1 }).limit(1).toArray();
         let today = new Date();
-       // dashBoard.firstDbRecord = await posts.find().sort({ "item.date" : 1 }).limit(1);
+        dashBoard.weeklyStatisticsGECC = {
+            labels: [],
+            datasets: [
+                {
+                    label: "GECC",
+                    data: [],
+                }
+            ],
+        };
+        for (let i = getMonday(firstPost[0].item.created_at); i <= today; i = addDays(i,7)) {
+            let currentGraphics = data.filter(object =>
+                (object.item.updated_at.getTime() >= i.getTime() && object.item.updated_at.getTime() <= addDays(i,7).getTime())
+            );
+            dashBoard.weeklyStatisticsGECC.labels.push("KW " + i.getWeek());
+            dashBoard.weeklyStatisticsGECC.datasets.find(item => item.label === "GECC").data.push(
+                currentGraphics.filter(object => object.item.selectState === "Finished").length)
+        }
         dashBoard.totoalGraphics = data.length
         dashBoard.floorPlans = await posts.countDocuments({"item.selectType": "Floor plan"});
         dashBoard.plantGrahpics = await posts.countDocuments({"item.selectType": "Plant graphic"});
         dashBoard.navigationGraphics = await posts.countDocuments({"item.selectType": "Navigation graphic"});
         dashBoard.gecc = {};
-        dashBoard.gecc.finish = await posts.countDocuments({"item.selectState": "Finish"});
+        dashBoard.gecc.finshed = await posts.countDocuments({"item.selectState": "Finished"});
         dashBoard.gecc.inProgress = await posts.countDocuments({"item.selectState": "In Progress"});
         dashBoard.gecc.issues = await posts.countDocuments({"item.selectState": "Issues"});
         dashBoard.gecc.notStarted = await posts.countDocuments({"item.selectState": "Not started"});
@@ -87,6 +134,7 @@ router.get('/dashboard', async (req, res,next) => {
         dashBoard.planer.auditOK = await posts.countDocuments({"item.selectPlanerTested": "OK"});
         res.send(dashBoard);
     } catch (err){
+        console.log(err);
         res.status(500).send(err.message);
         next(err);
     }
@@ -171,7 +219,7 @@ router.get('/excel',async (req, res) => {
 async function loadPostsCollection() {
     try {
         const dbInstance = await mongodb.MongoClient.connect('mongodb+srv://workify123:workify123@workify.iukfu.gcp.mongodb.net/workify?retryWrites=true&w=majority', {
-            useNewUrlParser: true, useUnifiedTopology: true
+            useNewUrlParser: true, useUnifiedTopology: true,
         });
         logger.info('connect to mongodb: ' + dbInstance.isConnected());
         return dbInstance.db('vue_express').collection('posts');
@@ -181,5 +229,17 @@ async function loadPostsCollection() {
     }
 }
 
+function addDays(date, days) {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+}
+
+function getMonday(d) {
+    d = new Date(d);
+    let day = d.getDay(),
+        diff = d.getDate() - day + (day === 0 ? -6:1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
+}
 
 module.exports = router;

@@ -34,6 +34,9 @@ async function deleteAllEntries() {
 
 function generateRandomObject(){
     let object = {}
+    let creationDate = getRandomCreationDate();
+    let updatedAtDate = addDays(creationDate, getRandomInt(1,50));
+    let updatedAtDate2 = addDays(updatedAtDate, getRandomInt(1,10));
     object.item = {
         graphic: uniqueNamesGenerator({
             dictionaries: [adjectives, names],
@@ -42,7 +45,7 @@ function generateRandomObject(){
         selectType:getRandomSelectType(),
         selectState: getRandomSelectState(),
         regulations: Math.floor(Math.random() * 6) + 1,
-        date: randomDate(new Date(2020, 1, 1), new Date()),
+        date: parseDate(creationDate),
         creator: uniqueNamesGenerator({
             dictionaries: [starWars],
         }),
@@ -50,8 +53,10 @@ function generateRandomObject(){
             dictionaries: [adjectives, countries, colors, animals],
             separator: " "
         }),
-        siemensDate: randomSiemensDate(new Date(2020, 1, 1), new Date()),
+        siemensDate: randomNull(parseDate(updatedAtDate)),
     }
+    object.item.created_at = creationDate;
+    object.item.updated_at = creationDate;
     if(object.item.siemensDate !== null){
         object.item.selectSiemensTested =  getSelectAuditTested();
         object.item.siemensAuditor =  uniqueNamesGenerator({
@@ -61,8 +66,11 @@ function generateRandomObject(){
             dictionaries: [adjectives, countries, colors, animals],
             separator: " "
         });
-        object.item.planerDate = randomSiemensDate(new Date(2020, 1, 1), new Date());
+        object.item.planerDate = randomNull(parseDate(updatedAtDate2));
+        object.item.updated_at = updatedAtDate2;
+
     }
+
     if(object.item.planerDate !== null && object.item.siemensDate !== null) {
         object.item.selectPlanerTested =  getSelectAuditTested();
         object.item.planer =  uniqueNamesGenerator({
@@ -91,7 +99,7 @@ function getRandomSelectType(){
 function getRandomSelectState(){
     let str1 = "Not started";
     let str2 = "In Progress";
-    let str3 = "Finish";
+    let str3 = "Finished";
     let str4 = "Issues";
     let x = Math.random();
     if(x<0.25){
@@ -104,17 +112,27 @@ function getRandomSelectState(){
 
 }
 
+function getRandomCreationDate(){
+    let start = new Date(2020, 1, 1);
+    let end = new Date();
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+function parseDate(date) {
+    return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+}
+
+
 function randomDate(start, end) {
     let calcDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     return calcDate.getFullYear()+'-'+(calcDate.getMonth()+1)+'-'+calcDate.getDate();
 }
 
-function randomSiemensDate(start, end) {
+function randomNull(value) {
     let x = Math.random();
-    let calcDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     if(x>0.77){
         return null
-    } else return calcDate.getFullYear()+'-'+(calcDate.getMonth()+1)+'-'+calcDate.getDate();
+    } else return value;
 }
 
 function getSelectAuditTested(){
@@ -125,6 +143,18 @@ function getSelectAuditTested(){
     if(x<0.5){
         return str1;
     } else return str2
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function addDays(date, days) {
+    let result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
 }
 
 module.exports = {deleteAllEntries, generateRandomEntries}
