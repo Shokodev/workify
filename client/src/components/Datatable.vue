@@ -17,17 +17,10 @@
             item-key="posts._id"
             :search="search"
             fixed-header
-
+            dense
     >
         <template v-slot:top>
             <v-toolbar flat color="white">
-            <v-toolbar-title>Graphics</v-toolbar-title>
-            <v-divider
-            class="mx-4"
-            vertical
-            inset></v-divider>
-            <v-spacer></v-spacer>
-
                 <v-text-field
                         v-model="search"
                         append-icon="mdi-magnify"

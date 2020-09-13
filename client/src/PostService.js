@@ -16,6 +16,19 @@ class PostService{
         )))
     }
 
+    //Get Dashboard info
+    static getDashboard(){
+        return new Promise(((resolve, reject) =>
+            axios.get(url + "dashboard").then((res) => {
+                resolve(
+                    res.data
+                );
+            }).catch((err) => {
+                    reject(err);
+                }
+            )))
+    }
+
     // Create Posts
     static insertPost(item){
         return axios.post(url, {
