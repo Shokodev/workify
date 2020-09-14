@@ -1,9 +1,9 @@
 <template>
-    <div class="container">
+    <div class="small">
         <Bar-chart
-                v-if="loaded"
-                :chartdata="chartdata"
-                :options="options"/>
+        v-if="loaded"
+        :chartdata="chartdata"
+        :options="options"/>
 
     </div>
 </template>
@@ -57,6 +57,10 @@
     }
 </script>
 
-<style scoped>
+<style>
+    .small {
+        max-width: 1000px;
+        margin:  150px auto;
+    }
 
 </style>
