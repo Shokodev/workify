@@ -33,7 +33,9 @@ async function deleteAllEntries() {
 }
 
 function generateRandomObject(){
-    let object = {}
+    let object = {
+        meta: {}
+    }
     let creationDate = getRandomCreationDate();
     let updatedAtDate = addDays(creationDate, getRandomInt(1,50));
     let updatedAtDate2 = addDays(updatedAtDate, getRandomInt(1,10));
@@ -55,8 +57,10 @@ function generateRandomObject(){
         }),
         siemensDate: randomNull(parseDate(updatedAtDate)),
     }
-    object.item.created_at = creationDate;
-    object.item.updated_at = creationDate;
+    object.meta.created_at = creationDate;
+    if(object.item.selectState === "Finished"){
+        object.meta.finshed_at = creationDate;
+    }
     if(object.item.siemensDate !== null){
         object.item.selectSiemensTested =  getSelectAuditTested();
         object.item.siemensAuditor =  uniqueNamesGenerator({
@@ -67,8 +71,9 @@ function generateRandomObject(){
             separator: " "
         });
         object.item.planerDate = randomNull(parseDate(updatedAtDate2));
-        object.item.updated_at = updatedAtDate2;
-
+        if(object.item.selectSiemensTested === "OK"){
+            object.meta.okBySiemens_at = updatedAtDate;
+        }
     }
 
     if(object.item.planerDate !== null && object.item.siemensDate !== null) {
@@ -80,6 +85,10 @@ function generateRandomObject(){
             dictionaries: [adjectives, countries, colors, animals],
             separator: " "
         });
+        if(object.item.selectPlanerTested === "OK"){
+            object.meta.okByPlaner_at = updatedAtDate2;
+        }
+
     }
     return object
 }

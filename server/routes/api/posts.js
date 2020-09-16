@@ -50,7 +50,10 @@ router.post('/', async (req, res,next) => {
     logger.info('add new graphic: ' + req.body.item.graphic);
     try {
         const posts = await loadPostsCollection();
-        req.body.created_at = new Date();
+        req.body.meta = {
+            created_at: new Date(),
+            finished_at: isFinished(req.body.item)
+        };
         await posts.insertOne(
             req.body);
         res.status(201).send();
@@ -80,9 +83,9 @@ router.put('/:id', async (req, res,next) =>{
     logger.info('update graphic: ' + req.body.post.item.graphic);
     try {
         const posts = await loadPostsCollection();
-        req.body.post.item.updated_at = new Date();
-        await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:
-                {item: req.body.post.item}});
+        //TODO 1
+        let x = comparePosts(await posts.findOne({_id: new mongodb.ObjectID(req.params.id)}),req.body.post).item;
+        await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:{x}});
         res.status(200).send();
     } catch (err){
         logger.error("Update DB failed: " + err.message);
@@ -98,7 +101,7 @@ router.get('/dashboard', async (req, res,next) => {
     try{
         const posts = await loadPostsCollection();
         let data = await posts.find({}).toArray();
-        let firstPost = await posts.find({}).sort({ "item.created_at" : 1 }).limit(1).toArray();
+        let firstPost = await posts.find({}).sort({ "meta.created_at" : 1 }).limit(1).toArray();
         let today = new Date();
         dashBoard.weeklyStatisticsGECC = {
             labels: [],
@@ -109,9 +112,9 @@ router.get('/dashboard', async (req, res,next) => {
                 }
             ],
         };
-        for (let i = getMonday(firstPost[0].item.created_at); i <= today; i = addDays(i,7)) {
+        for (let i = getMonday(firstPost[0].meta.created_at); i <= today; i = addDays(i,7)) {
             let currentGraphics = data.filter(object =>
-                (object.item.updated_at.getTime() >= i.getTime() && object.item.updated_at.getTime() <= addDays(i,7).getTime())
+                (object.meta.finished_at.getTime() >= i.getTime() && object.meta.finished_at.getTime() < addDays(i,7).getTime())
             );
             dashBoard.weeklyStatisticsGECC.labels.push("KW " + i.getWeek());
             dashBoard.weeklyStatisticsGECC.datasets.find(item => item.label === "GECC").data.push(
@@ -228,6 +231,26 @@ async function loadPostsCollection() {
         throw new Error('cant connect to db: ' + err);
     }
 }
+
+function isFinished(post) {
+    if(post.selectState === "Finished"){
+        return new Date();
+    } else return null
+}
+
+function comparePosts(dbPost, newPost) {
+    const keys = Object.keys(dbPost.item);
+    let finalPost = {
+        item: {}
+    }
+    for (let key of keys) {
+        if (dbPost.item[key] !== newPost.item[key]) {
+            finalPost.item[key] = newPost.item[key];
+        }
+    }
+    return finalPost
+}
+
 
 function addDays(date, days) {
     let result = new Date(date);
