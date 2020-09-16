@@ -14,7 +14,7 @@
             height="800"
             :headers="headers"
             :items="posts"
-            item-key="posts._id"
+            item-key="_id"
             :search="search"
             fixed-header
             dense
@@ -42,12 +42,11 @@
             ></AddItem>
             </v-toolbar>
         </template>
-        <template v-slot:item.item.actions = "{item}">
+        <template v-slot:item.item.actions = "{ item }">
             <EditItem
                 :edit-item="item"
                 v-on:change-item="editItem($event)"
             >
-
             </EditItem>
             <v-icon
                     small
