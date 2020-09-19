@@ -289,8 +289,12 @@
                 date2: false,
                 date3: false,
                 dialog: false,
+                postUnchanged: null,
+                postUnchangedKeys: null,
             }
 
+        },
+        mounted() {
         },
 
       methods:{
@@ -299,7 +303,8 @@
             this.dialog = false;
             //this.$nextTick(() => this.$refs.form.reset())
           },
-      },
+    },
+
     }
 </script>
 

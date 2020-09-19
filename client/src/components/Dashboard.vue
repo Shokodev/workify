@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="small">
         <Bar-chart
         v-if="loaded"
@@ -6,17 +7,38 @@
         :options="options"/>
 
     </div>
+    <div class="small">
+    <Pie-chart
+        v-if="loaded"
+        :chartdata="chartdata"
+        :options="options"/>
+
+    </div>
+    <div class="small">
+    <Radar-chart
+        v-if="loaded"
+        :chartdata="chartdata"
+        :options="options"/>
+
+    </div>
+  </div>
 </template>
 
 <script>
     import PostService from "../PostService";
     import BarChart from "./BarChart";
+/*    import LineChart from "./LineChart";*/
+    import PieChart from "./PieChart";
+    import RadarChart from "./RadarChart";
     import { Bar } from 'vue-chartjs'
+/*    import { Line } from 'vue-chartjs'*/
+    import { Pie } from 'vue-chartjs'
+    import { Radar } from 'vue-chartjs'
 
     export default {
         name: "Dashboard",
-        components: {BarChart},
-        extends: Bar,
+        components: {BarChart, PieChart, RadarChart},
+        extends: {Bar, Pie, Radar},
 
         data: () => ({
             loaded: false,
@@ -25,16 +47,6 @@
                 type: Object,
                 default: null
             },
-
-            dataObject: {
-                labels: ['KW30', 'KW31', 'KW32'],
-                datasets: [
-                    {
-                        label: 'Graphics / Week',
-                        data: [],
-                    }
-                ]
-            }
         }),
 
         methods: {
@@ -46,7 +58,6 @@
             try {
 
                 this.dataObject = await PostService.getDashboard();
-                console.log(this.dataObject.weeklyStatisticsGECC)
                 this.chartdata = this.dataObject.weeklyStatisticsGECC;
                 this.loaded = true
             } catch (e) {
