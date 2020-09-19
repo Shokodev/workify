@@ -101,6 +101,7 @@ router.get('/dashboard', async (req, res,next) => {
     try{
         const posts = await loadPostsCollection();
         let data = await posts.find({}).toArray();
+        let dataWithFinishedTimestamp = [];
         let firstPost = await posts.find({}).sort({ "meta.created_at" : 1 }).limit(1).toArray();
         let today = new Date();
         dashBoard.weeklyStatisticsGECC = {
@@ -112,9 +113,17 @@ router.get('/dashboard', async (req, res,next) => {
                 }
             ],
         };
+         data.forEach(objectWithTimestamp =>{
+                if(objectWithTimestamp.meta.finished_at !== undefined) {
+                    dataWithFinishedTimestamp.push(objectWithTimestamp)
+                }
+            }
+        )
+
         for (let i = getMonday(firstPost[0].meta.created_at); i <= today; i = addDays(i,7)) {
-            let currentGraphics = data.filter(object =>
-                (object.meta.finished_at.getTime() >= i.getTime() && object.meta.finished_at.getTime() < addDays(i,7).getTime())
+
+            let currentGraphics = dataWithFinishedTimestamp.filter(object =>
+                   (object.meta.finished_at.getTime() >= i.getTime() && object.meta.finished_at.getTime() < addDays(i,7).getTime())
             );
             dashBoard.weeklyStatisticsGECC.labels.push("KW " + i.getWeek());
             dashBoard.weeklyStatisticsGECC.datasets.find(item => item.label === "GECC").data.push(

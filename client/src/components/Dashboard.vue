@@ -1,26 +1,33 @@
 <template>
-  <div>
+  <div class="container">
+<v-row>
+  <v-col>
     <div class="small">
-        <Bar-chart
-        v-if="loaded"
-        :chartdata="chartdata"
-        :options="options"/>
-
+      <Bar-chart
+          v-if="loaded"
+          :chartdata="chartdata"
+          :options="options"/>
     </div>
+  </v-col>
+  <v-col>
     <div class="small">
-    <Pie-chart
-        v-if="loaded"
-        :chartdata="chartdata"
-        :options="options"/>
-
+      <Radar-chart
+          v-if="loaded"
+          :chartdata="chartdata"
+          :options="options"/>
     </div>
-    <div class="small">
-    <Radar-chart
-        v-if="loaded"
-        :chartdata="chartdata"
-        :options="options"/>
-
-    </div>
+  </v-col>
+</v-row>
+<!--    <v-row>
+      <v-col>
+        <div class="small">
+          <Pie-chart
+              v-if="loaded"
+              :chartdata="chartdata"
+              :options="options"/>
+        </div>
+      </v-col>
+    </v-row>-->
   </div>
 </template>
 
@@ -28,7 +35,7 @@
     import PostService from "../PostService";
     import BarChart from "./BarChart";
 /*    import LineChart from "./LineChart";*/
-    import PieChart from "./PieChart";
+/*    import PieChart from "./PieChart";*/
     import RadarChart from "./RadarChart";
     import { Bar } from 'vue-chartjs'
 /*    import { Line } from 'vue-chartjs'*/
@@ -37,7 +44,7 @@
 
     export default {
         name: "Dashboard",
-        components: {BarChart, PieChart, RadarChart},
+        components: {BarChart, RadarChart},
         extends: {Bar, Pie, Radar},
 
         data: () => ({
@@ -70,7 +77,7 @@
 
 <style>
     .small {
-        max-width: 1000px;
+        max-width: 800px;
         margin:  150px auto;
     }
 

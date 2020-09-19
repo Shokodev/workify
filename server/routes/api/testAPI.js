@@ -59,7 +59,7 @@ function generateRandomObject(){
     }
     object.meta.created_at = creationDate;
     if(object.item.selectState === "Finished"){
-        object.meta.finshed_at = creationDate;
+        object.meta.finished_at = creationDate;
     }
     if(object.item.siemensDate !== null){
         object.item.selectSiemensTested =  getSelectAuditTested();
