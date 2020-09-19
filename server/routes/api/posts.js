@@ -83,9 +83,16 @@ router.put('/:id', async (req, res,next) =>{
     logger.info('update graphic: ' + req.body.post.item.graphic);
     try {
         const posts = await loadPostsCollection();
-        //TODO 1
-        let x = comparePosts(await posts.findOne({_id: new mongodb.ObjectID(req.params.id)}),req.body.post).item;
-        await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:{x}});
+        //TODO there should be just one db query!
+        let finalPost = comparePosts(await posts.findOne({_id: new mongodb.ObjectID(req.params.id)}),req.body.post);
+        for (const [key, value] of Object.entries(finalPost.item)) {
+            let propertyName = 'item.' + key
+            await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:{[propertyName]: value}});
+        }
+        for (const [key, value] of Object.entries(finalPost.meta)) {
+            let propertyName = 'meta.' + key
+            await posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:{[propertyName]: value}});
+        }
         res.status(200).send();
     } catch (err){
         logger.error("Update DB failed: " + err.message);
@@ -250,12 +257,22 @@ function isFinished(post) {
 function comparePosts(dbPost, newPost) {
     const keys = Object.keys(dbPost.item);
     let finalPost = {
-        item: {}
+        item:{},
+        meta:{}
     }
     for (let key of keys) {
         if (dbPost.item[key] !== newPost.item[key]) {
             finalPost.item[key] = newPost.item[key];
-        }
+            if(key === "selectState" && (dbPost.item[key] !== "Finished" && newPost.item[key] === "Finished")){
+                finalPost.meta.finished_at = new Date();
+                }
+            if(key === "selectSiemensTested" && (dbPost.item[key] !== "OK" && newPost.item[key] === "OK")){
+                finalPost.meta.okBySiemens_at = new Date();
+            }
+            if(key === "selectPlanerTested" && (dbPost.item[key] !== "OK" && newPost.item[key] === "OK")){
+                finalPost.meta.okByPlaner_at = new Date();
+            }
+            }
     }
     return finalPost
 }

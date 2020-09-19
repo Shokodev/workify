@@ -280,8 +280,7 @@
                     'Issues',
                 ],
                 itemsTested:[
-                  'Correct',
-                    'Wrong',
+                    'OK',
                     'Faults',
               ],
                 valid: true,

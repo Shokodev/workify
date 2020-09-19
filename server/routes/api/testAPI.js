@@ -131,12 +131,6 @@ function parseDate(date) {
     return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
 }
 
-
-function randomDate(start, end) {
-    let calcDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-    return calcDate.getFullYear()+'-'+(calcDate.getMonth()+1)+'-'+calcDate.getDate();
-}
-
 function randomNull(value) {
     let x = Math.random();
     if(x>0.77){
