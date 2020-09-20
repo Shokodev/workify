@@ -33,6 +33,7 @@
 
 <script>
     import PostService from "../PostService";
+    import Colors from "@/assets/Colors";
     import BarChart from "./BarChart";
 /*    import LineChart from "./LineChart";*/
 /*    import PieChart from "./PieChart";*/
@@ -49,7 +50,11 @@
 
         data: () => ({
             loaded: false,
-            chartdata: null,
+            chartdata: {
+              label: null,
+              data: null,
+              backgroundColor: null
+            },
             options: {
                 type: Object,
                 default: null
@@ -66,6 +71,8 @@
 
                 this.dataObject = await PostService.getDashboard();
                 this.chartdata = this.dataObject.weeklyStatisticsGECC;
+                //TODO for each dataset set colors
+                this.chartdata.datasets[0].backgroundColor = Colors.getColors(this.chartdata.datasets[0].data.length)
                 this.loaded = true
             } catch (e) {
                 console.error(e)
