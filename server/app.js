@@ -3,7 +3,7 @@ const cors = require('cors');
 const logger = require('./serverlog/logger');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const posts = require('./routes/api/posts');
+const api = require('./routes/api/api');
 const fs = require('fs');
 const path = require('path');
 const middlewares = require('./middlewares');
@@ -28,7 +28,7 @@ if(process.env.NODE_ENV === 'production') {
         });
     });
 }
-app.use('/api/posts', posts);
+app.use('/api',api);
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 

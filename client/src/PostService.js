@@ -1,12 +1,13 @@
 import axios from 'axios';
 //import fs from 'fs';
-const url = 'api/posts/';
+const postUrl = 'api/posts/';
+const baseUrl = 'api/';
 
 class PostService{
     //Get Posts
     static getPosts(){
         return new Promise(((resolve, reject) =>
-            axios.get(url).then((res) => {
+            axios.get(postUrl).then((res) => {
             resolve(
                 res.data
             );
@@ -17,9 +18,9 @@ class PostService{
     }
 
     //Get Dashboard info
-    static getDashboard(){
+    static getDashboard(data){
         return new Promise(((resolve, reject) =>
-            axios.get(url + "dashboard").then((res) => {
+            axios.get(baseUrl + "dashboard/" + data).then((res) => {
                 resolve(
                     res.data
                 );
@@ -31,25 +32,25 @@ class PostService{
 
     // Create Posts
     static insertPost(item){
-        return axios.post(url, {
+        return axios.post(postUrl, {
             item
         });
     }
 
 
     static editPost(post){
-        return axios.put(`${url}${post._id}`, {post} )
+        return axios.put(`${postUrl}${post._id}`, {post} )
     }
 
     // Delete Posts
     static deletePost(id){
-        return axios.delete(`${url}${id}`)
+        return axios.delete(`${postUrl}${id}`)
     }
 
     // Get Excel sheet of all graphics
     static createExcel(){
         return new Promise(((resolve, reject) =>
-            axios.get(url + 'excel',{responseType: 'arraybuffer'}).then((res) => {
+            axios.get(baseUrl + 'excel',{responseType: 'arraybuffer'}).then((res) => {
                 resolve(
                     this.forceFileDownload(res)
                 );

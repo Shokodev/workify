@@ -9,21 +9,21 @@ const colorsArray = [
     '#F1C40F',
     '#F39C12',
     '#D35400',
-    '#ECF0F1',
-    '#95A5A6',
-    '#95A5A6',
-    '#7F8C8D',
+    '#94bdbd',
+    '#95a5a6',
+    '#4c5252',
+    '#5f6b6b',
     '#34495E',
 ]
 
 
 class Colors{
 
-    static getColors(amount){
+    static getColors(amount, offset){
         while(amount > colorsArray.length) {
             colorsArray.push(...colorsArray)
         }
-        return colorsArray.slice(0, amount)
+        return colorsArray.slice(offset, amount + offset);
 
     }
 }
