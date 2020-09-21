@@ -42,6 +42,55 @@
             ></AddItem>
             </v-toolbar>
         </template>
+      <template v-slot:item.item.comments = "{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{on, attrs }">
+            <v-icon
+                v-if="item.item.comments"
+                small
+                class="mx-4"
+                v-bind="attrs"
+                v-on="on"
+            >
+              mdi-comment-text
+            </v-icon>
+          </template>
+          <span>{{item.item.comments }}</span>
+        </v-tooltip>
+      </template>
+      <template v-slot:item.item.siemensComments = "{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{on, attrs }">
+            <v-icon
+                v-if="item.item.siemensComments"
+                small
+                class="mx-4"
+                v-bind="attrs"
+                v-on="on"
+            >
+              mdi-comment-text
+            </v-icon>
+          </template>
+          <span>{{item.item.siemensComments }}</span>
+        </v-tooltip>
+      </template>
+      <template v-slot:item.item.planerComments = "{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{on, attrs }">
+            <v-icon
+                v-if="item.item.planerComments"
+                small
+                class="mx-4"
+                v-bind="attrs"
+                v-on="on"
+            >
+              mdi-comment-text
+            </v-icon>
+          </template>
+          <span>{{item.item.planerComments }}</span>
+        </v-tooltip>
+      </template>
+
         <template v-slot:item.item.actions = "{ item }">
             <EditItem
                 :edit-item="item"
