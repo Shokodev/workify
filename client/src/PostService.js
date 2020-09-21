@@ -30,6 +30,19 @@ class PostService{
             )))
     }
 
+    // Get Settings
+    static getSettings(){
+        return new Promise(((resolve, reject) =>
+            axios.get(baseUrl+"settings").then((res) => {
+                resolve(
+                    res.data
+                );
+            }).catch((err) => {
+                    reject(err);
+                }
+            )))
+    }
+
     // Create Posts
     static insertPost(item){
         return axios.post(postUrl, {

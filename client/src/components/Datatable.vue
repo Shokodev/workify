@@ -60,7 +60,7 @@
 </template>
 
 <script>
-    import PostService from "../PostService";
+    import PostService from "@/PostService";
     import AddItem from "./AddItem";
     import EditItem from "./EditItem";
     export default {
