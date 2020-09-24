@@ -86,7 +86,7 @@ router.get('/weekly', async (req, res,next) => {
         let dataWithFinishedTimestamp = [];
         let firstPost = await posts.find({}).sort({ "meta.created_at" : 1 }).limit(1).toArray();
         let today = new Date();
-        weeklyDashboard.weeklyStatistics = {
+        weeklyDashboard = {
             labels: [],
             datasets: [
                 {
@@ -114,15 +114,15 @@ router.get('/weekly', async (req, res,next) => {
             let currentGraphics = dataWithFinishedTimestamp.filter(object =>
                 (object.meta.finished_at.getTime() >= i.getTime() &&
                     object.meta.finished_at.getTime() < addDays(i,7).getTime()));
-            weeklyDashboard.weeklyStatistics.labels.push("KW " + i.getWeek());
+            weeklyDashboard.labels.push("KW " + i.getWeek());
 
-            weeklyDashboard.weeklyStatistics.datasets.find(item => item.label === "GECC")
+            weeklyDashboard.datasets.find(item => item.label === "GECC")
                 .data.push(currentGraphics.filter(object => object.item.selectState === "Finished").length);
 
-            weeklyDashboard.weeklyStatistics.datasets.find(item => item.label === "Siemens")
+            weeklyDashboard.datasets.find(item => item.label === "Siemens")
                 .data.push(currentGraphics.filter(object => object.item.selectSiemensTested === "OK").length);
 
-            weeklyDashboard.weeklyStatistics.datasets.find(item => item.label === "Planer")
+            weeklyDashboard.datasets.find(item => item.label === "Planer")
                 .data.push(currentGraphics.filter(object => object.item.selectPlanerTested === "OK").length);
         }
         res.send(weeklyDashboard);
