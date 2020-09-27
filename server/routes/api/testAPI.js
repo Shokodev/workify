@@ -1,6 +1,9 @@
 const mongodb = require("mongodb");
 const logger = require("../../serverlog/logger");
-const { uniqueNamesGenerator, adjectives, colors, animals, starWars, countries, names } = require('unique-names-generator');
+const { uniqueNamesGenerator, adjectives, colors,
+    animals, starWars, countries, names } = require('unique-names-generator');
+//post manifest
+const postTypes = require('../../utils/postmanifest');
 
 // Load PostCollection from DB
 async function loadPostsCollection() {
@@ -58,7 +61,7 @@ function generateRandomObject(){
         siemensDate: randomNull(parseDate(updatedAtDate)),
     }
     object.meta.created_at = creationDate;
-    if(object.item.selectState === "Finished"){
+    if(object.item.selectState === postTypes.state.FINISHED){
         object.meta.finished_at = creationDate;
     }
     if(object.item.siemensDate !== null){
@@ -71,7 +74,7 @@ function generateRandomObject(){
             separator: " "
         });
         object.item.planerDate = randomNull(parseDate(updatedAtDate2));
-        if(object.item.selectSiemensTested === "OK"){
+        if(object.item.selectSiemensTested === postTypes.state.OK){
             object.meta.okBySiemens_at = updatedAtDate;
         }
     }
@@ -85,7 +88,7 @@ function generateRandomObject(){
             dictionaries: [adjectives, countries, colors, animals],
             separator: " "
         });
-        if(object.item.selectPlanerTested === "OK"){
+        if(object.item.selectPlanerTested === postTypes.state.OK){
             object.meta.okByPlaner_at = updatedAtDate2;
         }
 
@@ -94,9 +97,9 @@ function generateRandomObject(){
 }
 
 function getRandomSelectType(){
-    let str1 = "Floor plan";
-    let str2 = "Plant graphic";
-    let str3 = "Navigation graphic";
+    let str1 = postTypes.selectType.FLOOR;
+    let str2 = postTypes.selectType.PLANT;
+    let str3 = postTypes.selectType.NAV;
     let x = Math.random();
     if(x<0.2){
         return str1;
@@ -106,10 +109,10 @@ function getRandomSelectType(){
 }
 
 function getRandomSelectState(){
-    let str1 = "Not started";
-    let str2 = "In Progress";
-    let str3 = "Finished";
-    let str4 = "Issues";
+    let str1 = postTypes.state.NOT_STARTED;
+    let str2 = postTypes.state.IN_PROGRESS;
+    let str3 = postTypes.state.FINISHED;
+    let str4 = postTypes.state.ISSUES;
     let x = Math.random();
     if(x<0.25){
         return str1;
@@ -139,8 +142,8 @@ function randomNull(value) {
 }
 
 function getSelectAuditTested(){
-    let str1 = "OK";
-    let str2 = "Faults";
+    let str1 = postTypes.tested.OK;
+    let str2 = postTypes.tested.FAULTS;
 
     let x = Math.random();
     if(x<0.5){

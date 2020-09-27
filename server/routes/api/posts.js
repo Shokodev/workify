@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const logger=require('../../serverlog/logger');
-const { loadPostsCollection } = require('./mongodb')
-
+const { loadPostsCollection } = require('./mongodb');
+const mongodb = require('mongodb');
+const postTypes = require('../../utils/postmanifest');
+//post manifest
+const finished = postTypes.state.FINISHED;
+const ok = postTypes.tested.OK;
 
 // Get Posts
 router.get('/', async (req, res, next) => {
@@ -11,7 +15,6 @@ router.get('/', async (req, res, next) => {
         const posts = await loadPostsCollection();
         res.send(await posts.find({}).toArray());
     } catch (err){
-        res.status(500).send(err.message);
         next(err);
     }
 });
@@ -30,7 +33,6 @@ router.post('/', async (req, res,next) => {
         res.status(201).send();
     } catch (err){
         logger.error("Add post DB failed: " + err.message);
-        res.status(500).send(err.message);
         next(err);
     }
 });
@@ -44,7 +46,6 @@ router.delete('/:id', async (req, res,next) => {
         res.status(200).send();
     } catch (err){
         logger.error("Delete post failed: " + err.message);
-        res.status(500).send(err.message);
         next(err);
     }
 });
@@ -67,13 +68,12 @@ router.put('/:id', async (req, res,next) =>{
         res.status(200).send();
     } catch (err){
         logger.error("Update DB failed: " + err.message);
-        res.status(500).send(err.message);
         next(err);
     }
 });
 
 function isFinished(post) {
-    if(post.selectState === "Finished"){
+    if(post.selectState === postTypes.state.FINISHED){
         return new Date();
     } else return null
 }
@@ -84,21 +84,28 @@ function comparePosts(dbPost, newPost) {
         item:{},
         meta:{}
     }
+
     for (let key of keys) {
         if (dbPost.item[key] !== newPost.item[key]) {
             finalPost.item[key] = newPost.item[key];
-            if(key === "selectState" && (dbPost.item[key] !== "Finished" && newPost.item[key] === "Finished")){
+            if(key === "selectState" && (dbPost.item[key] !== finished && newPost.item[key] === finished)){
                 finalPost.meta.finished_at = new Date();
             }
-            if(key === "selectSiemensTested" && (dbPost.item[key] !== "OK" && newPost.item[key] === "OK")){
+            if(key === "selectSiemensTested" && (dbPost.item[key] !== ok && newPost.item[key] === ok)){
                 finalPost.meta.okBySiemens_at = new Date();
             }
-            if(key === "selectPlanerTested" && (dbPost.item[key] !== "OK" && newPost.item[key] === "OK")){
+            if(key === "selectPlanerTested" && (dbPost.item[key] !== ok && newPost.item[key] === ok)){
                 finalPost.meta.okByPlaner_at = new Date();
             }
         }
     }
-    return finalPost
+    return tryToClosePost(finalPost);
+}
+
+function tryToClosePost(post) {
+    if(post.meta.selectState === finished && post.meta.selectSiemensTested === ok && post.meta.selectPlanerTested === ok){
+        post.meta.closed_at = new Date();
+    }
 }
 
 module.exports = router;

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const logger = require('../../serverlog/logger');
 const { loadPostsCollection } = require('./mongodb');
+const postTypes = require('../../utils/postmanifest');
 Date.prototype.getWeek = function (dowOffset) {
     /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
 
@@ -30,12 +31,6 @@ Date.prototype.getWeek = function (dowOffset) {
     return weeknum;
 };
 
-const tempSettings = {
-    requiredGraphicAmount: 10,
-    maxGraphics: 2000,
-    maxRegulations: 1500,
-}
-
 router.get('/main', async (req, res,next) => {
     logger.info('fetch major data from db for dashboard');
     let dashBoard = {
@@ -51,13 +46,12 @@ router.get('/main', async (req, res,next) => {
     try{
         const posts = await loadPostsCollection();
         let data = await posts.find({}).toArray();
-
        // dashBoard.totoalGraphics = data.length;
        // dashBoard.maxGraphics = tempSettings.maxGraphics;
        // dashBoard.maxRegulation = tempSettings.maxRegulations;
-        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": "Floor plan"}));
-        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": "Plant graphic"}));
-        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": "Navigation graphic"}));
+        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": postTypes.selectType.FLOOR}));
+        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": postTypes.selectType.PLANT}));
+        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": postTypes.selectType.NAV}));
         /*dashBoard.gecc = {};
         dashBoard.gecc.finshed = await posts.countDocuments({"item.selectState": "Finished"});
         dashBoard.gecc.inProgress = await posts.countDocuments({"item.selectState": "In Progress"});
@@ -117,13 +111,13 @@ router.get('/weekly', async (req, res,next) => {
             weeklyDashboard.labels.push("KW " + i.getWeek());
 
             weeklyDashboard.datasets.find(item => item.label === "GECC")
-                .data.push(currentGraphics.filter(object => object.item.selectState === "Finished").length);
+                .data.push(currentGraphics.filter(object => object.item.selectState === postTypes.state.FINISHED).length);
 
             weeklyDashboard.datasets.find(item => item.label === "Siemens")
-                .data.push(currentGraphics.filter(object => object.item.selectSiemensTested === "OK").length);
+                .data.push(currentGraphics.filter(object => object.item.selectSiemensTested === postTypes.tested.OK).length);
 
             weeklyDashboard.datasets.find(item => item.label === "Planer")
-                .data.push(currentGraphics.filter(object => object.item.selectPlanerTested === "OK").length);
+                .data.push(currentGraphics.filter(object => object.item.selectPlanerTested === postTypes.tested.OK).length);
         }
         res.send(weeklyDashboard);
     } catch (err){
