@@ -26,5 +26,5 @@ router.get('/', async (req, res, next) => {
         next(err);
     }
 });
-
+//TODO Update settings method
 module.exports = router
