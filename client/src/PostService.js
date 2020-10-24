@@ -43,6 +43,10 @@ class PostService{
             )))
     }
 
+    static updateSettings(settings, id){
+        return axios.put(`${baseUrl + "settings/"}${id}`, settings)
+    }
+
     // Create Posts
     static insertPost(item){
         return axios.post(postUrl, {

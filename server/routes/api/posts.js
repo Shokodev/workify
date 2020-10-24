@@ -84,7 +84,6 @@ function comparePosts(dbPost, newPost) {
         item:{},
         meta:{}
     }
-
     for (let key of keys) {
         if (dbPost.item[key] !== newPost.item[key]) {
             finalPost.item[key] = newPost.item[key];
@@ -97,7 +96,6 @@ function comparePosts(dbPost, newPost) {
             if(key === "selectPlanerTested" && (dbPost.item[key] !== ok && newPost.item[key] === ok)){
                 finalPost.meta.okByPlaner_at = new Date();
             }
-            //TODO Set complete state
         }
     }
     return tryToClosePost(finalPost);

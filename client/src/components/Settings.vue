@@ -36,8 +36,13 @@
         label="Total data points"
         required
     ></v-text-field>
-    <v-btn dark color="indigo"><v-icon dark>mdi-content-save</v-icon>Save</v-btn>
-
+    <v-btn color="indigo"
+           class="white--text"
+           @click="updateSettings(settings)"
+           :loading ="loadingActive"
+           :disabled="loadingActive">
+      <v-icon color="white">mdi-content-save</v-icon>Save
+    </v-btn>
   </div>
 
 
@@ -49,11 +54,36 @@ import PostService from "@/PostService";
         name: "Settings",
       data() {
           return{
-            settings: null,
-          }
+            settings: {
+              calculatedGraphics: "",
+              plantGraphics: "",
+              floorPlan: "",
+              navigationGraphic: "",
+              regulationsGraphic: "",
+              requiredGraphicsAtWeek: "",
+              totalDataPoints: ""
+            },
+            id:"",
+            loadingActive: false,
+      }
       },
      async mounted() {
-      this.settings = await PostService.getSettings();
+      let res = await PostService.getSettings();
+      this.id = res._id;
+      this.settings = res.settings;
+      },
+      methods:{
+          async updateSettings(settings){
+            this.loadingActive = true;
+            PostService.updateSettings(settings, this.id).then(()=>{
+             this.loadingActive = false;
+             }
+            ).catch(err=>{
+              console.log(err);
+              this.loadingActive = false;
+            });
+            await PostService.getSettings();
+          }
       }
     }
 </script>
