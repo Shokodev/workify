@@ -3,7 +3,7 @@ const router = express.Router();
 const logger = require('../../serverlog/logger');
 const path = require('path');
 const exceljs = require('exceljs');
-const { loadPostsCollection } = require('./mongodb');
+const { loadPostsCollection } = require('../../mongodb');
 
 // Get data in excel sheet
 router.get('/',async (req, res) => {

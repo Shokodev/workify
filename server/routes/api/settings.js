@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const logger = require('../../serverlog/logger');
-const {loadSettings} = require('./mongodb');
-const mongodb = require('mongodb');
+const {Settings} = require('../../mongodb');
+
 
 // Get Posts
 router.get('/', async (req, res, next) => {
-    logger.info('get settings');
+    logger.info('get settings ' + res.body);
     try{
-        const rawData = await loadSettings();
-        const settings = await rawData.find({}).toArray()
-        if (settings.length === 0){
-           await rawData.insertOne({ settings: {
+       let dbSettings = await Settings.find({name: "Settings"});
+        if (dbSettings.length === 0){
+           await Settings.create({
+               name: "Settings",
+               settings:{
                    calculatedGraphics: 10000,
                    plantGraphics: 1000,
                    floorPlan: 20,
@@ -19,9 +20,10 @@ router.get('/', async (req, res, next) => {
                    regulationsGraphic: 666,
                    requiredGraphicsAtWeek: 50,
                    totalDataPoints: 33333
-               }})
+               }
+           });
         }
-        res.send(settings[0]);
+        res.send(dbSettings[0]);
     } catch (err){
         res.status(500).send(err.message);
         next(err);
@@ -31,8 +33,7 @@ router.get('/', async (req, res, next) => {
 router.put('/:id' ,async(req,res,next) => {
     logger.info('update settings: ' + res.body);
     try{
-        const settings = await loadSettings();
-        settings.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:{['settings']: req.body}});
+        Settings.replaceOne({name: "Settings"}, res.body);
         res.status(200).send();
     } catch (err){
         console.log(err);

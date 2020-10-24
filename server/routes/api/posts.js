@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const logger=require('../../serverlog/logger');
-const { loadPostsCollection } = require('./mongodb');
+const { loadPostsCollection } = require('../../mongodb');
 const mongodb = require('mongodb');
 const postTypes = require('../../utils/postmanifest');
 //post manifest
