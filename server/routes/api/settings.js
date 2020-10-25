@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const logger = require('../../serverlog/logger');
-const {Settings} = require('../../mongodb');
+const {Settings, connectDb} = require('../../mongodb');
 
 
 // Get Posts
 router.get('/', async (req, res, next) => {
-    logger.info('get settings ' + res.body);
+    logger.info('get settings ');
     try{
        let dbSettings = await Settings.find({name: "Settings"});
         if (dbSettings.length === 0){
@@ -31,10 +31,10 @@ router.get('/', async (req, res, next) => {
 });
 
 router.put('/:id' ,async(req,res,next) => {
-    logger.info('update settings: ' + res.body);
+    logger.info('update settings: ' + JSON.stringify(req.body));
     try{
-        Settings.replaceOne({name: "Settings"}, res.body);
-        res.status(200).send();
+       await Settings.findOneAndUpdate({_id: req.params.id},{settings: req.body});
+       res.status(200).send();
     } catch (err){
         console.log(err);
         res.status(500).send(err.message);

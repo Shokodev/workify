@@ -9,15 +9,16 @@ const path = require('path');
 const bodyparser = require('body-parser');
 const middlewares = require('./middlewares');
 const accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/access.log'), { flags: 'a' });
-const {connectDb} = require("./mongodb");
-
+const { connectDb } = require("./mongodb");
 const app = express();
-app.use(bodyparser.urlencoded({ extended: true }));
-app.use(bodyparser.json());
+
+
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(morgan('combined', { stream: accessLogStream }));
+app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
 
 if(process.env.NODE_ENV === 'production') {
     app.use(express.static(__dirname + '/public/'));
@@ -32,14 +33,17 @@ if(process.env.NODE_ENV === 'production') {
     });
 }
 
-app.use('/api',api);
-app.use(middlewares.notFound);
-app.use(middlewares.errorHandler);
-
 connectDb().then(()=>{
     logger.info("DB connection successful!");
 }).catch(err=>{
     logger.error("DB connection failed: " + err)
 });
+
+
+app.use('/api',api);
+app.use(middlewares.notFound);
+app.use(middlewares.errorHandler);
+
+
 
 module.exports = app;

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const logger = require('../../serverlog/logger');
-const { loadPostsCollection } = require('../../mongodb');
+const { Posts } = require('../../mongodb');
 const postTypes = require('../../utils/postmanifest');
 Date.prototype.getWeek = function (dowOffset) {
     /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
@@ -44,14 +44,13 @@ router.get('/main', async (req, res,next) => {
 
     };
     try{
-        const posts = await loadPostsCollection();
-        let data = await posts.find({}).toArray();
-       // dashBoard.totoalGraphics = data.length;
+        let data = await Posts.find({});
+        dashBoard.totoalGraphics = data.length;
        // dashBoard.maxGraphics = tempSettings.maxGraphics;
        // dashBoard.maxRegulation = tempSettings.maxRegulations;
-        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": postTypes.selectType.FLOOR}));
-        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": postTypes.selectType.PLANT}));
-        dashBoard.datasets[0].data.push(await posts.countDocuments({"item.selectType": postTypes.selectType.NAV}));
+        dashBoard.datasets[0].data.push(await Posts.countDocuments({"item.selectType": postTypes.selectType.FLOOR}));
+        dashBoard.datasets[0].data.push(await Posts.countDocuments({"item.selectType": postTypes.selectType.PLANT}));
+        dashBoard.datasets[0].data.push(await Posts.countDocuments({"item.selectType": postTypes.selectType.NAV}));
         /*dashBoard.gecc = {};
         dashBoard.gecc.finshed = await posts.countDocuments({"item.selectState": "Finished"});
         dashBoard.gecc.inProgress = await posts.countDocuments({"item.selectState": "In Progress"});
@@ -75,10 +74,9 @@ router.get('/weekly', async (req, res,next) => {
     logger.info('fetch gecc data from db for dashboard');
     let weeklyDashboard = {};
     try{
-        const posts = await loadPostsCollection();
-        let data = await posts.find({}).toArray();
+        let data = await Posts.find({})
         let dataWithFinishedTimestamp = [];
-        let firstPost = await posts.find({}).sort({ "meta.created_at" : 1 }).limit(1).toArray();
+        let firstPost = await Posts.find({}).sort({ "meta.created_at" : 1 }).limit(1);
         let today = new Date();
         weeklyDashboard = {
             labels: [],

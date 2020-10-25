@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const logger = require('./serverlog/logger')
+const postTypes = require('./utils/postmanifest');
 require('dotenv').config();
 
 const connectDb = () => {
@@ -8,8 +8,7 @@ const connectDb = () => {
         useUnifiedTopology: true,
         useFindAndModify: false,
         useCreateIndex: true
-    })
-
+    });
 };
 
 const userSchema = new mongoose.Schema(
@@ -65,10 +64,74 @@ const settings = new mongoose.Schema(
     },
     { timestamps: true },
 );
+
+const posts = new mongoose.Schema(
+    {
+        item: {
+            graphic:{
+                type: String,
+                required: true,
+            },
+            selectType:{
+                type: postTypes.selectType,
+                required: true,
+            },
+            selectState:{
+                type: postTypes.state,
+                required: true,
+            },
+            regulations:{
+                type: Number,
+                required: true,
+            },
+            creator:{
+                type: String,
+                required: true,
+            },
+            comments:{
+              type: String,
+            },
+            selectSiemensTested:{
+                type: postTypes.tested,
+            },
+            siemensAuditor:{
+                type: String,
+            },
+            siemensComments:{
+                type: String,
+            },
+            selectPlanerTested:{
+                type: postTypes.tested,
+            },
+            planer:{
+                type: String,
+            },
+            planerComments:{
+                type: String,
+            },
+        },
+        meta: {
+            finished_at: {
+             type: Date,
+            },
+            okBySiemens_at: {
+                type: Date,
+            },
+            okByPlaner: {
+                type: Date,
+            },
+            colsed_at: {
+                type: Date,
+            },
+        },
+    },
+    { timestamps: true },
+);
+
 const User = mongoose.model('User', userSchema);
 const Settings = mongoose.model('Settings', settings);
-
+const Posts = mongoose.model('Posts', posts);
 
 module.exports = {
-    connectDb, User, Settings
+    connectDb, User, Settings, Posts
 }
