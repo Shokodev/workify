@@ -1,28 +1,13 @@
-const mongodb = require("mongodb");
 const logger = require("../../serverlog/logger");
 const { uniqueNamesGenerator, adjectives, colors,
     animals, starWars, countries, names } = require('unique-names-generator');
 //post manifest
 const postTypes = require('../../utils/postmanifest');
-
-// Load PostCollection from DB
-async function loadPostsCollection() {
-    try {
-        const dbInstance = await mongodb.MongoClient.connect('mongodb+srv://workify123:workify123@workify.iukfu.gcp.mongodb.net/workify?retryWrites=true&w=majority', {
-            useNewUrlParser: true, useUnifiedTopology: true
-        });
-        logger.info('connect to mongodb: ' + dbInstance.isConnected());
-        return dbInstance.db('vue_express').collection('posts');
-    } catch (err){
-        logger.error('cant connect to db: ' + err);
-        throw new Error('cant connect to db: ' + err);
-    }
-}
+const { Posts } = require('../../mongodb');
 
 async function generateRandomEntries(countOfRandomEntries) {
-    const posts = await loadPostsCollection();
     for (let i = 0; i < countOfRandomEntries; i++) {
-        await posts.insertOne(
+        await Posts.create(
             generateRandomObject()
         );
     }
@@ -30,8 +15,7 @@ async function generateRandomEntries(countOfRandomEntries) {
 }
 
 async function deleteAllEntries() {
-    const posts = await loadPostsCollection();
-    await posts.drop();
+    await Posts.drop();
     return true;
 }
 

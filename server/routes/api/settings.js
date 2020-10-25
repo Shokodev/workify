@@ -31,7 +31,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.put('/:id' ,async(req,res,next) => {
-    logger.info('update settings: ' + JSON.stringify(req.body));
+    logger.info('update settings: ');
     try{
        await Settings.findOneAndUpdate({_id: req.params.id},{settings: req.body});
        res.status(200).send();

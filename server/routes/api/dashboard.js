@@ -102,6 +102,7 @@ router.get('/weekly', async (req, res,next) => {
                 }
             }
         );
+        //TODO created_at has to be replaced with the mongoose createdAt
         for (let i = getMonday(firstPost[0].meta.created_at); i <= today; i = addDays(i,7)) {
             let currentGraphics = dataWithFinishedTimestamp.filter(object =>
                 (object.meta.finished_at.getTime() >= i.getTime() &&
