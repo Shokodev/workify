@@ -93,7 +93,7 @@ function comparePosts(dbPost, newPost) {
             }
         }
     }
-    return finalPost;
+    return tryToClosePost(finalPost);
 }
 
 function tryToClosePost(post) {
