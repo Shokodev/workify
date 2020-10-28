@@ -16,8 +16,17 @@ const state = {
     ISSUES:"Issues"
 }
 
+const roles = {
+    ADMIN: "Administrator",
+    GECC: "GECC",
+    SIEMENS:"Siemens",
+    PLANER: "Planer",
+    NONE: "Default",
+}
+
 module.exports = {
     selectType,
     tested,
-    state
+    state,
+    roles
 }

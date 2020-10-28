@@ -15,12 +15,20 @@ const userSchema = new mongoose.Schema(
     {
         username: {
             type: String,
+            required: true,
+        },
+        nickname: {
+            type: String,
             unique: true,
             required: true,
         },
         password:{
             type: String,
             required: true,
+        },
+        role:{
+            type: postTypes.roles,
+            required: true
         }
     },
     { timestamps: true },
@@ -128,10 +136,10 @@ const posts = new mongoose.Schema(
     { timestamps: true },
 );
 
-const User = mongoose.model('User', userSchema);
+const Users = mongoose.model('User', userSchema);
 const Settings = mongoose.model('Settings', settings);
 const Posts = mongoose.model('Posts', posts);
 
 module.exports = {
-    connectDb, User, Settings, Posts
+    connectDb, Users, Settings, Posts
 }
