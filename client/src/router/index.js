@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Datatable from "../components/Datatable";
 import Settings from "../components/Settings";
+import Signup from "../components/Signup";
+import Signin from "../components/Signin";
 
 Vue.use(Router);
 
@@ -34,6 +36,16 @@ const router = new Router({
             path: '/settings',
             name: 'settings',
             component: Settings,
+        },
+        {
+            path: '/signup',
+            name: 'signup',
+            component: Signup,
+        },
+        {
+            path: '/signin',
+            name: 'signin',
+            component: Signin,
         },
     ]
 

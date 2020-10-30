@@ -1,9 +1,12 @@
 import axios from 'axios';
 //import fs from 'fs';
-const postUrl = 'api/posts/';
+
 const baseUrl = 'api/';
+const postUrl = 'api/posts/';
 
 class PostService{
+
+
     //Get Posts
     static getPosts(){
         return new Promise(((resolve, reject) =>

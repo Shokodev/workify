@@ -25,7 +25,6 @@
                             v-for="(name, i) in items"
                             :key="i"
                             :to="{ name }"
-                            :exact="name === 'Dashboard'"
                             :ripple="false"
                             active-class="text--primary"
                             class="font-weight-bold"
@@ -34,6 +33,26 @@
                     >
                         {{ name }}
                     </v-tab>
+                  <v-tab
+                      :to="'signup'"
+                      :ripple="false"
+                      active-class="text--primary"
+                      class="font-weight-bold"
+                      min-width="96"
+                      text
+                  >
+                     Sign up
+                  </v-tab>
+                  <v-tab
+                      :to="'signin'"
+                      :ripple="false"
+                      active-class="text--primary"
+                      class="font-weight-bold"
+                      min-width="96"
+                      text
+                  >
+                    Sign in
+                  </v-tab>
                 </v-tabs>
             </div>
         </v-app-bar>
