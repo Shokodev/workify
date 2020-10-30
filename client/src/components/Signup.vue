@@ -92,12 +92,11 @@ export default {
   methods: {
     signup () {
       this.$refs.form.validate()
-      const formData = {
-        email: this.name,
+      this.$store.dispatch('signup', {
+        username: this.name,
+        nickname: this.shortname,
         password: this.password,
-      }
-      console.log(formData)
-      this.$store.dispatch('signup', formData)
+      })
     },
     cancel () {
       this.$refs.form.reset()

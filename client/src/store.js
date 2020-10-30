@@ -24,36 +24,30 @@ export default  new Vuex.Store({
 
     actions: {
 
-        signup ({commit, dispatch}, authData) {
-        axios.post('api/users/register', {
+        signup ({dispatch}, authData) {
+        axios.post('api/users/register',
             authData
-        })
-            .then(res => {
-                console.log(res)
-                commit('authUser', {
-                    token: res.data.idToken,
-                    userId: res.data.localId
-                })
-                localStorage.setItem('token', res.data.idToken)
-                localStorage.setItem('userId', res.data.userId)
-                dispatch('storeUser', authData)
+        )
+            .then(() => {
+                console.log(authData);
+                dispatch('login',authData)
             })
             .catch(error => console.log(error))
         },
 
         login ({commit}, authData) {
-            axios.post('api/users/login', {
+            axios.post('api/auth/login',
                 authData
-            })
+            )
                 .then(res => {
-                    localStorage.setItem('token', res.data.idToken)
-                    localStorage.setItem('userId', res.data.localId)
+                    localStorage.setItem('token', res.data.accessToken)
+                    localStorage.setItem('userId', res.data.user[0]._id)
                     commit('authUser', {
-                        token: res.data.idToken,
-                        userId: res.data.userId
+                        token: res.data.accessToken,
+                        userId: res.data.user[0]._id
                     })
                 })
-        }
+        },
     },
     getters: {
     }
