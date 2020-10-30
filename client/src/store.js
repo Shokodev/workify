@@ -9,16 +9,20 @@ export default  new Vuex.Store({
     state: {
         idToken: null,
         localId: null,
-        user: null
+        user: {
+            nickname: "",
+            username: "",
+            role: "",
+        }
     },
 
     mutations: {
-        authUser (state, userData){
-            state.idToken = userData.token
-            state.userId = userData.userid
-        },
-        storeUser (state, user) {
-            state.user = user
+        authUser (state, data){
+             state.idToken = data.accessToken;
+             state.localId = data.user[0]._id
+             state.user.nickname = data.user[0].nickname;
+             state.user.username = data.user[0].username;
+             state.user.role = data.user[0].role;
         }
     },
 
@@ -42,10 +46,7 @@ export default  new Vuex.Store({
                 .then(res => {
                     localStorage.setItem('token', res.data.accessToken)
                     localStorage.setItem('userId', res.data.user[0]._id)
-                    commit('authUser', {
-                        token: res.data.accessToken,
-                        userId: res.data.user[0]._id
-                    })
+                    commit('authUser', res.data)
                 })
         },
     },
