@@ -1,7 +1,7 @@
 const logger = require('./serverlog/logger');
 const app = require('./app');
 require('dotenv').config();
-const {deleteAllEntries, generateRandomEntries} = require('./routes/api/testAPI');
+const {deleteAllEntries, generateRandomEntries} = require('./routes/api/testDatabase');
 const port = process.env.PORT;
 
 

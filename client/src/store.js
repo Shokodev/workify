@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-//import router from './router/index'
+import router from './router/index'
 
 Vue.use(Vuex)
 
@@ -39,15 +39,16 @@ export default  new Vuex.Store({
             .catch(error => console.log(error))
         },
 
-        login ({commit}, authData) {
-            axios.post('api/auth/login',
+       async login ({commit}, authData) {
+           await axios.post('api/auth/login',
                 authData
             )
                 .then(res => {
                     localStorage.setItem('token', res.data.accessToken)
                     localStorage.setItem('userId', res.data.user[0]._id)
                     commit('authUser', res.data)
-                })
+                });
+            await router.replace('/');
         },
     },
     getters: {

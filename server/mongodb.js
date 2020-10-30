@@ -119,6 +119,9 @@ const posts = new mongoose.Schema(
             },
         },
         meta: {
+            testCreationDate: {
+                type: Date,
+            },
             finished_at: {
              type: Date,
             },
@@ -128,7 +131,7 @@ const posts = new mongoose.Schema(
             okByPlaner: {
                 type: Date,
             },
-            colsed_at: {
+            closed_at: {
                 type: Date,
             },
         },

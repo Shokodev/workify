@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const logger = require('../../serverlog/logger');
-const { Posts } = require('../../mongodb');
+const { Posts, Settings } = require('../../mongodb');
 const postTypes = require('../../utils/postmanifest');
 Date.prototype.getWeek = function (dowOffset) {
     /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
@@ -45,23 +45,22 @@ router.get('/main', async (req, res,next) => {
     };
     try{
         let data = await Posts.find({});
+        let dbSettings = await Settings.find({name: "Settings"});
         dashBoard.totoalGraphics = data.length;
-       // dashBoard.maxGraphics = tempSettings.maxGraphics;
-       // dashBoard.maxRegulation = tempSettings.maxRegulations;
         dashBoard.datasets[0].data.push(await Posts.countDocuments({"item.selectType": postTypes.selectType.FLOOR}));
         dashBoard.datasets[0].data.push(await Posts.countDocuments({"item.selectType": postTypes.selectType.PLANT}));
         dashBoard.datasets[0].data.push(await Posts.countDocuments({"item.selectType": postTypes.selectType.NAV}));
         /*dashBoard.gecc = {};
-        dashBoard.gecc.finshed = await posts.countDocuments({"item.selectState": "Finished"});
-        dashBoard.gecc.inProgress = await posts.countDocuments({"item.selectState": "In Progress"});
-        dashBoard.gecc.issues = await posts.countDocuments({"item.selectState": "Issues"});
-        dashBoard.gecc.notStarted = await posts.countDocuments({"item.selectState": "Not started"});
+        dashBoard.gecc.finshed = await Posts.countDocuments({"item.selectState": "Finished"});
+        dashBoard.gecc.inProgress = await Posts.countDocuments({"item.selectState": "In Progress"});
+        dashBoard.gecc.issues = await Posts.countDocuments({"item.selectState": "Issues"});
+        dashBoard.gecc.notStarted = await Posts.countDocuments({"item.selectState": "Not started"});
         dashBoard.siemens = {};
-        dashBoard.siemens.auditFaults = await posts.countDocuments({"item.selectSiemensTested": "Faults"});
-        dashBoard.siemens.auditOK = await posts.countDocuments({"item.selectSiemensTested": "OK"});
+        dashBoard.siemens.auditFaults = await Posts.countDocuments({"item.selectSiemensTested": "Faults"});
+        dashBoard.siemens.auditOK = await Posts.countDocuments({"item.selectSiemensTested": "OK"});
         dashBoard.planer = {};
-        dashBoard.planer.auditFaults = await posts.countDocuments({"item.selectPlanerTested": "Faults"});
-        dashBoard.planer.auditOK = await posts.countDocuments({"item.selectPlanerTested": "OK"});*/
+        dashBoard.planer.auditFaults = await Posts.countDocuments({"item.selectPlanerTested": "Faults"});
+        dashBoard.planer.auditOK = await Posts.countDocuments({"item.selectPlanerTested": "OK"});*/
         res.send(dashBoard);
     } catch (err){
         console.log(err);
@@ -76,7 +75,7 @@ router.get('/weekly', async (req, res,next) => {
     try{
         let data = await Posts.find({})
         let dataWithFinishedTimestamp = [];
-        let firstPost = await Posts.find({}).sort({ "meta.created_at" : 1 }).limit(1);
+        let firstPost = await Posts.find({}).sort({ "meta.testCreationDate" : 1 }).limit(1);
         let today = new Date();
         weeklyDashboard = {
             labels: [],
@@ -102,8 +101,9 @@ router.get('/weekly', async (req, res,next) => {
                 }
             }
         );
-        //TODO created_at has to be replaced with the mongoose createdAt
-        for (let i = getMonday(firstPost[0].meta.created_at); i <= today; i = addDays(i,7)) {
+        //TODO testCreationDate has to be replaced with the mongoose createdAt
+        console.log(firstPost[0].meta)
+        for (let i = getMonday(firstPost[0].meta.testCreationDate); i <= today; i = addDays(i,7)) {
             let currentGraphics = dataWithFinishedTimestamp.filter(object =>
                 (object.meta.finished_at.getTime() >= i.getTime() &&
                     object.meta.finished_at.getTime() < addDays(i,7).getTime()));

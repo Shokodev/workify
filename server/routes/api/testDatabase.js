@@ -1,6 +1,7 @@
-const logger = require("../../serverlog/logger");
+
 const { uniqueNamesGenerator, adjectives, colors,
     animals, starWars, countries, names } = require('unique-names-generator');
+
 //post manifest
 const postTypes = require('../../utils/postmanifest');
 const { Posts } = require('../../mongodb');
@@ -15,7 +16,7 @@ async function generateRandomEntries(countOfRandomEntries) {
 }
 
 async function deleteAllEntries() {
-    await Posts.drop();
+    await Posts.deleteMany({});
     return true;
 }
 
@@ -44,7 +45,7 @@ function generateRandomObject(){
         }),
         siemensDate: randomNull(parseDate(updatedAtDate)),
     }
-    object.meta.created_at = creationDate;
+    object.meta.testCreationDate = creationDate;
     if(object.item.selectState === postTypes.state.FINISHED){
         object.meta.finished_at = creationDate;
     }
