@@ -51,15 +51,16 @@ router.put('/:id', async (req, res,next) =>{
     logger.info('update graphic: ' + req.body.post.item.graphic);
     try {
         //TODO there should be just one db query!
-        let finalPost = comparePosts(await Posts.findOne({_id: new mongodb.ObjectID(req.params.id)}),req.body.post);
+        let finalPost = comparePosts(await Posts.findOne({_id: req.params.id}),req.body.post);
         for (const [key, value] of Object.entries(finalPost.item)) {
             let propertyName = 'item.' + key
-            await Posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:{[propertyName]: value}});
+            await Posts.updateOne({_id:req.params.id},{$set:{[propertyName]: value}});
         }
         for (const [key, value] of Object.entries(finalPost.meta)) {
             let propertyName = 'meta.' + key
-            await Posts.updateOne({_id: new mongodb.ObjectID(req.params.id)},{$set:{[propertyName]: value}});
+            await Posts.updateOne({_id:req.params.id},{$set:{[propertyName]: value}});
         }
+        await tryToClosePost(await Posts.findOne({_id: req.params.id}));
         res.status(200).send();
     } catch (err){
         logger.error("Update DB failed: " + err.message);
@@ -93,13 +94,14 @@ function comparePosts(dbPost, newPost) {
             }
         }
     }
-    return tryToClosePost(finalPost);
+    return finalPost;
 }
-
-function tryToClosePost(post) {
-    if(post.meta.selectState === finished && post.meta.selectSiemensTested === ok && post.meta.selectPlanerTested === ok){
-        post.meta.closed_at = new Date();
+async function tryToClosePost(post) {
+    console.log(post);
+    if(post.item.selectState === finished && post.item.selectSiemensTested === ok && post.item.selectPlanerTested === ok){
+        let value = new Date();
+        let propertyName = 'meta.closed_at';
+        await Posts.updateOne({_id: post._id},{$set:{[propertyName]: value}});
     }
 }
-
 module.exports = router;

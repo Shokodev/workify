@@ -73,9 +73,13 @@ function generateRandomObject(){
             dictionaries: [adjectives, countries, colors, animals],
             separator: " "
         });
-        if(object.item.selectPlanerTested === postTypes.state.OK){
+        if(object.item.selectPlanerTested  === postTypes.tested.OK){
             object.meta.okByPlaner_at = updatedAtDate2;
+            if((object.item.selectSiemensTested === postTypes.tested.OK) && (object.item.selectState === postTypes.state.FINISHED)){
+               object.meta.closed_at =  updatedAtDate2;
+            }
         }
+
 
     }
     return object

@@ -69,11 +69,47 @@ router.get('/main', async (req, res,next) => {
     }
 });
 
+router.get('/progress', async (req, res,next) => {
+    logger.info('fetch progress data from db for dashboard');
+    try{
+    let data = await Posts.find({});
+    let dbSettings = await Settings.find({name: "Settings"});
+    let progress = {
+        plantGraphics: {
+            current: await Posts.countDocuments({"item.selectType": postTypes.selectType.PLANT}),
+            expected: dbSettings[0].settings.plantGraphics,
+        },
+        floorPlans: {
+            current: await Posts.countDocuments({"item.selectType": postTypes.selectType.FLOOR}),
+            expected: dbSettings[0].settings.floorPlan,
+        },
+        navigationsGraphics: {
+            current: await Posts.countDocuments({"item.selectType": postTypes.selectType.NAV}),
+            expected: dbSettings[0].settings.navigationGraphic,
+        },
+        regulationGraphics: {
+            current: getAmountOfRegulationGraphics(data),
+            expected: dbSettings[0].settings.regulationsGraphic,
+        },
+        total:{
+            current:  data.length,
+            expected: dbSettings[0].settings.calculatedGraphics,
+        }
+    };
+    res.send(progress);
+    } catch (err){
+        console.log(err);
+        res.status(500).send(err.message);
+        next(err);
+    }
+});
+
 router.get('/weekly', async (req, res,next) => {
     logger.info('fetch gecc data from db for dashboard');
     let weeklyDashboard = {};
+    let weeklyGoals = {};
     try{
-        let data = await Posts.find({})
+        let data = await Posts.find({});
         let dataWithFinishedTimestamp = [];
         let firstPost = await Posts.find({}).sort({ "meta.testCreationDate" : 1 }).limit(1);
         let today = new Date();
@@ -91,10 +127,14 @@ router.get('/weekly', async (req, res,next) => {
                 {
                     label: "Planer",
                     data: [],
-                }
+                },
+                {
+                    label: "Closed",
+                    data: [],
+                },
             ],
-
         };
+
         data.forEach(objectWithTimestamp =>{
                 if(objectWithTimestamp.meta.finished_at !== undefined) {
                     dataWithFinishedTimestamp.push(objectWithTimestamp)
@@ -102,7 +142,6 @@ router.get('/weekly', async (req, res,next) => {
             }
         );
         //TODO testCreationDate has to be replaced with the mongoose createdAt
-        console.log(firstPost[0].meta)
         for (let i = getMonday(firstPost[0].meta.testCreationDate); i <= today; i = addDays(i,7)) {
             let currentGraphics = dataWithFinishedTimestamp.filter(object =>
                 (object.meta.finished_at.getTime() >= i.getTime() &&
@@ -117,6 +156,10 @@ router.get('/weekly', async (req, res,next) => {
 
             weeklyDashboard.datasets.find(item => item.label === "Planer")
                 .data.push(currentGraphics.filter(object => object.item.selectPlanerTested === postTypes.tested.OK).length);
+
+            weeklyDashboard.datasets.find(item => item.label === "Closed")
+                .data.push(currentGraphics.filter(object => object.meta.closed_at !== undefined).length);
+
         }
         res.send(weeklyDashboard);
     } catch (err){
@@ -126,6 +169,14 @@ router.get('/weekly', async (req, res,next) => {
     }
 });
 
+
+function getAmountOfRegulationGraphics(data) {
+    let regulationGraphics = 0;
+    data.forEach(post=>{
+      regulationGraphics = regulationGraphics + post.item.regulations
+    });
+    return regulationGraphics;
+}
 
 function addDays(date, days) {
     let result = new Date(date);
