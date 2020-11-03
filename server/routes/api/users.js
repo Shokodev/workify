@@ -23,8 +23,11 @@ router.post('/register', async (req, res,next) => {
         req.body.role = roles.NONE;
         await Users.create(req.body);
         res.status(201).send();
-    } catch (err){
+
         logger.error("Add User failed: " + err.message);
+        next(err);
+    } catch (err){
+        logger.error("Register user failed: " + err.message);
         next(err);
     }
 });

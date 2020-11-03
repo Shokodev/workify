@@ -9,48 +9,91 @@ export default  new Vuex.Store({
     state: {
         idToken: null,
         localId: null,
-        user: {
-            nickname: "",
-            username: "",
-            role: "",
-        }
+        user: null,
     },
 
     mutations: {
-        authUser (state, data){
-             state.idToken = data.accessToken;
-             state.localId = data.user[0]._id
-             state.user.nickname = data.user[0].nickname;
-             state.user.username = data.user[0].username;
-             state.user.role = data.user[0].role;
-        }
+        authUser(state, data) {
+            state.idToken = data.accessToken;
+            state.localId = data.user[0]._id
+            state.user = data.user[0];
+
+        },
+        storeUser (state, user) {
+            state.user = user
+        },
+        clearAuthData(state) {
+            state.idToken = null
+            state.localId = null
+        },
     },
 
     actions: {
-
-        signup ({dispatch}, authData) {
-        axios.post('api/users/register',
-            authData
-        )
-            .then(() => {
-                console.log(authData);
-                dispatch('login',authData)
-            })
-            .catch(error => console.log(error))
+        setLogoutTimer({commit}, expirationTime) {
+            setTimeout(() => {
+                commit('clearAuthData')
+            }, expirationTime * 1000)
+        },
+        signup({dispatch}, authData) {
+            axios.post('api/users/register',
+                authData
+            )
+                .then(() => {
+                    console.log(authData);
+                    dispatch('login', authData)
+                })
+                .catch(error => console.log(error))
         },
 
-       async login ({commit}, authData) {
-           await axios.post('api/auth/login',
+        async login({commit, dispatch}, authData) {
+            await axios.post('api/auth/login',
                 authData
             )
                 .then(res => {
+                    const now = new Date()
+                    const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
+                    localStorage.setItem('expirationDate', expirationDate.toString())
                     localStorage.setItem('token', res.data.accessToken)
                     localStorage.setItem('userId', res.data.user[0]._id)
+                    console.log(res.data)
                     commit('authUser', res.data)
-                });
-            await router.replace('/');
+                    dispatch('setLogoutTimer', res.data.expiresIn)
+                    router.replace('/datatable')
+                })
+                .catch(error => console.log(error))
+
+        },
+        tryAutoLogin ({commit}) {
+            const token = localStorage.getItem('token')
+            if(!token) {
+                return
+            }
+            const expirationDate = localStorage.getItem('expirationDate')
+            const now = new Date()
+            if (now >= expirationDate) {
+                return
+            }
+            const userId = localStorage.getItem('userId')
+            commit('authUser', {
+                token: token,
+                userId: userId
+            })
+        },
+
+        logout({commit}) {
+            commit('clearAuthData')
+            localStorage.removeItem('expirationDate')
+            localStorage.removeItem('token')
+            localStorage.removeItem('userId')
+            router.replace('/signin')
         },
     },
     getters: {
+        user (state) {
+            return state.user
+        },
+        isAuthenticated (state) {
+            return state.idToken !== null
+        },
     }
 })

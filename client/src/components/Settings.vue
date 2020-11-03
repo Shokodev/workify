@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p>Settings</p>
+  <div v-if="auth">
+    <p>Project Settings</p>
     <v-text-field
         v-model="settings.calculatedGraphics"
         label="Calculated graphic"
@@ -44,7 +45,11 @@
       <v-icon color="white">mdi-content-save</v-icon>Save
     </v-btn>
   </div>
-
+    <div
+    v-if="auth
+"></div>
+    <p>User Settings</p>
+  </div>
 
 </template>
 
@@ -84,6 +89,12 @@ import PostService from "@/PostService";
             });
             await PostService.getSettings();
           }
+      },
+      computed: {
+          auth () {
+           return  this.$store.getters.isAuthenticated
+            //TODO get user group
+          },
       }
     }
 </script>

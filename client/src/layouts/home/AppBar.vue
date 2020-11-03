@@ -34,16 +34,7 @@
                         {{ name }}
                     </v-tab>
                   <v-tab
-                      :to="'signup'"
-                      :ripple="false"
-                      active-class="text--primary"
-                      class="font-weight-bold"
-                      min-width="96"
-                      text
-                  >
-                     Sign up
-                  </v-tab>
-                  <v-tab
+                      v-if="!auth"
                       :to="'signin'"
                       :ripple="false"
                       active-class="text--primary"
@@ -53,10 +44,33 @@
                   >
                     Sign in
                   </v-tab>
+                  <v-tab
+                      v-if="!auth"
+                      :to="'signup'"
+                      :ripple="false"
+                      active-class="text--primary"
+                      class="font-weight-bold"
+                      min-width="96"
+                      text
+                  >
+                     Sign up
+                  </v-tab>
+
+                  <v-tab
+                      v-if="auth"
+                      v-on:click="logout"
+                      :to="'/'"
+                      :ripple="false"
+                      active-class="text--primary"
+                      class="font-weight-bold"
+                      min-width="96"
+                      text
+                  >
+                    Logout
+                  </v-tab>
                 </v-tabs>
             </div>
         </v-app-bar>
-
     </div>
 </template>
 
@@ -72,6 +86,16 @@
                 'settings',
             ],
         }),
+      methods: {
+        logout () {
+          this.$store.dispatch('logout')
+        }
+      },
+      computed: {
+          auth () {
+            return this.$store.getters.isAuthenticated
+          },
+      },
     }
 </script>
 

@@ -1,40 +1,61 @@
 <template>
-  <v-form
-      ref="form"
-      v-model="valid"
-      lazy-validation
-  >
-    <v-text-field
-        v-model="name"
-        :rules="nameRules"
-        label="Name"
-        required
-    ></v-text-field>
+  <div>
+            <v-form
+                ref="form"
+                v-model="valid"
+                lazy-validation
+            >
+              <v-text-field
+                  v-model="shortname"
+                  :rules="nameRules"
+                  label="Short Name"
+                  required
+              ></v-text-field>
 
-    <v-text-field
-        v-model="shortname"
-        :rules="shortnameRules"
-        label="Short Name"
-        required
-    ></v-text-field>
+              <v-text-field
+                  v-model="password"
+                  :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                  :rules="passwordRules"
+                  :type="show ? 'text' : 'password'"
+                  name="input-10-1"
+                  label="Password"
+                  counter
+                  @click:append="show = !show"
+              ></v-text-field>
 
 
-    <v-btn
-        :disabled="!valid"
-        color="success"
-        class="mr-4"
-        @click="signup"
+              <v-btn
+                  :disabled="!valid"
+                  color="success"
+                  class="mr-4"
+                  @click="signin"
+              >
+                Login
+              </v-btn>
+
+              <v-btn
+                  color="warning"
+                  @click="cancel"
+              >
+                Cancel
+              </v-btn>
+            </v-form>
+
+    <v-divider
+    class="my-6"></v-divider>
+    <p
+        class="font-weight-bold"
     >
-      Signup
-    </v-btn>
-
+      Or create a new Account
+    </p>
     <v-btn
-        color="warning"
-        @click="cancel"
+        class="text-capitalize"
+        :to="'signup'"
     >
-      Cancel
+      Sign up
     </v-btn>
-  </v-form>
+  </div>
+
 </template>
 
 <script>
@@ -43,21 +64,25 @@ export default {
 
   data: () => ({
     valid: true,
-    name: '',
+    shortname: '',
     nameRules: [
       v => !!v || 'Name is required',
     ],
-    shortname: '',
-    shortnameRules: [
-      v => !!v || 'Short Name is required',
-      v => (v && v.length <= 3) || 'Short Name must be less than 3 characters',
+    password: '',
+    passwordRules: [
+      v => !!v || 'Password is required',
     ],
+    show: false,
 
   }),
 
   methods: {
-    signup () {
+    signin () {
       this.$refs.form.validate()
+      this.$store.dispatch('login', {
+            nickname: this.shortname,
+            password: this.password,
+      })
     },
     cancel () {
       this.$refs.form.reset()

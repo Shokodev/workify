@@ -1,4 +1,5 @@
 <template>
+
       <v-form
       ref="form"
       v-model="valid"
@@ -24,7 +25,7 @@
         :rules="passwordRules"
         :type="show ? 'text' : 'password'"
         name="input-10-1"
-        label="Normal with hint text"
+        label="Password"
         hint="At least 8 characters"
         counter
         @click:append="show = !show"
@@ -36,8 +37,7 @@
           :rules="[confirmPasswordEquality]"
           :type="show1 ? 'text' : 'password'"
           name="input-10-1"
-          label="Normal with hint text"
-          hint="At least 8 characters"
+          label="Password"
           counter
           @click:append="show1 = !show1"
       ></v-text-field>

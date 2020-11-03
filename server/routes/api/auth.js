@@ -11,14 +11,15 @@ router.post('/login', async (req, res, next) => {
     try {
         const user = await Users.find({nickname: req.body.nickname});
         const match = await bcrypt.compare(req.body.password, user[0].password);
+        const expiresIn = process.env.TOKEN_EXPIRES_IN
         if (match) {
             // Generate an access token
             const accessToken = jwt.sign({
                 nickname: req.body.nickname,
                 role: user[0].role,
-            }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRES_IN });
+            }, process.env.TOKEN_SECRET, { expiresIn });
             res.status(200).json({
-                accessToken, user
+                accessToken, user, expiresIn
             });
         } else {
             res.status(401).send(new Error("Wrong password or username"));

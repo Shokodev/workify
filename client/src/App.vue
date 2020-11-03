@@ -23,6 +23,9 @@ export default {
       error: '',
     }
   },
+  mounted() {
+    this.$store.dispatch('tryAutoLogin')
+  },
   async created() {
     try {
       this.posts = await PostService.getPosts();
