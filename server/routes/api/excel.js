@@ -3,14 +3,14 @@ const router = express.Router();
 const logger = require('../../serverlog/logger');
 const path = require('path');
 const exceljs = require('exceljs');
-const { loadPostsCollection } = require('../../mongodb');
+const { Posts } = require('../../mongodb');
 
 // Get data in excel sheet
 router.get('/',async (req, res) => {
     logger.info('fetch all posts in excel sheet');
     try{
-        const posts = await loadPostsCollection();
-        const excelContentData = await posts.find({}).toArray();
+
+        const excelContentData = await Posts.find({})
         res.setHeader(
             "Content-Type",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -33,11 +33,21 @@ router.get('/',async (req, res) => {
             columns: [
                 {name: 'Graphics', filterButton: true},
                 {name: 'Type', filterButton: true,},
+                {name: 'GECC State', filterButton: true},
                 {name: 'Regulations', filterButton:true},
-                {name: 'Date', filterButton: true},
-                {name: 'Editor', filterButton: true},
-                {name: 'State', filterButton: true},
-                {name: 'Comments', filterButton: true},
+                {name: 'Finished by GECC at', filterButton: true},
+                {name: 'Creator', filterButton: true},
+                {name: 'GECC comments', filterButton: true},
+                {name: 'Siemens State', filterButton: true},
+                {name: 'Ok by Siemens at', filterButton: true},
+                {name: 'Auditor Siemens', filterButton: true},
+                {name: 'Siemens comments', filterButton: true},
+                {name: 'Planer State', filterButton: true},
+                {name: 'Ok by Planer at', filterButton: true},
+                {name: 'Auditor Planer', filterButton: true},
+                {name: 'Planer comments', filterButton: true},
+                {name: 'Closed at', filterButton: true},
+               
             ],
             rows:[
                 [' ', ' '],
@@ -49,26 +59,52 @@ router.get('/',async (req, res) => {
             graphicsTable.addRow([
                 data.item.graphic,
                 data.item.selectType,
-                data.item.regulations,
-                data.item.date,
-                data.item.editor,
                 data.item.selectState,
+                data.item.regulations,
+                data.meta.finished_at,
+                data.item.creator,
                 data.item.comments,
+                data.item.selectSiemensTested,
+                data.meta.okBySiemens_at,
+                data.item.siemensAuditor,
+                data.item.siemensComments,
+                data.item.selectPlanerTested,
+                data.meta.okByPlaner_at,
+                data.item.planer,
+                data.item.planerComments,
             ],0);
         });
         graphicsTable.commit();
-        worksheet.getCell('A1').value = 'Total graphics:';
-        worksheet.getCell('B1').value = excelContentData.length;
+        worksheet.getCell('A1').value = '="Selected:                      "&TEILERGEBNIS(3;A4:A999999)';
         worksheet.mergeCells('A2:G2');
-        worksheet.getCell('G2').value = 'Sofia';
+        worksheet.getCell('G2').value = 'GECC';
+        worksheet.getCell('A1').fill = {
+            type: 'pattern',
+            pattern:'darkVertical',
+            fgColor:{argb:'FFFF0000'}
+        };
+        worksheet.mergeCells('H2:K2');
+        worksheet.getCell('K2').value = 'Siemens';
+        worksheet.mergeCells('L2:O2');
+        worksheet.getCell('O2').value = 'Planer';
+        worksheet.getCell('P2').value = 'Graphic ready';
         worksheet.columns = [
-            {key: 'Graphics', width: 35 },
-            {key: 'Type', width: 35 },
-            {key: 'Regulations', width: 15 },
-            {key: 'Date', width: 20 },
-            {key: 'Editor', width: 20 },
-            {key: 'State', width: 25 },
-            {key: 'Comments', width: 50 },
+            {key: 'Graphics', width: 35},
+            {key: 'Type', width: 35,},
+            {key: 'GECC State', width: 35},
+            {key: 'Regulations', width:35},
+            {key: 'Finished by GECC at', width: 35},
+            {key: 'Creator', width: 35},
+            {key: 'GECC comments', width: 35},
+            {key: 'Siemens State', width: 35},
+            {key: 'Ok by Siemens at', width: 35},
+            {key: 'Auditor Siemens', width: 35},
+            {key: 'Siemens comments', width: 35},
+            {key: 'Planer State', width: 35},
+            {key: 'Ok by Planer at', width: 35},
+            {key: 'Auditor Planer', width: 35},
+            {key: 'Planer comments', width: 35},
+            {key: 'Closed at', width: 35},
         ];
         await workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function () {
             logger.info('Excel file saved');
