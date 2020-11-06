@@ -11,17 +11,21 @@ router.post('/login', async (req, res, next) => {
     logger.info('login from: ' + req.headers['x-forwarded-for']);
     try {
         const user = await Users.find({nickname: req.body.nickname});
-        const match = await bcrypt.compare(req.body.password, user[0].password);
-        const expiresIn = process.env.TOKEN_EXPIRES_IN
-        if (match) {
-            // Generate an access token
-            const accessToken = jwt.sign({
-                nickname: req.body.nickname,
-                role: user[0].role,
-            }, process.env.TOKEN_SECRET, { expiresIn });
-            res.status(200).json({
-                accessToken, user, expiresIn
-            });
+        if(!user.length === 0){
+            const match = await bcrypt.compare(req.body.password, user[0].password);
+            const expiresIn = process.env.TOKEN_EXPIRES_IN
+            if (match) {
+                // Generate an access token
+                const accessToken = jwt.sign({
+                    nickname: req.body.nickname,
+                    role: user[0].role,
+                }, process.env.TOKEN_SECRET, { expiresIn });
+                res.status(200).json({
+                    accessToken, user, expiresIn
+                });
+            } else {
+                res.status(401).send( {message: "Wrong password or username"});
+            }
         } else {
             res.status(401).send( {message: "Wrong password or username"});
         }
