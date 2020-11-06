@@ -5,6 +5,7 @@ const logger = require('../../serverlog/logger');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+//TODO check if user exists first, then check if password match
 router.post('/login', async (req, res, next) => {
     // Read username and password from request body
     logger.info('login from: ' + req.headers['x-forwarded-for']);
@@ -22,7 +23,7 @@ router.post('/login', async (req, res, next) => {
                 accessToken, user, expiresIn
             });
         } else {
-            res.status(401).send(new Error("Wrong password or username"));
+            res.status(401).send( {message: "Wrong password or username"});
         }
     } catch (err) {
         logger.error('Auth failed:' + err.message);

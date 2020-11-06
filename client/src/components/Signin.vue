@@ -10,6 +10,7 @@
                   :rules="nameRules"
                   label="Short Name"
                   required
+                  v-on:keyup.enter="signin"
               ></v-text-field>
 
               <v-text-field
@@ -21,6 +22,7 @@
                   label="Password"
                   counter
                   @click:append="show = !show"
+                  v-on:keyup.enter="signin"
               ></v-text-field>
 
 
@@ -54,6 +56,24 @@
     >
       Sign up
     </v-btn>
+
+    <v-snackbar
+            v-model="snack"
+            :timeout="3000"
+            :color="snackColor"
+    >
+      {{ snackText }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+                v-bind="attrs"
+                text
+                @click="snack = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 
 </template>
@@ -63,6 +83,9 @@ export default {
   name: 'signin',
 
   data: () => ({
+    snack: false,
+    snackColor: '',
+    snackText: '',
     valid: true,
     shortname: '',
     nameRules: [
@@ -79,10 +102,22 @@ export default {
   methods: {
     signin () {
       this.$refs.form.validate()
-      this.$store.dispatch('login', {
+      this.$store.dispatch('signin', {
             nickname: this.shortname,
             password: this.password,
-      })
+      }).then((res => {
+        console.log(res)
+        this.snack = true;
+        this.snackColor = 'success';
+        this.snackText = 'Welcome';
+      })).catch((error) =>
+      {
+        this.snack = true;
+        this.snackColor = 'error';
+        this.snackText = error.response.data.message;
+      }
+
+      )
     },
     cancel () {
       this.$refs.form.reset()
