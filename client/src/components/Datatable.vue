@@ -46,7 +46,8 @@
         </template>
 
 
-        <template v-slot:item.item.graphic= "{ item }">
+        <template v-slot:item.item.graphic= "{ item }"
+        v-if="isAdmin">
             <v-edit-dialog
                     :return-value.sync="item.item.graphic"
                     large
@@ -155,7 +156,6 @@
               </template>
           </v-edit-dialog>-->
 
-
         <v-tooltip bottom>
           <template v-slot:activator="{on, attrs }">
             <v-icon
@@ -175,6 +175,44 @@
       </template>
 
 
+
+        <template v-slot:item.item.selectSiemensTested= "{ item }">
+            <v-edit-dialog
+                    :return-value.sync="item.item.selectSiemensTested"
+                    large
+                    @save="save(item)"
+                    @cancel="cancel"
+            >
+                {{ item.item.selectSiemensTested }}
+                <template v-slot:input>
+                    <v-select
+                            v-model="item.item.selectSiemensTested"
+                            :items="['OK', 'Faults', 'Todo']"
+                            label="Tested"
+                            required
+                    ></v-select>
+                </template>
+            </v-edit-dialog>
+        </template>
+
+        <template v-slot:item.item.siemensAuditor= "{ item }">
+            <v-edit-dialog
+                    :return-value.sync="item.item.siemensAuditor"
+                    large
+                    @save="save(item)"
+                    @cancel="cancel"
+            >
+                {{ item.item.siemensAuditor }}
+                <template v-slot:input>
+                    <v-select
+                            v-model="item.item.siemensAuditor"
+                            :items="['Siemens User1', 'Siemens User2', 'Siemens User3','Siemens User4']"
+                            label="Auditor"
+                            required
+                    ></v-select>
+                </template>
+            </v-edit-dialog>
+        </template>
 
 
       <template v-slot:item.item.siemensComments = "{ item }">
@@ -209,6 +247,45 @@
           <span>{{item.item.planerComments }}</span>
         </v-tooltip>
       </template>
+
+        <template v-slot:item.item.selectPlanerTested= "{ item }">
+            <v-edit-dialog
+                    :return-value.sync="item.item.selectPlanerTested"
+                    large
+                    @save="save(item)"
+                    @cancel="cancel"
+            >
+                {{ item.item.selectPlanerTested }}
+                <template v-slot:input>
+                    <v-select
+                            v-model="item.item.selectPlanerTested"
+                            :items="['OK', 'Faults', 'Todo']"
+                            label="Tested"
+                            required
+                    ></v-select>
+                </template>
+            </v-edit-dialog>
+        </template>
+
+        <template v-slot:item.item.planer= "{ item }">
+            <v-edit-dialog
+                    :return-value.sync="item.item.planer"
+                    large
+                    @save="save(item)"
+                    @cancel="cancel"
+            >
+                {{ item.item.planer }}
+                <template v-slot:input>
+                    <v-select
+                            v-model="item.item.planer"
+                            :items="['Planer User1', 'Planer User2', 'Planer User3','Planer User4']"
+                            label="Planer"
+                            required
+                    ></v-select>
+                </template>
+            </v-edit-dialog>
+        </template>
+
 
         <template v-slot:item.item.actions = "{ item }">
             <EditItem
@@ -353,7 +430,20 @@
                 this.posts = await PostService.getPosts();
                 this.loadingActive = false;
             },
-        }
+       }, computed: {
+            isAdmin () {
+                return this.$store.getters.userRole === "admin"
+            },
+            isGECC () {
+                return this.$store.getters.userRole === "gecc"
+            },
+            isSiemens () {
+                return this.$store.getters.userRole === "simenes"
+            },
+            isPlaner () {
+                return this.$store.getters.userRole === "planer"
+            },
+        },
     }
 </script>
 

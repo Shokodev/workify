@@ -11,6 +11,7 @@ export default  new Vuex.Store({
         idToken: null,
         localId: null,
         user: null,
+        role: null,
     },
 
     mutations: {
@@ -118,6 +119,9 @@ export default  new Vuex.Store({
         },
         isAuthenticated (state) {
             return state.idToken !== null
+        },
+        userRole (state){
+            return state.role
         },
     }
 })
