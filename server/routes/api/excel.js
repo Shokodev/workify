@@ -49,12 +49,9 @@ router.get('/',async (req, res) => {
                 {name: 'Closed at', filterButton: true},
                
             ],
-            rows:[
-                [' ', ' '],
-            ],
+            rows:[],
         });
         const graphicsTable = worksheet.getTable('graphics');
-        console.log(excelContentData.length);
         excelContentData.forEach(data => {
             graphicsTable.addRow([
                 data.item.graphic,
@@ -75,14 +72,10 @@ router.get('/',async (req, res) => {
             ],0);
         });
         graphicsTable.commit();
-        worksheet.getCell('A1').value = '="Selected:                      "&TEILERGEBNIS(3;A4:A999999)';
+        worksheet.getCell('A1').value = '="Selected:       "&TEILERGEBNIS(3;A4:A999999)';
         worksheet.mergeCells('A2:G2');
         worksheet.getCell('G2').value = 'GECC';
-        worksheet.getCell('A1').fill = {
-            type: 'pattern',
-            pattern:'darkVertical',
-            fgColor:{argb:'FFFF0000'}
-        };
+        worksheet.getCell('A1').fill = {argb:'FFFF0000'};
         worksheet.mergeCells('H2:K2');
         worksheet.getCell('K2').value = 'Siemens';
         worksheet.mergeCells('L2:O2');
