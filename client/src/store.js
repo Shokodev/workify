@@ -18,7 +18,9 @@ export default  new Vuex.Store({
         authUser(state, data) {
             state.idToken = data.accessToken;
             state.localId = data.user[0]._id
+            state.role = data.user[0].role;
             state.user = data.user[0];
+
 
         },
         storeUser (state, user) {
@@ -58,6 +60,7 @@ export default  new Vuex.Store({
                     localStorage.setItem('expirationDate', expirationDate.toString())
                     localStorage.setItem('token', res.data.accessToken)
                     localStorage.setItem('userId', res.data.user[0]._id)
+                    localStorage.setItem('role', res.data.user[0].role)
                     console.log(res.data)
                     commit('authUser', res.data)
                     dispatch('setLogoutTimer', res.data.expiresIn)
