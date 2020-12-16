@@ -38,25 +38,57 @@
     </div>
   </v-col>
 </v-row>
-<!--    <v-row v-if="false">
-      <v-col>
-        <div class="small">
-          <Bar-chart
-              v-if="loaded"
-              :chartdata="chartdata"
-              :options="options"/>
-        </div>
-      </v-col>
-      <v-col>
-        <div class="small">
-          <Pie-chart
-              v-if="loaded"
-              :chartdata="chartdata"
-              :options="options"/>
-        </div>
-      </v-col>
-    </v-row>-->
+    <v-footer
+      v-bind="localAttrs"
+      :padless="padless"
+      color="white"
+    >
+      <v-card
+        flat
+        tile
+        width="100%"
+        class="red lighten-1 text-center"
+      >
+        <v-card-text class="white--text">
+          <strong>Progress Status</strong>
+        </v-card-text>
+      </v-card>
+      <v-card elevation="2">
+    <v-card-title>
+      <p class="text-left">Plant Graphics</p>
+    </v-card-title>
+    <v-progress-circular
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.regulationGraphics.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.regulationGraphics.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left body-1">Current:{{dataProgress.plantGraphics.current}}</p>
+      <p class="text-left body-1">Expected:{{dataProgress.plantGraphics.expected}}</p>
+    </div>
+      
+    </v-card>
+    <v-card elevation="2">
+    <v-card-title>
+      <p>{{dataProgress.plantGraphics.current}}</p>
+      <p>{{dataProgress.plantGraphics.expected}}</p>
+    </v-card-title>
+    
+    </v-card>
+    </v-footer>
+    
+    
+ 
+
   </div>
+ 
+ 
+
+
 </template>
 
 <script>
@@ -83,6 +115,7 @@
             chart2: 'PieChart',
             component: 'BarChart',
             component2: 'PieChart',
+            dataProgress: {},
             mainData: {
               label: null,
               data: null,
@@ -122,7 +155,7 @@
         async mounted() {
             this.loaded = false;
             try {
-
+                this.dataProgress = await PostService.getDashboard("progress");
                 this.chartdata = await PostService.getDashboard("weekly");
                 this.addChartColors(this.chartdata)
                 this.loaded = true
