@@ -47,17 +47,56 @@
         flat
         tile
         width="100%"
-        class="red lighten-1 text-center"
+        class="grey lighten-1 text-center"
       >
         <v-card-text class="white--text">
           <strong>Progress Status</strong>
         </v-card-text>
       </v-card>
-      <v-card elevation="2">
+  
+      <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Floor Plans</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.floorPlans.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.floorPlansvalue)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.floorPlans.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.floorPlans.expected}}</p>
+    </div> 
+    </v-card>
+
+    <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Navigations Graphics</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.navigationsGraphics.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.navigationsGraphics.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.navigationsGraphics.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.navigationsGraphics.expected}}</p>
+    </div> 
+    </v-card>
+
+    <v-card elevation="2" class="ma-1">
     <v-card-title>
       <p class="text-left">Plant Graphics</p>
     </v-card-title>
-    <v-progress-circular
+    <v-progress-circular class="mb-6"
       :rotate="360"
       :size="100"
       :width="15"
@@ -67,18 +106,49 @@
       {{ Math.round(dataProgress.regulationGraphics.value)}} %
     </v-progress-circular>
     <div class="ms-4">
-      <p class="text-left body-1">Current:{{dataProgress.plantGraphics.current}}</p>
-      <p class="text-left body-1">Expected:{{dataProgress.plantGraphics.expected}}</p>
-    </div>
-      
+      <p class="text-left">Current:{{dataProgress.plantGraphics.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.plantGraphics.expected}}</p>
+    </div> 
     </v-card>
-    <v-card elevation="2">
+
+    <v-card elevation="2" class="ma-1">
     <v-card-title>
-      <p>{{dataProgress.plantGraphics.current}}</p>
-      <p>{{dataProgress.plantGraphics.expected}}</p>
+      <p class="text-left">Regulations Graphics</p>
     </v-card-title>
-    
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.regulationGraphics.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.regulationGraphics.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.regulationGraphics.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.regulationGraphics.expected}}</p>
+    </div> 
     </v-card>
+
+    <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Total</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.total.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.total.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.total.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.total.expected}}</p>
+    </div> 
+    </v-card>
+
     </v-footer>
     
     
