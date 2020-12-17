@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const baseUrl = 'api/';
 const postUrl = 'api/posts/';
+const userUrl = 'api/users/';
 
 class PostService{
 
@@ -45,6 +46,18 @@ class PostService{
                 }
             )))
     }
+        // Get Settings   
+        static getUsers(){
+            return new Promise(((resolve, reject) =>
+                axios.get(userUrl+"users").then((res) => {
+                    resolve(
+                        res.data
+                    );
+                }).catch((err) => {
+                        reject(err);
+                    }
+                )))
+        }
 
     static updateSettings(settings, id){
         return axios.put(`${baseUrl + "settings/"}${id}`, settings)
@@ -88,6 +101,9 @@ class PostService{
         document.body.appendChild(link)
         link.click()
     }
+
+
+    
 
 
 }

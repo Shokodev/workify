@@ -49,6 +49,15 @@
     v-if="auth
 "></div>
     <p>User Settings</p>
+    <v-btn
+    @click="getUsers">show Users</v-btn>
+    <div
+    v-for="user in users"
+    :key="user._id">
+    {{user.username}}
+    {{user.nickname}}
+    {{user.role}}
+    </div>
   </div>
 
 </template>
@@ -70,6 +79,7 @@ import PostService from "@/PostService";
             },
             id:"",
             loadingActive: false,
+            users: null,
       }
       },
      async mounted() {
@@ -88,6 +98,10 @@ import PostService from "@/PostService";
               this.loadingActive = false;
             });
             await PostService.getSettings();
+          },
+            async getUsers(){
+              let res = await PostService.getUsers();
+              this.users = res;
           }
       },
       computed: {

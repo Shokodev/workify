@@ -29,38 +29,22 @@
       </template>
 
       <template v-slot:[`item.item.graphic`]="{ item }">
-        <table-item :type="'text'" :item="item.item.graphic" :label="'Graphic'"> </table-item>
+        <table-item :type="'text'" :item="item.item.graphic" :label="'Graphic'" v-on:update-item="updateItem"> </table-item>
       </template>
       <template v-slot:[`item.item.selectType`]="{ item }" >
-        <table-item :type="'select'" :item="item.item.selectType" :state="['Floor plan', 'Navigation graphic', 'Plant graphic']" :label="'Type'"> </table-item>
+        <table-item :type="'select'" :item="item.item.selectType" :state="['Floor plan', 'Navigation graphic', 'Plant graphic']" :label="'Type'" v-on:update-item="updateItem"> </table-item>
       </template>
       <template v-slot:[`item.item.regulations`]="{ item }">
-        <table-item :type="'select'" :item="item.item.regulations" :state="[0, 1, 2, 3, 4, 5]" :label="'Regulations'"> </table-item>
+        <table-item :type="'select'" :item="item.item.regulations" :state="[0, 1, 2, 3, 4, 5]" :label="'Regulations'" v-on:update-item="updateItem"> </table-item>
       </template>
       <template v-slot:[`item.item.selectState`]="{ item }">
-        <table-item :type="'select'" :item="item.item.selectState" :state="['Not started', 'In progress', 'Finished', 'Issues']" :label="'State'"> </table-item>
+        <table-item :type="'select'" :item="item.item.selectState" :state="['Not started', 'In progress', 'Finished', 'Issues']" :label="'State'" v-on:update-item="updateItem"> </table-item>
       </template>
       <template v-slot:[`item.item.creator`]="{ item }">
-        <table-item :type="'select'" :item="item.item.creator" :state="['GECC 1', 'GECC 2', 'GECC 3', 'GECC 4']" :label="'Creator'"> </table-item>
+        <table-item :type="'select'" :item="item.item.creator" :state="['GECC 1', 'GECC 2', 'GECC 3', 'GECC 4']" :label="'Creator'" v-on:update-item="updateItem"> </table-item>
       </template>
 
       <template v-slot:[`item.item.comments`]="{ item }">
-        <!--          <v-edit-dialog
-                  :return-value.sync="item.item.comments"
-                  @save="save(item)"
-                  @cancel="cancel"
-          >
-              {{ item.item.comments }}
-              <template v-slot:input>
-                  <v-textarea
-                          solo
-                          name="input-7-4"
-                          label="Comments"
-                          v-model="item.item.comments"
-                  ></v-textarea>
-              </template>
-          </v-edit-dialog>-->
-
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -79,7 +63,7 @@
       </template>
 
       <template v-slot:[`item.item.selectSiemensTested`]="{ item }">
-        <table-item :type="'select'" :item="item.item.selectSiemensTested" :state="['OK', 'Faults', 'Todo']" :label="'Tested'"> </table-item>
+        <table-item :type="'select'" :item="item.item.selectSiemensTested" :state="['OK', 'Faults', 'Todo']" :label="'Tested'" v-on:update-item="updateItem"> </table-item>
       </template>
 
       <template v-slot:[`item.item.siemensAuditor`]="{ item }">
@@ -88,7 +72,7 @@
                 'Siemens User2',
                 'Siemens User3',
                 'Siemens User4',
-              ]" :label="'Auditor'"> </table-item>
+              ]" :label="'Auditor'" v-on:update-item="updateItem"> </table-item>
       </template>
 
       <template v-slot:[`item.item.siemensComments`]="{ item }">
@@ -125,7 +109,7 @@
       </template>
 
       <template v-slot:[`item.item.selectPlanerTested`]="{ item }">
-        <table-item :type="'select'" :item="item.item.selectPlanerTested" :state="['OK', 'Faults', 'Todo']" :label="'Tested'"> </table-item>
+        <table-item :type="'select'" :item="item.item.selectPlanerTested" :state="['OK', 'Faults', 'Todo']" :label="'Tested'" v-on:update-item="updateItem"> </table-item>
       </template>
 
       <template v-slot:[`item.item.planer`]="{ item }">
@@ -296,6 +280,12 @@ export default {
       this.posts = await PostService.getPosts();
       this.loadingActive = false;
     },
+        updateItem(e) {
+        this.snack = true;
+        this.snackColor = "success";
+        this.snackText = "Data saved";
+      console.log(e)
+    }
   },
   computed: {
     isAdmin() {
