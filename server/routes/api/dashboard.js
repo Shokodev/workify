@@ -78,22 +78,27 @@ router.get('/progress', async (req, res,next) => {
         plantGraphics: {
             current: await Posts.countDocuments({"item.selectType": postTypes.selectType.PLANT}),
             expected: dbSettings[0].settings.plantGraphics,
+            value: (await Posts.countDocuments({"item.selectType": postTypes.selectType.PLANT}) / dbSettings[0].settings.plantGraphics) *100
         },
         floorPlans: {
             current: await Posts.countDocuments({"item.selectType": postTypes.selectType.FLOOR}),
             expected: dbSettings[0].settings.floorPlan,
+            value: (await Posts.countDocuments({"item.selectType": postTypes.selectType.FLOOR}) / dbSettings[0].settings.floorPlan) *100
         },
         navigationsGraphics: {
             current: await Posts.countDocuments({"item.selectType": postTypes.selectType.NAV}),
             expected: dbSettings[0].settings.navigationGraphic,
+            value: (await Posts.countDocuments({"item.selectType": postTypes.selectType.NAV}) / dbSettings[0].settings.navigationGraphic) *100
         },
         regulationGraphics: {
             current: getAmountOfRegulationGraphics(data),
             expected: dbSettings[0].settings.regulationsGraphic,
+            value: (getAmountOfRegulationGraphics(data) / dbSettings[0].settings.regulationsGraphic) *100
         },
         total:{
             current:  data.length,
             expected: dbSettings[0].settings.calculatedGraphics,
+            value: (data.length / dbSettings[0].settings.calculatedGraphics) *100
         }
     };
     res.send(progress);

@@ -38,20 +38,127 @@
     </div>
   </v-col>
 </v-row>
-<v-row v-if="progressLoaded">
-    <v-col
-    class="subtitle-1 text-center"
-    cols="12"
-  >
-    Progress total graphics
-  </v-col>
-  <v-col>
-    <v-progress-linear  :value="progressTotal" height="20" >
-        <strong>{{ Math.ceil(progressTotal) }}%</strong>
-    </v-progress-linear>
-  </v-col>
-</v-row>
+    <v-footer
+      v-bind="localAttrs"
+      :padless="padless"
+      color="white"
+    >
+      <v-card
+        flat
+        tile
+        width="100%"
+        class="grey lighten-1 text-center"
+      >
+        <v-card-text class="white--text">
+          <strong>Progress Status</strong>
+        </v-card-text>
+      </v-card>
+  
+      <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Floor Plans</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.floorPlans.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.floorPlansvalue)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.floorPlans.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.floorPlans.expected}}</p>
+    </div> 
+    </v-card>
+
+    <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Navigations Graphics</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.navigationsGraphics.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.navigationsGraphics.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.navigationsGraphics.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.navigationsGraphics.expected}}</p>
+    </div> 
+    </v-card>
+
+    <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Plant Graphics</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.regulationGraphics.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.regulationGraphics.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.plantGraphics.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.plantGraphics.expected}}</p>
+    </div> 
+    </v-card>
+
+    <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Regulations Graphics</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.regulationGraphics.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.regulationGraphics.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.regulationGraphics.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.regulationGraphics.expected}}</p>
+    </div> 
+    </v-card>
+
+    <v-card elevation="2" class="ma-1">
+    <v-card-title>
+      <p class="text-left">Total</p>
+    </v-card-title>
+    <v-progress-circular class="mb-6"
+      :rotate="360"
+      :size="100"
+      :width="15"
+      :value="dataProgress.total.value"
+      color="teal"
+    >
+      {{ Math.round(dataProgress.total.value)}} %
+    </v-progress-circular>
+    <div class="ms-4">
+      <p class="text-left">Current:{{dataProgress.total.current}}</p>
+      <p class="text-left">Expected:{{dataProgress.total.expected}}</p>
+    </div> 
+    </v-card>
+
+    </v-footer>
+    
+    
+ 
+
   </div>
+ 
+ 
+
+
 </template>
 
 <script>
@@ -79,8 +186,7 @@
             chart2: 'PieChart',
             component: 'BarChart',
             component2: 'PieChart',
-            progressdata: {},
-            progressTotal: 5,
+            dataProgress: {},
             mainData: {
               label: null,
               data: null,
@@ -126,6 +232,7 @@
             this.loaded = false;
             this.progressLoaded = false;
             try {
+                this.dataProgress = await PostService.getDashboard("progress");
                 this.chartdata = await PostService.getDashboard("weekly");
                 this.addChartColors(this.chartdata)
                 this.loaded = true
