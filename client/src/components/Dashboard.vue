@@ -38,24 +38,19 @@
     </div>
   </v-col>
 </v-row>
-<!--    <v-row v-if="false">
-      <v-col>
-        <div class="small">
-          <Bar-chart
-              v-if="loaded"
-              :chartdata="chartdata"
-              :options="options"/>
-        </div>
-      </v-col>
-      <v-col>
-        <div class="small">
-          <Pie-chart
-              v-if="loaded"
-              :chartdata="chartdata"
-              :options="options"/>
-        </div>
-      </v-col>
-    </v-row>-->
+<v-row v-if="progressLoaded">
+    <v-col
+    class="subtitle-1 text-center"
+    cols="12"
+  >
+    Progress total graphics
+  </v-col>
+  <v-col>
+    <v-progress-linear  :value="progressTotal" height="20" >
+        <strong>{{ Math.ceil(progressTotal) }}%</strong>
+    </v-progress-linear>
+  </v-col>
+</v-row>
   </div>
 </template>
 
@@ -78,11 +73,14 @@
 
         data: () => ({
             loaded: false,
+            progressLoaded: false,
             items: ['BarChart', 'LineChart', 'PieChart', 'RadarChart'],
             chart1: 'BarChart',
             chart2: 'PieChart',
             component: 'BarChart',
             component2: 'PieChart',
+            progressdata: {},
+            progressTotal: 5,
             mainData: {
               label: null,
               data: null,
@@ -117,20 +115,27 @@
           changeChart2() {
             this.component2 = this.chart2
           },
+
+          calculatePercentage() {
+            this.progressTotal = Math.round((190 * this.progressdata.total.current) / this.progressdata.total.expected);
+            console.log(this.progressTotal)
+          }
         },
 
         async mounted() {
             this.loaded = false;
+            this.progressLoaded = false;
             try {
-
                 this.chartdata = await PostService.getDashboard("weekly");
                 this.addChartColors(this.chartdata)
                 this.loaded = true
             } catch (e) {
                 console.error(e)
             }
-
-        }
+            this.progressdata = await PostService.getDashboard("progress")
+            //this.calculatePercentage()
+            this.progressLoaded = true;
+        }, 
     }
 </script>
 
