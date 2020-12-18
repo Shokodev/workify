@@ -4,6 +4,9 @@ import Datatable from "../components/Datatable";
 import Settings from "../components/Settings";
 import Signup from "../components/Signup";
 import Signin from "../components/Signin";
+import UserAdministration from "../components/UserAdministration";
+import PermissionDenied from "../components/pages/PermissionDenied";
+import store from "../store"
 
 Vue.use(Router);
 
@@ -47,11 +50,35 @@ const router = new Router({
             name: 'signin',
             component: Signin,
         },
+        {
+            path: '/permissionDenied',
+            name: 'permissionDenied',
+            component: PermissionDenied,
+        },
+        {
+            path: '/userAdministration',
+            component: UserAdministration,
+            beforeEnter(to, from, next) {
+                if(isAdmin()) {
+                    next();
+                } else {
+                    next('/permissionDenied')
+                }
+            }
+        }
     ]
 
 
 })
 
+function isAdmin() {
+    if (store.state.role === "Default") {
+        return true;
+    } else {
+        return false; 
+    }
+
+}
 
 export const routes = [
 

@@ -25,7 +25,8 @@ export default  new Vuex.Store({
         },
         storeUser (state, user) {
             state.idToken = user.idToken;
-            state.userId = user.userId
+            state.userId = user.userId;
+            state.role = user.role;
         },
         clearAuthData(state) {
             state.idToken = null
@@ -65,6 +66,7 @@ export default  new Vuex.Store({
                     localStorage.setItem('role', res.data.user[0].role)
                     console.log(res.data)
                     commit('authUser', res.data)
+                    console.log(res.data)
                     dispatch('setLogoutTimer', res.data.expiresIn)
                     router.replace('/datatable')
                 })
@@ -74,8 +76,8 @@ export default  new Vuex.Store({
             }))
         },
         tryAutoLogin ({commit}) {
-            const token = localStorage.getItem('token')
-            if(!token) {
+            const idToken = localStorage.getItem('token')
+            if(!idToken) {
                 return
             }
             const expirationDate = localStorage.getItem('expirationDate')
@@ -85,8 +87,9 @@ export default  new Vuex.Store({
             }
             const userId = localStorage.getItem('userId')
             commit('storeUser', {
-                token: token,
-                userId: userId
+                idToken: idToken,
+                userId: userId,
+                role: localStorage.getItem('role')
             })
         },
 

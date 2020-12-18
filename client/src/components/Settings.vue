@@ -45,19 +45,13 @@
       <v-icon color="white">mdi-content-save</v-icon>Save
     </v-btn>
   </div>
+  <v-divider class="my-5"></v-divider>
     <div
     v-if="auth
 "></div>
-    <p>User Settings</p>
+    <p>Administration</p>
     <v-btn
-    @click="getUsers">show Users</v-btn>
-    <div
-    v-for="user in users"
-    :key="user._id">
-    {{user.username}}
-    {{user.nickname}}
-    {{user.role}}
-    </div>
+    to="/userAdministration">Edit users</v-btn>
   </div>
 
 </template>
@@ -79,7 +73,6 @@ import PostService from "@/PostService";
             },
             id:"",
             loadingActive: false,
-            users: null,
       }
       },
      async mounted() {
@@ -99,10 +92,6 @@ import PostService from "@/PostService";
             });
             await PostService.getSettings();
           },
-            async getUsers(){
-              let res = await PostService.getUsers();
-              this.users = res;
-          }
       },
       computed: {
           auth () {
