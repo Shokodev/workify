@@ -25,6 +25,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('tryAutoLogin')
+    this.$store.dispatch('loadPosts')
   },
   async created() {
     try {
@@ -33,10 +34,6 @@ export default {
       this.error = e.message;
     }
   },
-
-  methods: {
-
-      }
 }
 </script>
 

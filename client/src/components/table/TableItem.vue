@@ -52,6 +52,8 @@ export default {
     state: Array,
     label: String,
     type: null,
+    _id: null,
+    propName: null,
   },
   data() {
     return {
@@ -63,7 +65,7 @@ export default {
   },
   methods: {
     save() {
-      this.$emit("update-item", this.propItem);
+      this.$emit("update-item", {item:{[this.propName]: this.propItem}, _id: this._id});
     },
     cancel() {
       this.snack = true;

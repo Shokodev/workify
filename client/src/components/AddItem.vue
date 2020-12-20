@@ -62,34 +62,6 @@
                         </v-list-item-content>
                     </v-list-item>
                   <v-list-item>
-                    <v-list-item-content>
-                      <v-menu
-                          ref="date1"
-                          v-model="date1"
-                          :close-on-content-click="false"
-                          :return-value.sync="newItem.date"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                              v-model="newItem.date"
-                              label="Date"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker v-model="newItem.date" no-title scrollable>
-                          <v-spacer></v-spacer>
-                          <v-btn text color="primary" @click="date1 = false">Cancel</v-btn>
-                          <v-btn text color="primary" @click="$refs.date1.save(newItem.date)">OK</v-btn>
-                        </v-date-picker>
-                      </v-menu>
-                    </v-list-item-content>
-                    </v-list-item>
-                  <v-list-item>
                         <v-list-item-content>
                           <v-text-field
                               v-model="newItem.creator"
@@ -142,7 +114,6 @@
                 selectType: null,
                 selectState: null,
                 regulations: "",
-                date: new Date().toISOString().substr(0, 10),
                 creator: null,
                 comments: null,
             },
@@ -172,9 +143,6 @@
                     'Faults',
               ],
                 valid: true,
-                date1: false,
-                date2: false,
-                date3: false,
                 dialog: false,
             }
         },

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import router from './router/index'
+import PostService from './PostService'
 /*import {error} from "winston";*/
 
 Vue.use(Vuex)
@@ -12,6 +13,7 @@ export default  new Vuex.Store({
         localId: null,
         user: null,
         role: null,
+        posts: null,
     },
 
     mutations: {
@@ -33,6 +35,9 @@ export default  new Vuex.Store({
             state.localId = null
             state.role = null
         },
+        setPosts(state, posts) {
+            state.posts = posts;
+        }
     },
 
     actions: {
@@ -100,6 +105,9 @@ export default  new Vuex.Store({
             localStorage.removeItem('userId')
             router.replace('/signin')
         },
+        async loadPosts({commit}) {
+            commit('setPosts', await PostService.getPosts())
+        }
     },
     getters: {
         user (state) {
@@ -110,6 +118,9 @@ export default  new Vuex.Store({
         },
         userRole (state){
             return state.role
+        },
+        getPosts (state) {
+            return state.posts
         },
     }
 })

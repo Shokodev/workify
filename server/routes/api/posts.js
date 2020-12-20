@@ -48,11 +48,11 @@ router.delete('/:id', async (req, res,next) => {
 
 //TODO use just update(remove comparePosts)
 router.put('/:id', async (req, res,next) =>{
-    logger.info('update graphic: ' + req.body.post.item.graphic);
+    logger.info('update graphic: ' + req.body.post.item._id);
     try {
         //TODO there should be just one db query!
         let finalPost = comparePosts(await Posts.findOne({_id: req.params.id}),req.body.post);
-        for (const [key, value] of Object.entries(finalPost.item)) {
+        for (const [key, value] of Object.entries(req.body.post.item)) {
             let propertyName = 'item.' + key
             await Posts.updateOne({_id:req.params.id},{$set:{[propertyName]: value}});
         }
@@ -77,7 +77,7 @@ function isFinished(post) {
 function comparePosts(dbPost, newPost) {
     const keys = Object.keys(dbPost.item);
     let finalPost = {
-        item:{},
+        item: {},
         meta:{}
     }
     for (let key of keys) {
