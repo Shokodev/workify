@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       propItem: this.item,
-    snack: false,
+      snack: false,
       snackColor: "",
       snackText: "",
     };

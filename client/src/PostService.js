@@ -70,6 +70,9 @@ class PostService{
         });
     }
 
+    static editUser(user){
+        return axios.put(`${userUrl}${user._id}` , {user})
+    }
 
     static editPost(post){
         return axios.put(`${postUrl}${post._id}`, {post} )
