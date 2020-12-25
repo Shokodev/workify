@@ -116,7 +116,7 @@ router.get('/weekly', async (req, res,next) => {
     try{
         let data = await Posts.find({});
         let dataWithFinishedTimestamp = [];
-        let firstPost = await Posts.find({}).sort({ "meta.testCreationDate" : 1 }).limit(1);
+        let firstPost = await Posts.find({}).sort({ "createdAt" : 1 }).limit(1);
         let today = new Date();
         weeklyDashboard = {
             labels: [],
@@ -141,13 +141,13 @@ router.get('/weekly', async (req, res,next) => {
         };
 
         data.forEach(objectWithTimestamp =>{
-                if(objectWithTimestamp.meta.finished_at !== undefined) {
+                if(objectWithTimestamp.meta.finished_at !== (undefined || null)) {
                     dataWithFinishedTimestamp.push(objectWithTimestamp)
                 }
             }
         );
         //TODO testCreationDate has to be replaced with the mongoose createdAt
-        for (let i = getMonday(firstPost[0].meta.testCreationDate); i <= today; i = addDays(i,7)) {
+        for (let i = getMonday(firstPost[0].createdAt); i <= today; i = addDays(i,7)) {
             let currentGraphics = dataWithFinishedTimestamp.filter(object =>
                 (object.meta.finished_at.getTime() >= i.getTime() &&
                     object.meta.finished_at.getTime() < addDays(i,7).getTime()));
