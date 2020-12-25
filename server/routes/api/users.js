@@ -32,14 +32,23 @@ router.post('/register', async (req, res,next) => {
     }
 });
 
-router.put('/update', async (req, res,next) =>{
-    logger.info('update user: ' + req.body.nickname);
+router.put('/:id', authenticateToken, async (req, res,next) =>{
+    logger.info('update user: ' + req.body.user.nickname);
     try {
-        req.body.password = await bcrypt.hash(req.body.password, 10);
-        await Users.updateOne({nickname: req.body.nickname}, {username: req.body.username});
-        await Users.updateOne({nickname: req.body.nickname}, {password: req.body.password});
-        await Users.updateOne({nickname: req.body.nickname}, {role: req.body.role});
-        res.status(200).send();
+        console.log(req.user)
+        console.log(req.params.id)
+        
+        if(req.user.role === roles.ADMIN) {
+            await Users.updateOne({ _id: req.params.id }, { $set:{nickname:req.body.user.nickname}});
+            await Users.updateOne({ _id: req.params.id }, { $set:{username:req.body.user.username}});
+            await Users.updateOne({ _id: req.params.id }, { $set:{role:req.body.user.role}});
+
+
+            res.status(200).send();
+        } else {
+            res.status(403).send({message: "Permission denied"});
+        }
+
     } catch (err){
         logger.error("Update user failed: " + err.message);
         next(err);

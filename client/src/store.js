@@ -57,6 +57,9 @@ export default  new Vuex.Store({
                 .catch(error => console.log(error))
         },
 
+
+
+        
         signin ({commit, dispatch}, authData) {
             return new Promise(((resolve, reject) => {
                 console.log(authData)

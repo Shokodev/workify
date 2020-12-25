@@ -72,7 +72,7 @@ const router = new Router({
 })
 
 function isAdmin() {
-    if (store.state.role === "Default") {
+    if (store.state.role === "Admin") {
         return true;
     } else {
         return false; 

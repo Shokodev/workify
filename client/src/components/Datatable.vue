@@ -268,11 +268,6 @@ export default {
           class: "GECC",
         },
         {
-          text: "Date",
-          value: "meta.finished_at",
-          class: "GECC",
-        },
-        {
           text: "Creator",
           value: "item.creator",
           class: "GECC",
@@ -283,13 +278,19 @@ export default {
           class: "GECC",
         },
         {
+          text: "Date",
+          value: "meta.finished_at",
+          class: "GECC",
+        },
+
+        {
           text: "Comments",
           value: "item.comments",
           class: "GECC",
         },
         {
-          text: "Date",
-          value: "meta.okBySiemens_at",
+          text: "Auditor",
+          value: "item.siemensAuditor",
           class: "Siemens",
         },
         {
@@ -298,8 +299,8 @@ export default {
           class: "Siemens",
         },
         {
-          text: "Auditor",
-          value: "item.siemensAuditor",
+          text: "Date",
+          value: "meta.okBySiemens_at",
           class: "Siemens",
         },
         {
@@ -308,8 +309,8 @@ export default {
           class: "Siemens",
         },
         {
-          text: "Date",
-          value: "meta.closed_at",
+          text: "Planer",
+          value: "item.planer",
           class: "Planer",
         },
         {
@@ -317,9 +318,10 @@ export default {
           value: "item.selectPlanerTested",
           class: "Planer",
         },
+
         {
-          text: "Planer",
-          value: "item.planer",
+          text: "Date",
+          value: "meta.closed_at",
           class: "Planer",
         },
         {
@@ -377,7 +379,7 @@ export default {
       this.$store.dispatch("loadPosts");
     },
     parseDate(date) {
-      if (date === null) {
+      if (date === undefined || date === null) {
         return "";
       } else {
         let newDate = new Date(date);
