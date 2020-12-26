@@ -1,6 +1,6 @@
 <template>
   <div>
-  <div v-if="auth">
+  <div v-if="isAdmin">
     <p>Project Settings</p>
     <v-text-field
         v-model="settings.calculatedGraphics"
@@ -45,13 +45,17 @@
       <v-icon color="white">mdi-content-save</v-icon>Save
     </v-btn>
   </div>
-  <v-divider class="my-5"></v-divider>
-    <div
-    v-if="auth
-"></div>
-    <p>Administration</p>
-    <v-btn
-    to="/userAdministration">Edit users</v-btn>
+    <div v-if="isAdmin">
+    <v-divider class="my-5"></v-divider>
+      <p>Administrationv</p>
+      <v-btn
+      to="/userAdministration">Edit users</v-btn>
+    </div>
+    <div v-if="!auth">
+      <v-alert
+      type='info'
+      >Nothing to see here..</v-alert>
+    </div>
   </div>
 
 </template>
@@ -97,6 +101,9 @@ import PostService from "@/PostService";
           auth () {
            return  this.$store.getters.isAuthenticated
             //TODO get user group
+          },  
+          isAdmin() {
+            return this.$store.getters.userRole === "Admin";
           },
       }
     }
