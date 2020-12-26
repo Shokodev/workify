@@ -35,7 +35,7 @@
         </div>
       </v-col>
     </v-row>
-    <v-footer fixed color="white" class="d-flex justify-space-between">
+    <v-footer fixed color="white" class="d-flex justify-center">
       <v-card flat tile width="100%" class="grey lighten-1 text-center">
         <v-card-text class="white--text">
           <strong>Progress Status</strong>

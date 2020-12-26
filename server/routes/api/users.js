@@ -35,6 +35,7 @@ router.post('/register', async (req, res,next) => {
 router.put('/update', async (req, res,next) =>{
     logger.info('update user: ' + req.body.nickname);
     try {
+        const user = await Users.find({nickname: req.body.nickname});
         req.body.password = await bcrypt.hash(req.body.password, 10);
         await Users.updateOne({nickname: req.body.nickname}, {username: req.body.username});
         await Users.updateOne({nickname: req.body.nickname}, {password: req.body.password});
@@ -49,7 +50,8 @@ router.put('/update', async (req, res,next) =>{
 router.delete('/register', authenticateToken, async(req, res,next) => {
     logger.info('delete User: ' + req.body.nickname);
     try {
-        if(req.user.role === roles.ADMIN) {
+        const user = await Users.find({nickname: req.body.nickname});
+        if(user.role === roles.ADMIN) {
             await Users.deleteOne({nickname: req.body.nickname});
             res.status(200).send();
         } else {
