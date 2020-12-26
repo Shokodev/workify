@@ -1,5 +1,5 @@
 <template>
-  <div v-if="users">
+  <div>
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -19,10 +19,13 @@
             <th class="text-left">
               Reset password
             </th>
+            <th class="text-left">
+              Delete user
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in users" :key="user.nickname">
+          <tr v-for="user in getUsers" :key="user.nickname">
             <td>{{ user.nickname }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.role }}</td>
@@ -41,6 +44,13 @@
             <td>
               <v-btn color="error" @click="resetPassword(user)"
                 >Reset password</v-btn
+              >
+            </td>
+            <td>
+              <v-btn color="error" @click="deleteUser(user)"
+                ><v-icon>
+                  mdi-delete
+                </v-icon></v-btn
               >
             </td>
           </tr>
@@ -96,29 +106,35 @@ import PostService from "../PostService";
 export default {
   data() {
     return {
-      users: null,
       editUser: null,
       dialog: false,
     };
+  },
+  mounted(){
+    this.$store.dispatch('getUsers');
+  },
+  computed: {
+  getUsers () {
+    return this.$store.getters.getUsers
+    }
   },
   methods: {
     async save(param) {
       console.log(param);
       PostService.editUser(param);
-      this.users = await PostService.getUsers();
       this.dialog = false;
-      
     },
     cancel() {
       this.dialog = false;
     },
-    resetPassword(user) {
-      console.log(user.username + "Reset password");
+    async resetPassword(user) {
+      await PostService.resetPassword(user._id, "password");
+      this.$store.dispatch('getUsers');
     },
-  },
-  async mounted() {
-    this.users = await PostService.getUsers();
-    console.log(this.users);
+    async deleteUser(user) {
+      await PostService.deleteUser(user);
+      this.$store.dispatch('getUsers');
+    }
   },
 };
 </script>

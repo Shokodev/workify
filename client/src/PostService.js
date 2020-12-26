@@ -17,8 +17,7 @@ class PostService {
                 );
             }).catch((err) => {
                 reject(err);
-            }
-            )))
+            })))
     }
 
     //Get Dashboard info
@@ -30,23 +29,21 @@ class PostService {
                 );
             }).catch((err) => {
                 reject(err);
-            }
-            )))
+            })))
     }
 
     // Get Settings
     static getSettings() {
-        return new Promise(((resolve, reject) =>
-            axios.get(baseUrl + "settings").then((res) => {
-                resolve(
-                    res.data
-                );
-            }).catch((err) => {
-                reject(err);
-            }
-            )))
-    }
-    // Get Settings   
+            return new Promise(((resolve, reject) =>
+                axios.get(baseUrl + "settings").then((res) => {
+                    resolve(
+                        res.data
+                    );
+                }).catch((err) => {
+                    reject(err);
+                })))
+        }
+        // Get Settings   
     static getUsers() {
         return new Promise(((resolve, reject) =>
             axios.get(userUrl + "users").then((res) => {
@@ -55,8 +52,7 @@ class PostService {
                 );
             }).catch((err) => {
                 reject(err);
-            }
-            )))
+            })))
     }
 
     static updateSettings(settings, id) {
@@ -71,14 +67,30 @@ class PostService {
     }
 
     static editUser(user) {
-        return axios.put(`${userUrl}${user._id}`, { user },
-            {
-                headers: {
-                    'Authorization': "Bearer " +
-                        localStorage.getItem('token')
-                },
+        return axios.put(`${userUrl}${user._id}`, { user }, {
+            headers: {
+                'Authorization': "Bearer " +
+                    localStorage.getItem('token')
             },
-        )
+        }, )
+    }
+
+    static resetPassword(id, password) {
+        return axios.put(`${userUrl + 'reset/password/'}${id}`, { password: password }, {
+            headers: {
+                'Authorization': "Bearer " +
+                    localStorage.getItem('token')
+            },
+        }, )
+    }
+
+    static deleteUser(user) {
+        return axios.put(`${userUrl + 'delete/'}${user._id}`, { user }, {
+            headers: {
+                'Authorization': "Bearer " +
+                    localStorage.getItem('token')
+            },
+        }, )
     }
 
     static editPost(post) {
@@ -99,8 +111,7 @@ class PostService {
                 );
             }).catch((err) => {
                 reject(err);
-            }
-            )))
+            })))
     }
 
     static forceFileDownload(response) {

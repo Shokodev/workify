@@ -6,17 +6,17 @@ const bcrypt = require('bcrypt');
 const { roles } = require('../../utils/postmanifest');
 const { authenticateToken } = require('./authtoken');
 
-router.get('/users', async (req, res, next) => {
+router.get('/users', async(req, res, next) => {
     logger.info('fetch all users from db');
-    try{
+    try {
         res.send(await Users.find({}));
-    } catch (err){
+    } catch (err) {
         next(err);
     }
 });
 
 // Add User
-router.post('/register', async (req, res,next) => {
+router.post('/register', async(req, res, next) => {
     logger.info('add new user: ' + req.body.username);
     try {
         req.body.password = await bcrypt.hash(req.body.password, 10);
@@ -26,45 +26,56 @@ router.post('/register', async (req, res,next) => {
 
         logger.error("Add User failed: " + err.message);
         next(err);
-    } catch (err){
+    } catch (err) {
         logger.error("Register user failed: " + err.message);
         next(err);
     }
 });
 
-router.put('/:id', authenticateToken, async (req, res,next) =>{
+router.put('/:id', authenticateToken, async(req, res, next) => {
     logger.info('update user: ' + req.body.user.nickname);
     try {
-        console.log(req.user)
-        console.log(req.params.id)
-        
-        if(req.user.role === roles.ADMIN) {
-            await Users.updateOne({ _id: req.params.id }, { $set:{nickname:req.body.user.nickname}});
-            await Users.updateOne({ _id: req.params.id }, { $set:{username:req.body.user.username}});
-            await Users.updateOne({ _id: req.params.id }, { $set:{role:req.body.user.role}});
-
-
+        if (req.user.role === roles.ADMIN) {
+            await Users.updateOne({ _id: req.params.id }, { $set: { nickname: req.body.user.nickname } });
+            await Users.updateOne({ _id: req.params.id }, { $set: { username: req.body.user.username } });
+            await Users.updateOne({ _id: req.params.id }, { $set: { role: req.body.user.role } });
             res.status(200).send();
         } else {
-            res.status(403).send({message: "Permission denied"});
+            res.status(403).send({ message: "Permission denied" });
         }
-
-    } catch (err){
+    } catch (err) {
         logger.error("Update user failed: " + err.message);
         next(err);
     }
 });
 
-router.delete('/register', authenticateToken, async(req, res,next) => {
+router.put('/reset/password/:id', authenticateToken, async(req, res, next) => {
+    logger.info('reset password for user: ' + req.params.id);
+    try {
+        if (req.user.role === roles.ADMIN) {
+            req.body.password = await bcrypt.hash(req.body.password, 10);
+            await Users.updateOne({ _id: req.params.id }, { $set: { password: req.body.password } });
+            res.status(200).send();
+        } else {
+            res.status(403).send({ message: "Permission denied" });
+        }
+
+    } catch (err) {
+        logger.error("Update user failed: " + err.message);
+        next(err);
+    }
+});
+
+router.put('/delete/:id', authenticateToken, async(req, res, next) => {
     logger.info('delete User: ' + req.body.nickname);
     try {
-        if(req.user.role === roles.ADMIN) {
-            await Users.deleteOne({nickname: req.body.nickname});
+        if (req.user.role === roles.ADMIN) {
+            await Users.deleteOne({ _id: req.params.id });
             res.status(200).send();
         } else {
             res.sendStatus(403);
         }
-    } catch (err){
+    } catch (err) {
         logger.error("Delete post failed: " + err.message);
         next(err);
     }

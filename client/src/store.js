@@ -7,13 +7,14 @@ import PostService from './PostService'
 
 Vue.use(Vuex)
 
-export default  new Vuex.Store({
+export default new Vuex.Store({
     state: {
         idToken: null,
         localId: null,
         user: null,
         role: null,
         posts: null,
+        users: null,
     },
 
     mutations: {
@@ -22,10 +23,8 @@ export default  new Vuex.Store({
             state.localId = data.user[0]._id
             state.role = data.user[0].role;
             state.user = data.user[0];
-
-
         },
-        storeUser (state, user) {
+        storeUser(state, user) {
             state.idToken = user.idToken;
             state.userId = user.userId;
             state.role = user.role;
@@ -37,19 +36,22 @@ export default  new Vuex.Store({
         },
         setPosts(state, posts) {
             state.posts = posts;
-        }
+        },
+        setUsers(state, users) {
+            state.users = users;
+        },
     },
 
     actions: {
-        setLogoutTimer({commit}, expirationTime) {
+        setLogoutTimer({ commit }, expirationTime) {
             setTimeout(() => {
                 commit('clearAuthData')
             }, expirationTime * 1000)
         },
-        signup({dispatch}, authData) {
+        signup({ dispatch }, authData) {
             axios.post('api/users/register',
-                authData
-            )
+                    authData
+                )
                 .then(() => {
                     console.log(authData);
                     dispatch('login', authData)
@@ -57,35 +59,32 @@ export default  new Vuex.Store({
                 .catch(error => console.log(error))
         },
 
-
-
-        
-        signin ({commit, dispatch}, authData) {
+        signin({ commit, dispatch }, authData) {
             return new Promise(((resolve, reject) => {
                 console.log(authData)
                 axios.post('api/auth/login',
-                    authData
-                )                .then(res => {
-                    const now = new Date()
-                    const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
-                    localStorage.setItem('expirationDate', expirationDate.toString())
-                    localStorage.setItem('token', res.data.accessToken)
-                    localStorage.setItem('userId', res.data.user[0]._id)
-                    localStorage.setItem('role', res.data.user[0].role)
-                    console.log(res.data)
-                    commit('authUser', res.data)
-                    console.log(res.data)
-                    dispatch('setLogoutTimer', res.data.expiresIn)
-                    router.replace('/datatable')
-                })
+                        authData
+                    ).then(res => {
+                        const now = new Date()
+                        const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
+                        localStorage.setItem('expirationDate', expirationDate.toString())
+                        localStorage.setItem('token', res.data.accessToken)
+                        localStorage.setItem('userId', res.data.user[0]._id)
+                        localStorage.setItem('role', res.data.user[0].role)
+                        console.log(res.data)
+                        commit('authUser', res.data)
+                        console.log(res.data)
+                        dispatch('setLogoutTimer', res.data.expiresIn)
+                        router.replace('/datatable')
+                    })
                     .catch((error) => {
                         reject(error)
                     })
             }))
         },
-        tryAutoLogin ({commit}) {
+        tryAutoLogin({ commit }) {
             const idToken = localStorage.getItem('token')
-            if(!idToken) {
+            if (!idToken) {
                 return
             }
             const expirationDate = localStorage.getItem('expirationDate')
@@ -101,29 +100,38 @@ export default  new Vuex.Store({
             })
         },
 
-        logout({commit}) {
+        logout({ commit }) {
             commit('clearAuthData')
             localStorage.removeItem('expirationDate')
             localStorage.removeItem('token')
             localStorage.removeItem('userId')
             router.replace('/signin')
         },
-        async loadPosts({commit}) {
+        async loadPosts({ commit }) {
             commit('setPosts', await PostService.getPosts())
+        },
+
+        async getUsers({ commit }) {
+            PostService.getUsers().then(res => {
+                commit('setUsers', res)
+            }).catch(error => console.log(error));
         }
     },
     getters: {
-        user (state) {
+        user(state) {
             return state.user
         },
-        isAuthenticated (state) {
+        isAuthenticated(state) {
             return state.idToken !== null
         },
-        userRole (state){
+        userRole(state) {
             return state.role
         },
-        getPosts (state) {
+        getPosts(state) {
             return state.posts
         },
+        getUsers(state) {
+            return state.users
+        }
     }
 })
