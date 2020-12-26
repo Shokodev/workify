@@ -17,7 +17,7 @@ const state = {
 }
 
 const roles = {
-    ADMIN: "Administrator",
+    ADMIN: "Admin",
     GECC: "GECC",
     SIEMENS:"Siemens",
     PLANER: "Planer",

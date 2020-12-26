@@ -5,98 +5,116 @@ const baseUrl = 'api/';
 const postUrl = 'api/posts/';
 const userUrl = 'api/users/';
 
-class PostService{
+class PostService {
 
 
     //Get Posts
-    static getPosts(){
+    static getPosts() {
         return new Promise(((resolve, reject) =>
             axios.get(postUrl).then((res) => {
-            resolve(
-                res.data
-            );
-        }).catch((err) => {
-            reject(err);
-        }
-        )))
+                resolve(
+                    res.data
+                );
+            }).catch((err) => {
+                reject(err);
+            })))
     }
 
     //Get Dashboard info
-    static getDashboard(data){
+    static getDashboard(data) {
         return new Promise(((resolve, reject) =>
             axios.get(baseUrl + "dashboard/" + data).then((res) => {
                 resolve(
                     res.data
                 );
             }).catch((err) => {
-                    reject(err);
-                }
-            )))
+                reject(err);
+            })))
     }
 
     // Get Settings
-    static getSettings(){
-        return new Promise(((resolve, reject) =>
-            axios.get(baseUrl+"settings").then((res) => {
-                resolve(
-                    res.data
-                );
-            }).catch((err) => {
-                    reject(err);
-                }
-            )))
-    }
-        // Get Settings   
-        static getUsers(){
+    static getSettings() {
             return new Promise(((resolve, reject) =>
-                axios.get(userUrl+"users").then((res) => {
+                axios.get(baseUrl + "settings").then((res) => {
                     resolve(
                         res.data
                     );
                 }).catch((err) => {
-                        reject(err);
-                    }
-                )))
+                    reject(err);
+                })))
         }
+        // Get Settings   
+    static getUsers() {
+        return new Promise(((resolve, reject) =>
+            axios.get(userUrl + "users").then((res) => {
+                resolve(
+                    res.data
+                );
+            }).catch((err) => {
+                reject(err);
+            })))
+    }
 
-    static updateSettings(settings, id){
+    static updateSettings(settings, id) {
         return axios.put(`${baseUrl + "settings/"}${id}`, settings)
     }
 
     // Create Posts
-    static insertPost(item){
+    static insertPost(item) {
         return axios.post(postUrl, {
             item
         });
     }
 
-    static editUser(user){
-        return axios.put(`${userUrl}${user._id}` , {user})
+    static editUser(user) {
+        return axios.put(`${userUrl}${user._id}`, { user }, {
+            headers: {
+                'Authorization': "Bearer " +
+                    localStorage.getItem('token')
+            },
+        }, )
     }
 
-    static editPost(post){
-        return axios.put(`${postUrl}${post._id}`, {post} )
+    static resetPassword(id, password) {
+        return axios.put(`${userUrl + 'reset/password/'}${id}`, { password: password }, {
+            headers: {
+                'Authorization': "Bearer " +
+                    localStorage.getItem('token')
+            },
+        }, )
+    }
+
+    static deleteUser(user) {
+        return axios.put(`${userUrl + 'delete/'}${user._id}`, { user }, {
+            headers: {
+                'Authorization': "Bearer " +
+                    localStorage.getItem('token')
+            },
+        }, )
+    }
+
+    static editPost(post) {
+        return axios.put(`${postUrl}${post._id}`, { post })
     }
 
     // Delete Posts
-    static deletePost(id){
+    static deletePost(id) {
         return axios.delete(`${postUrl}${id}`)
     }
 
     // Get Excel sheet of all graphics
-    static createExcel(){
+    static createExcel() {
         return new Promise(((resolve, reject) =>
-            axios.get(baseUrl + 'excel',{responseType: 'arraybuffer'}).then((res) => {
+            axios.get(baseUrl + 'excel', { responseType: 'arraybuffer' }).then((res) => {
                 resolve(
                     this.forceFileDownload(res)
                 );
             }).catch((err) => {
-                    reject(err);
-                }
-            )))
+                reject(err);
+            })))
     }
 
-    static forceFileDownload(response){
+    static forceFileDownload(response) {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a')
         link.href = url
@@ -106,7 +124,7 @@ class PostService{
     }
 
 
-    
+
 
 
 }

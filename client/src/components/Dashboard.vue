@@ -15,7 +15,6 @@
             v-if="loaded"
             :chartdata="chartdata"
             :options="options"
-            height="300px"
           />
           <v-select v-model="chart1" :items="items" dense @input="changeChart">
           </v-select>
@@ -27,15 +26,14 @@
             v-bind:is="component2"
             v-if="loaded"
             :chartdata="chartdata"
-            :options="options"
-            height="300px"
+            :options="options" 
           />
           <v-select v-model="chart2" :items="items" dense @input="changeChart2">
           </v-select>
         </div>
       </v-col>
     </v-row>
-    <v-footer fixed color="white" class="d-flex justify-center">
+    <v-footer fixed color="white" class="d-flex justify-center" v-if="dataProgress">
       <v-card flat tile width="100%" class="grey lighten-1 text-center">
         <v-card-text class="white--text">
           <strong>Progress Status</strong>
@@ -54,7 +52,7 @@
           :value="dataProgress.floorPlans.value"
           color="teal"
         >
-          {{ Math.round(dataProgress.floorPlansvalue) }} %
+          {{ Math.round(dataProgress.floorPlans.value) }} %
         </v-progress-circular>
         <div class="ms-4">
           <p class="text-left">Current:{{ dataProgress.floorPlans.current }}</p>
@@ -97,10 +95,10 @@
           :rotate="360"
           :size="100"
           :width="15"
-          :value="dataProgress.regulationGraphics.value"
+          :value="dataProgress.plantGraphics.value"
           color="teal"
         >
-          {{ Math.round(dataProgress.regulationGraphics.value) }} %
+          {{ Math.round(dataProgress.plantGraphics.value) }} %
         </v-progress-circular>
         <div class="ms-4">
           <p class="text-left">
@@ -184,7 +182,7 @@ export default {
     chart2: "PieChart",
     component: "BarChart",
     component2: "PieChart",
-    dataProgress: {},
+    dataProgress: null,
     mainData: {
       label: null,
       data: null,
