@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const { roles } = require('../../utils/postmanifest');
 const { authenticateToken } = require('./authtoken');
 
-router.get('/users', async(req, res, next) => {
+router.get('/users', authenticateToken, async(req, res, next) => {
     logger.info('fetch all users from db');
     try {
         res.send(await Users.find({}));

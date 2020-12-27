@@ -29,7 +29,7 @@
         </v-toolbar>
       </template>
 
-      <template v-slot:[`item.item.graphic`]="{ item }">
+      <template v-slot:[`item.item.graphic`]="{ item }" v-if="isAdmin">
         <table-item
           :type="'text'"
           :propName="'graphic'"
@@ -40,7 +40,7 @@
         >
         </table-item>
       </template>
-      <template v-slot:[`item.item.selectType`]="{ item }">
+      <template v-slot:[`item.item.selectType`]="{ item }" v-if="isAdmin">
         <table-item
           :type="'select'"
           :propName="'selectType'"
@@ -52,7 +52,7 @@
         >
         </table-item>
       </template>
-      <template v-slot:[`item.item.regulations`]="{ item }">
+      <template v-slot:[`item.item.regulations`]="{ item }" v-if="isAdmin">
         <table-item
           :type="'select'"
           :propName="'regulations'"
@@ -64,7 +64,7 @@
         >
         </table-item>
       </template>
-      <template v-slot:[`item.item.selectState`]="{ item }">
+      <template v-slot:[`item.item.selectState`]="{ item }" v-if="isAdmin">
         <table-item
           :type="'select'"
           :propName="'selectState'"
@@ -80,7 +80,7 @@
         {{ parseDate(item.meta.finished_at) }}
       </template>
 
-      <template v-slot:[`item.item.creator`]="{ item }">
+      <template v-slot:[`item.item.creator`]="{ item }" v-if="isAdmin">
         <table-item
           :type="'select'"
           :propName="'creator'"
@@ -93,7 +93,7 @@
         </table-item>
       </template>
 
-      <template v-slot:[`item.item.comments`]="{ item }">
+      <template v-slot:[`item.item.comments`]="{ item }" v-if="isAdmin">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -111,7 +111,10 @@
         </v-tooltip>
       </template>
 
-      <template v-slot:[`item.item.selectSiemensTested`]="{ item }">
+      <template
+        v-slot:[`item.item.selectSiemensTested`]="{ item }"
+        v-if="isAdmin"
+      >
         <table-item
           :type="'select'"
           :propName="'selectSiemensTested'"
@@ -128,7 +131,7 @@
         {{ parseDate(item.meta.okBySiemens_at) }}
       </template>
 
-      <template v-slot:[`item.item.siemensAuditor`]="{ item }">
+      <template v-slot:[`item.item.siemensAuditor`]="{ item }" v-if="isAdmin">
         <table-item
           :type="'select'"
           :propName="'siemensAuditor'"
@@ -146,7 +149,7 @@
         </table-item>
       </template>
 
-      <template v-slot:[`item.item.siemensComments`]="{ item }">
+      <template v-slot:[`item.item.siemensComments`]="{ item }" v-if="isAdmin">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -162,7 +165,7 @@
           <span>{{ item.item.siemensComments }}</span>
         </v-tooltip>
       </template>
-      <template v-slot:[`item.item.planerComments`]="{ item }">
+      <template v-slot:[`item.item.planerComments`]="{ item }" v-if="isAdmin">
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -179,7 +182,10 @@
         </v-tooltip>
       </template>
 
-      <template v-slot:[`item.item.selectPlanerTested`]="{ item }">
+      <template
+        v-slot:[`item.item.selectPlanerTested`]="{ item }"
+        v-if="isAdmin"
+      >
         <table-item
           :type="'select'"
           :propName="'selectPlanerTested'"
@@ -196,7 +202,7 @@
         {{ parseDate(item.meta.closed_at) }}
       </template>
 
-      <template v-slot:[`item.item.planer`]="{ item }">
+      <template v-slot:[`item.item.planer`]="{ item }" v-if="isAdmin">
         <table-item
           :type="'select'"
           :item="item.item.planer"

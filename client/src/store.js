@@ -47,6 +47,7 @@ export default new Vuex.Store({
             setTimeout(() => {
                 commit('clearAuthData')
             }, expirationTime * 1000)
+            router.replace('/signin')
         },
         signup({ dispatch }, authData) {
             axios.post('api/users/register',
@@ -89,7 +90,9 @@ export default new Vuex.Store({
             }
             const expirationDate = localStorage.getItem('expirationDate')
             const now = new Date()
-            if (now >= expirationDate) {
+            console.log(now)
+            console.log(new Date(expirationDate))
+            if (now >= new Date(expirationDate)) {
                 return
             }
             const userId = localStorage.getItem('userId')
