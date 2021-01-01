@@ -58,7 +58,7 @@
 
                   <v-tab
                       v-if="auth"
-                      v-on:click="logout"
+                      v-on:click="areYouSureAlert = true"
                       :to="'/'"
                       :ripple="false"
                       active-class="text--primary"
@@ -71,24 +71,32 @@
                 </v-tabs>
             </div>
         </v-app-bar>
+        <AreYouSureAlert
+          v-if="areYouSureAlert" 
+          :showDialog="areYouSureAlert"
+          @confirm="logout($event)"
+        />
     </div>
 </template>
 
 <script>
+import AreYouSureAlert from "@/components/AreYouSureAlert.vue"
     export default {
         name: 'HomeAppBar',
-
-
         data: () => ({
             items: [
                 'dashboard',
                 'datatable',
                 'settings',
             ],
+            areYouSureAlert: false,
         }),
       methods: {
-        logout () {
-          this.$store.dispatch('logout')
+        logout (confirm) {
+          if(confirm){
+            this.$store.dispatch('logout')
+          }
+            this.areYouSureAlert = false;
         }
       },
       computed: {
@@ -96,6 +104,9 @@
             return this.$store.getters.isAuthenticated
           },
       },
+      components:{
+        AreYouSureAlert,
+      }
     }
 </script>
 
