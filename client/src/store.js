@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import router from './router/index'
 import PostService from './PostService'
+
 /*import {error} from "winston";*/
 
 Vue.use(Vuex)
@@ -15,6 +16,7 @@ export default new Vuex.Store({
         role: null,
         posts: null,
         users: null,
+        progressData: null,
     },
 
     mutations: {
@@ -39,6 +41,9 @@ export default new Vuex.Store({
         },
         setUsers(state, users) {
             state.users = users;
+        },
+        setProgressData(state, progressData) {
+            state.progressData = progressData;
         },
     },
 
@@ -118,8 +123,15 @@ export default new Vuex.Store({
             PostService.getUsers().then(res => {
                 commit('setUsers', res)
             }).catch(error => console.log(error));
+        },
+
+        async loadProgressData({ commit }) {
+            await PostService.getDashboard("progress").then(res => {
+                commit('setProgressData', res)
+            }).catch(error => console.log(error));
         }
     },
+
     getters: {
         user(state) {
             return state.user
@@ -135,6 +147,9 @@ export default new Vuex.Store({
         },
         getUsers(state) {
             return state.users
+        },
+        getProgressData(state) {
+            return state.progressData
         }
     }
 })
