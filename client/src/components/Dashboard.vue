@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="container">
     <v-row>
       <v-col>
@@ -33,128 +34,8 @@
         </div>
       </v-col>
     </v-row>
-    <v-footer fixed color="white" class="d-flex justify-center" v-if="dataProgress">
-      <v-card flat tile width="100%" class="grey lighten-1 text-center">
-        <v-card-text class="white--text">
-          <strong>Progress Status</strong>
-        </v-card-text>
-      </v-card>
-
-      <v-card elevation="2" class="ma-1">
-        <v-card-title>
-          <p class="text-left">Floor Plans</p>
-        </v-card-title>
-        <v-progress-circular
-          class="mb-6"
-          :rotate="360"
-          :size="100"
-          :width="15"
-          :value="dataProgress.floorPlans.value"
-          color="teal"
-        >
-          {{ Math.round(dataProgress.floorPlans.value) }} %
-        </v-progress-circular>
-        <div class="ms-4">
-          <p class="text-left">Current:{{ dataProgress.floorPlans.current }}</p>
-          <p class="text-left">
-            Expected:{{ dataProgress.floorPlans.expected }}
-          </p>
-        </div>
-      </v-card>
-
-      <v-card elevation="2" class="ma-1">
-        <v-card-title>
-          <p class="text-left">Navigations Graphics</p>
-        </v-card-title>
-        <v-progress-circular
-          class="mb-6"
-          :rotate="360"
-          :size="100"
-          :width="15"
-          :value="dataProgress.navigationsGraphics.value"
-          color="teal"
-        >
-          {{ Math.round(dataProgress.navigationsGraphics.value) }} %
-        </v-progress-circular>
-        <div class="ms-4">
-          <p class="text-left">
-            Current:{{ dataProgress.navigationsGraphics.current }}
-          </p>
-          <p class="text-left">
-            Expected:{{ dataProgress.navigationsGraphics.expected }}
-          </p>
-        </div>
-      </v-card>
-
-      <v-card elevation="2" class="ma-1">
-        <v-card-title>
-          <p class="text-left">Plant Graphics</p>
-        </v-card-title>
-        <v-progress-circular
-          class="mb-6"
-          :rotate="360"
-          :size="100"
-          :width="15"
-          :value="dataProgress.plantGraphics.value"
-          color="teal"
-        >
-          {{ Math.round(dataProgress.plantGraphics.value) }} %
-        </v-progress-circular>
-        <div class="ms-4">
-          <p class="text-left">
-            Current:{{ dataProgress.plantGraphics.current }}
-          </p>
-          <p class="text-left">
-            Expected:{{ dataProgress.plantGraphics.expected }}
-          </p>
-        </div>
-      </v-card>
-
-      <v-card elevation="2" class="ma-1">
-        <v-card-title>
-          <p class="text-left">Regulations Graphics</p>
-        </v-card-title>
-        <v-progress-circular
-          class="mb-6"
-          :rotate="360"
-          :size="100"
-          :width="15"
-          :value="dataProgress.regulationGraphics.value"
-          color="teal"
-        >
-          {{ Math.round(dataProgress.regulationGraphics.value) }} %
-        </v-progress-circular>
-        <div class="ms-4">
-          <p class="text-left">
-            Current:{{ dataProgress.regulationGraphics.current }}
-          </p>
-          <p class="text-left">
-            Expected:{{ dataProgress.regulationGraphics.expected }}
-          </p>
-        </div>
-      </v-card>
-
-      <v-card elevation="2" class="ma-1">
-        <v-card-title>
-          <p class="text-left">Total</p>
-        </v-card-title>
-        <v-progress-circular
-          class="mb-6"
-          :rotate="360"
-          :size="100"
-          :width="15"
-          :value="dataProgress.total.value"
-          color="teal"
-        >
-          {{ Math.round(dataProgress.total.value) }} %
-        </v-progress-circular>
-        <div class="ms-4">
-          <p class="text-left">Current:{{ dataProgress.total.current }}</p>
-          <p class="text-left">Expected:{{ dataProgress.total.expected }}</p>
-        </div>
-      </v-card>
-    </v-footer>
   </div>
+</div>
 </template>
 
 <script>
@@ -220,14 +101,6 @@ export default {
     changeChart2() {
       this.component2 = this.chart2;
     },
-
-    calculatePercentage() {
-      this.progressTotal = Math.round(
-        (190 * this.progressdata.total.current) /
-          this.progressdata.total.expected
-      );
-      console.log(this.progressTotal);
-    },
   },
 
   async mounted() {
@@ -241,8 +114,6 @@ export default {
     } catch (e) {
       console.error(e);
     }
-    this.progressdata = await PostService.getDashboard("progress");
-    //this.calculatePercentage()
     this.progressLoaded = true;
   },
 };
