@@ -59,7 +59,6 @@
                   <v-tab
                       v-if="auth"
                       v-on:click="areYouSureAlert = true"
-                      :to="'/'"
                       :ripple="false"
                       active-class="text--primary"
                       class="font-weight-bold"

@@ -3,18 +3,13 @@
   <div class="container">
     <v-row>
       <v-col>
-        <v-btn class="mx-2" @click="loadChartData('main')">main</v-btn>
-        <v-btn class="mx-2" @click="loadChartData('weekly')">weekly</v-btn>
-      </v-col>
-    </v-row>
-    <v-card></v-card>
-    <v-row>
-      <v-col>
         <div>
+          <p class="text-button">Overall</p>
           <component
+
             v-bind:is="component"
             v-if="loaded"
-            :chartdata="chartdata"
+            :chartdata="main"
             :options="options"
           />
           <v-select v-model="chart1" :items="items" dense @input="changeChart">
@@ -22,11 +17,12 @@
         </div>
       </v-col>
       <v-col>
+        <p class="text-button">Weekly</p>
         <div>
           <component2
             v-bind:is="component2"
             v-if="loaded"
-            :chartdata="chartdata"
+            :chartdata="weekly"
             :options="options" 
           />
           <v-select v-model="chart2" :items="items" dense @input="changeChart2">
@@ -63,13 +59,17 @@ export default {
     chart2: "PieChart",
     component: "BarChart",
     component2: "PieChart",
-    dataProgress: null,
     mainData: {
       label: null,
       data: null,
       backgroundColor: null,
     },
-    chartdata: {
+    main: {
+      label: null,
+      data: null,
+      backgroundColor: null,
+    },
+    weekly: {
       label: null,
       data: null,
       backgroundColor: null,
@@ -107,9 +107,10 @@ export default {
     this.loaded = false;
     this.progressLoaded = false;
     try {
-      this.dataProgress = await PostService.getDashboard("progress");
-      this.chartdata = await PostService.getDashboard("weekly");
-      this.addChartColors(this.chartdata);
+      this.weekly = await PostService.getDashboard("weekly");
+      this.main = await PostService.getDashboard("main");
+      this.addChartColors(this.weekly);
+      this.addChartColors(this.main);
       this.loaded = true;
     } catch (e) {
       console.error(e);

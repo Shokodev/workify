@@ -6,35 +6,38 @@
       <router-view :posts="posts"></router-view>
     </v-container>
     <div v-if="dataProgress">
-    <v-footer  v-if="$route.name === 'dashboard' ? true: false"  color="white" class="d-flex justify-center">
+    <v-footer fixed  v-if="$route.name === 'dashboard' ? true: false"  color="white" class="d-flex justify-center">
       
-      <v-card flat tile width="100%" class="grey lighten-1 text-center">
-        <v-card-text class="white--text">
+      <v-card flat tile width="100%" class="grey  lighten-1 text-center">
+        <v-card-text class="text-button">
           <strong>Progress Status</strong>
         </v-card-text>
       </v-card>
-      <v-card elevation="2" class="ma-1">
-        <v-card-title>
-          <p class="text-left">Floor Plans</p>
-        </v-card-title>
-        <v-progress-circular
-          class="mb-6"
-          :rotate="360"
-          :size="100"
-          :width="15"
-          :value="dataProgress.floorPlans.value"
-          color="teal"
-        >
-          {{ Math.round(dataProgress.floorPlans.value) }} %
-        </v-progress-circular>
-        <div class="ms-4">
-          <p class="text-left">Current:{{ dataProgress.floorPlans.current }}</p>
-          <p class="text-left">
-            Expected:{{ dataProgress.floorPlans.expected }}
-          </p>
-        </div>
-      </v-card>
-
+      <v-row>
+      <v-col>
+        <v-card elevation="2" class="ma-1">
+          <v-card-title>
+            <p class="text-left">Floor Plans</p>
+          </v-card-title>
+          <v-progress-circular
+            class="mb-6"
+            :rotate="360"
+            :size="100"
+            :width="15"
+            :value="dataProgress.floorPlans.value"
+            color="teal"
+          >
+            {{ Math.round(dataProgress.floorPlans.value) }} %
+          </v-progress-circular>
+          <div class="pa-4">
+            <p class="text-left">Current: <strong>{{ dataProgress.floorPlans.current }}</strong></p>
+            <p class="text-left">
+              <strong>Expected:{{ dataProgress.floorPlans.expected }}</strong>
+            </p>
+          </div>
+        </v-card>
+      </v-col>
+      <v-col>
       <v-card elevation="2" class="ma-1">
         <v-card-title>
           <p class="text-left">Navigations Graphics</p>
@@ -49,16 +52,17 @@
         >
           {{ Math.round(dataProgress.navigationsGraphics.value) }} %
         </v-progress-circular>
-        <div class="ms-4">
+        <div class="pa-4">
           <p class="text-left">
-            Current:{{ dataProgress.navigationsGraphics.current }}
+            Current: <strong> {{ dataProgress.navigationsGraphics.current }}</strong>
           </p>
           <p class="text-left">
-            Expected:{{ dataProgress.navigationsGraphics.expected }}
+            Expected:<strong>{{ dataProgress.navigationsGraphics.expected }}</strong>
           </p>
         </div>
       </v-card>
-
+       </v-col>
+      <v-col>
       <v-card elevation="2" class="ma-1">
         <v-card-title>
           <p class="text-left">Plant Graphics</p>
@@ -73,16 +77,17 @@
         >
           {{ Math.round(dataProgress.plantGraphics.value) }} %
         </v-progress-circular>
-        <div class="ms-4">
+        <div class="pa-4">
           <p class="text-left">
-            Current:{{ dataProgress.plantGraphics.current }}
+            Current:<strong>{{ dataProgress.plantGraphics.current }}</strong>
           </p>
           <p class="text-left">
-            Expected:{{ dataProgress.plantGraphics.expected }}
+            Expected:<strong>{{ dataProgress.plantGraphics.expected }}</strong>
           </p>
         </div>
       </v-card>
-
+       </v-col>
+      <v-col>
       <v-card elevation="2" class="ma-1">
         <v-card-title>
           <p class="text-left">Regulations Graphics</p>
@@ -97,16 +102,17 @@
         >
           {{ Math.round(dataProgress.regulationGraphics.value) }} %
         </v-progress-circular>
-        <div class="ms-4">
+        <div class="pa-4">
           <p class="text-left">
-            Current:{{ dataProgress.regulationGraphics.current }}
+            Current:<strong>{{ dataProgress.regulationGraphics.current }}</strong>
           </p>
           <p class="text-left">
-            Expected:{{ dataProgress.regulationGraphics.expected }}
+            Expected:<strong>{{ dataProgress.regulationGraphics.expected }}</strong>
           </p>
         </div>
       </v-card>
-
+         </v-col>
+      <v-col>
       <v-card elevation="2" class="ma-1">
         <v-card-title>
           <p class="text-left">Total</p>
@@ -121,13 +127,16 @@
         >
           {{ Math.round(dataProgress.total.value) }} %
         </v-progress-circular>
-        <div class="ms-4">
-          <p class="text-left">Current:{{ dataProgress.total.current }}</p>
-          <p class="text-left">Expected:{{ dataProgress.total.expected }}</p>
+        <div class="pa-4">
+          <p class="text-left">Current:<strong>{{ dataProgress.total.current }}</strong></p>
+          <p class="text-left">Expected:<strong>{{ dataProgress.total.expected }}</strong></p>
         </div>
       </v-card>
+      </v-col>
+      </v-row>
     </v-footer>
     </div>
+    
   </v-app>
 </template>
 
@@ -170,7 +179,7 @@ export default {
         (190 * this.progressdata.total.current) /
           this.progressdata.total.expected
       );
-      console.log(this.progressTotal);
+      
     },
   }
 }

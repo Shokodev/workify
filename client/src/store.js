@@ -59,15 +59,13 @@ export default new Vuex.Store({
                     authData
                 )
                 .then(() => {
-                    console.log(authData);
-                    dispatch('login', authData)
+                    dispatch('signin', authData)
                 })
                 .catch(error => console.log(error))
         },
 
         signin({ commit, dispatch }, authData) {
             return new Promise(((resolve, reject) => {
-                console.log(authData)
                 axios.post('api/auth/login',
                         authData
                     ).then(res => {
