@@ -1,12 +1,9 @@
 <template>
-  <div>
-  <div class="container">
-    <v-row>
-      <v-col>
+  <div >
+
         <div>
           <p class="text-button">Overall</p>
           <component
-
             v-bind:is="component"
             v-if="loaded"
             :chartdata="main"
@@ -15,8 +12,7 @@
           <v-select v-model="chart1" :items="items" dense @input="changeChart">
           </v-select>
         </div>
-      </v-col>
-      <v-col>
+
         <p class="text-button">Weekly</p>
         <div>
           <component2
@@ -28,9 +24,7 @@
           <v-select v-model="chart2" :items="items" dense @input="changeChart2">
           </v-select>
         </div>
-      </v-col>
-    </v-row>
-  </div>
+
 </div>
 </template>
 
@@ -123,5 +117,8 @@ export default {
 <style>
 .small {
   max-height: 500px;
+}
+.charts {
+  margin-bottom: 20%;
 }
 </style>

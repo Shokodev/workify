@@ -6,7 +6,6 @@
                 color="white"
                 elevation="1"
                 height="60"
-                hide-on-scroll
         >
 
             <div>
