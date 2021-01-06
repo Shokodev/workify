@@ -223,7 +223,7 @@
       <template v-slot:[`item.item.actions`]="{ item }" v-if="isAdmin">
         <EditItem :edit-item="item" v-on:change-item="updateItem($event)">
         </EditItem>
-        <v-icon small @click="deleteItem(item)">
+        <v-icon small @click="setToDeleteItem(item)">
           mdi-delete
         </v-icon>
       </template>
@@ -238,12 +238,19 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <AreYouSureAlert
+          v-if="areYouSureAlert" 
+          :showDialog="areYouSureAlert"
+          @confirm="deleteItem($event)"
+        />
   </div>
+  
 </template>
 
 <script>
 import moment from "moment";
 import PostService from "@/PostService";
+import AreYouSureAlert from "@/components/AreYouSureAlert"
 import AddItem from "./AddItem";
 import EditItem from "./EditItem";
 import TableItem from "./table/TableItem";
@@ -253,6 +260,7 @@ export default {
     AddItem,
     EditItem,
     TableItem,
+    AreYouSureAlert,
   },
   props: {
     posts: {
@@ -263,6 +271,8 @@ export default {
     return {
       search: "",
       loadingActive: false,
+      areYouSureAlert: false,
+      toDeleteItem: null,
       headers: [
         {
           text: "Graphic",
@@ -373,12 +383,19 @@ export default {
       this.snackColor = "error";
       this.snackText = "Canceled";
     },
-
-    async deleteItem(item) {
-      await PostService.deletePost(item._id);
-      this.loadingActive = true;
-      this.$store.dispatch("loadPosts");
-      this.loadingActive = false;
+    setToDeleteItem(item) {
+      this.toDeleteItem = item;
+      this.areYouSureAlert = true;
+    },
+    async deleteItem(confirm) {
+      if(confirm) {
+        await PostService.deletePost(this.toDeleteItem._id);
+        this.loadingActive = true;
+        this.$store.dispatch("loadPosts");
+        this.loadingActive = false;
+      }
+      this.toDeleteItem = null;
+      this.areYouSureAlert = false;
     },
     async updateItem(item) {
       await PostService.editPost(item);

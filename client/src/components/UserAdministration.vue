@@ -42,12 +42,12 @@
               >
             </td>
             <td>
-              <v-btn color="error" @click="resetPassword(user)"
+              <v-btn color="error" @click="setToResetPassword(user)"
                 >Reset password</v-btn
               >
             </td>
             <td>
-              <v-btn color="error" @click="deleteUser(user)"
+              <v-btn color="error" @click="setToDeleteUser(user)"
                 ><v-icon>
                   mdi-delete
                 </v-icon></v-btn
@@ -98,17 +98,36 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <AreYouSureAlert
+          v-if="areYouSureAlertPassword" 
+          :showDialog="areYouSureAlertPassword"
+          @confirm="resetPassword($event)"
+      />
+      <AreYouSureAlert
+          v-if="areYouSureAlertUser" 
+          :showDialog="areYouSureAlertUser"
+          @confirm="deleteUser($event)"
+      />
   </div>
 </template>
 
 <script>
 import PostService from "../PostService";
+import AreYouSureAlert from "@/components/AreYouSureAlert"
+
 export default {
   data() {
     return {
       editUser: null,
       dialog: false,
+      areYouSureAlertUser: false,
+      areYouSureAlertPassword: false,
+      toResetPassword:null,
+      toDeleteUser:null,
     };
+  },
+  components:{
+    AreYouSureAlert
   },
   mounted(){
     this.$store.dispatch('getUsers');
@@ -127,13 +146,31 @@ export default {
     cancel() {
       this.dialog = false;
     },
-    async resetPassword(user) {
-      await PostService.resetPassword(user._id, "password");
-      this.$store.dispatch('getUsers');
+    setToResetPassword(user){
+      this.toResetPassword = user;
+      this.areYouSureAlertPassword = true;
     },
-    async deleteUser(user) {
-      await PostService.deleteUser(user);
-      this.$store.dispatch('getUsers');
+    setToDeleteUser(user){
+      this.toDeleteUser = user;
+      this.areYouSureAlertUser = true;
+    },
+    async resetPassword(confirm) {
+      if(confirm){
+        await PostService.resetPassword(this.toResetPassword._id, "password");
+        this.$store.dispatch('getUsers');
+      }
+      this.areYouSureAlertPassword = false;
+      this.toResetPassword = null;
+    },
+    async deleteUser(confirm) {
+      if(confirm){
+        await PostService.deleteUser(this.toDeleteUser);
+        this.$store.dispatch('getUsers');
+      }
+      this.areYouSureAlertUser = false;
+      this.toDeleteUser = null;
+
+      
     }
   },
 };
