@@ -1,12 +1,13 @@
 <template>
   <v-app id="app">
-    <v-container>
-    <AppBar></AppBar>
+        <AppBar></AppBar>
+    <div class="mt-15 content">
+
       <p class="error" v-if="error">{{error}}</p>
       <router-view :posts="posts"></router-view>
-    </v-container>
+    </div>
     <div v-if="dataProgress">
-    <v-footer fixed  v-if="$route.name === 'dashboard' ? true: false"  color="white" class="d-flex justify-center">
+    <v-footer  v-if="$route.name === 'dashboard' ? true: false"  color="white" class="d-flex justify-center">
       
       <v-card flat tile width="100%" class="grey  lighten-1 text-center">
         <v-card-text class="text-button">
@@ -192,6 +193,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
+
+  .content {
+    background: #FAFBFE;
+  }
 </style>

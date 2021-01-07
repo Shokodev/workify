@@ -1,31 +1,35 @@
 <template>
-  <div >
-
-        <div>
+  <div class="content">
+    <div class="container">
+      <div class="Chart__container">
+        <div class="Chart__title">
           <p class="text-button">Overall</p>
-          <component
-            v-bind:is="component"
-            v-if="loaded"
-            :chartdata="main"
-            :options="options"
-          />
-          <v-select v-model="chart1" :items="items" dense @input="changeChart">
-          </v-select>
         </div>
+        <component
+          v-bind:is="component"
+          v-if="loaded"
+          :chartdata="main"
+          :options="options"
+        />
+        <v-select v-model="chart1" :items="items" dense @input="changeChart">
+        </v-select>
+      </div>
 
-        <p class="text-button">Weekly</p>
-        <div>
-          <component2
-            v-bind:is="component2"
-            v-if="loaded"
-            :chartdata="weekly"
-            :options="options" 
-          />
-          <v-select v-model="chart2" :items="items" dense @input="changeChart2">
-          </v-select>
+      <div class="Chart__container">
+        <div class="Chart__title">
+          <p class="text-button">Weekly</p>
         </div>
-
-</div>
+        <component2
+          v-bind:is="component2"
+          v-if="loaded"
+          :chartdata="weekly"
+          :options="options"
+        />
+        <v-select v-model="chart1" :items="items" dense @input="changeChart2">
+        </v-select>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -48,11 +52,11 @@ export default {
   data: () => ({
     loaded: false,
     progressLoaded: false,
-    items: ["BarChart", "LineChart", "PieChart", "RadarChart"],
+    items: ["BarChart", "LineChart"],
     chart1: "BarChart",
-    chart2: "PieChart",
+    chart2: "BarChart",
     component: "BarChart",
-    component2: "PieChart",
+    component2: "BarChart",
     mainData: {
       label: null,
       data: null,
@@ -93,7 +97,7 @@ export default {
       this.component = this.chart1;
     },
     changeChart2() {
-      this.component2 = this.chart2;
+      this.component2 = this.chart1;
     },
   },
 
@@ -114,11 +118,4 @@ export default {
 };
 </script>
 
-<style>
-.small {
-  max-height: 500px;
-}
-.charts {
-  margin-bottom: 20%;
-}
-</style>
+<style></style>
