@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container userAdmin ">
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -179,5 +179,9 @@ export default {
 <style>
 td {
   text-align: left;
+}
+
+.userAdmin {
+  margin-top: 80px;
 }
 </style>
