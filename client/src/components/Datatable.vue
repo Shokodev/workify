@@ -40,6 +40,7 @@
         >
         </table-item>
       </template>
+
       <template v-slot:[`item.item.selectType`]="{ item }" v-if="isGECC">
         <table-item
           :type="'select'"
@@ -52,6 +53,7 @@
         >
         </table-item>
       </template>
+
       <template v-slot:[`item.item.regulations`]="{ item }" v-if="isGECC">
         <table-item
           :type="'select'"
@@ -64,6 +66,7 @@
         >
         </table-item>
       </template>
+
       <template v-slot:[`item.item.selectState`]="{ item }" v-if="isGECC">
         <table-item
           :type="'select'"
@@ -76,39 +79,18 @@
         >
         </table-item>
       </template>
+
       <template v-slot:[`item.meta.finished_at`]="{ item }">
         {{ parseDate(item.meta.finished_at) }}
       </template>
 
-      <template v-slot:[`item.item.creator`]="{ item }" v-if="isGECC">
-        <table-item
-          :type="'select'"
-          :propName="'creator'"
-          :item="item.item.creator"
-          :_id="item._id"
-          :state="['GECC 1', 'GECC 2', 'GECC 3', 'GECC 4']"
-          :label="'Creator'"
-          v-on:update-item="updateItem"
-        >
-        </table-item>
-      </template>
-
       <template v-slot:[`item.item.comments`]="{ item }" v-if="isGECC">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              v-if="item.item.comments"
-              small
-              class="mx-4"
-              v-bind="attrs"
-              v-on="on"
-            >
-              mdi-comment-text
-            </v-icon>
-          </template>
-
-          <span>{{ item.item.comments }}</span>
-        </v-tooltip>
+        <CommentDialog
+              :item="item"
+              :propName="'comments'"
+              @update-item="updateItem($event)"
+              :label="'GECC Comments'"
+              />
       </template>
 
       <template
@@ -132,21 +114,19 @@
       </template>
 
       <template v-slot:[`item.item.siemensAuditor`]="{ item }" v-if="isSiemens">
-        <table-item
-          :type="'select'"
-          :propName="'siemensAuditor'"
-          :item="item.item.siemensAuditor"
-          :_id="item._id"
-          :state="[
-            'Siemens User1',
-            'Siemens User2',
-            'Siemens User3',
-            'Siemens User4',
-          ]"
-          :label="'Auditor'"
-          v-on:update-item="updateItem"
+        <v-icon
+              v-if="!item.item.siemensAuditor"
+              small
+              icon
+              @click="updateAuditor(item)"
+            >
+              mdi-plus
+          </v-icon>
+        <p
+        v-if="item.item.siemensAuditor"
         >
-        </table-item>
+          {{item.item.siemensAuditor}}
+        </p>
       </template>
 
       <template
@@ -161,6 +141,7 @@
               class="mx-4"
               v-bind="attrs"
               v-on="on"
+              @click="commentDialog = true"
             >
               mdi-comment-text
             </v-icon>
@@ -254,6 +235,8 @@ import AreYouSureAlert from "@/components/AreYouSureAlert"
 import AddItem from "./AddItem";
 import EditItem from "./EditItem";
 import TableItem from "./table/TableItem";
+import CommentDialog from "@/components/table/CommentDialog"
+
 export default {
   name: "Datatable",
   components: {
@@ -261,6 +244,7 @@ export default {
     EditItem,
     TableItem,
     AreYouSureAlert,
+    CommentDialog
   },
   props: {
     posts: {
@@ -403,6 +387,14 @@ export default {
       this.snackColor = "success";
       this.snackText = "Data saved";
       this.$store.dispatch("loadPosts");
+    },
+    updateAuditor(item) {
+      this.updateItem({
+                item:{
+                  siemensAuditor: this.$store.getters.user.nickname
+                },
+                _id: item._id
+              })
     },
     parseDate(date) {
       if (date === undefined || date === null) {

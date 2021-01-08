@@ -33,7 +33,7 @@
         ></v-text-field>
       </template>
     </v-edit-dialog>
-        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
       {{ snackText }}
 
       <template v-slot:action="{ attrs }">
