@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="container signin">
+    <v-card class="pa-5">
             <v-form
                 ref="form"
                 v-model="valid"
@@ -42,6 +43,7 @@
                 Cancel
               </v-btn>
             </v-form>
+            </v-card>
 
     <v-divider
     class="my-6"></v-divider>
@@ -128,5 +130,9 @@ export default {
 </script>
 
 <style scoped>
+
+.signin {
+  margin-top: 80px;
+}
 
 </style>

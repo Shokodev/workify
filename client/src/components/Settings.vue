@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="container settings">
+    <v-card class="pa-5">
   <div v-if="isAdmin">
     <p>Project Settings</p>
     <v-text-field
@@ -56,6 +57,7 @@
       type='info'
       >Nothing to see here..</v-alert>
     </div>
+    </v-card>
   </div>
 
 </template>
@@ -111,4 +113,7 @@ import PostService from "@/PostService";
 
 <style scoped>
 
+.settings {
+  margin-top: 80px;
+}
 </style>
