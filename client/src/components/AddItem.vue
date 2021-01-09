@@ -1,5 +1,9 @@
 <template>
-        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-dialog 
+          v-model="dialog"
+          max-width="600px"
+          persistent  
+        >
             <template v-slot:activator="{ on, attrs}">
                 <v-btn
                         class="mx-2"
@@ -11,25 +15,12 @@
                     <v-icon dark>mdi-plus</v-icon>
                 </v-btn>
             </template>
-            <v-card>
-                <v-toolbar dark color="primary">
-                    <v-btn icon dark @click="dialog = false">
-                        <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                    <v-toolbar-title>Editing</v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                        <v-btn dark text :disabled="!valid" v-on:click="saveItem(newItem)">Save</v-btn>
-                    </v-toolbar-items>
-                </v-toolbar>
-              <div class="pa-3">
-                <v-form ref="form" v-model="valid">
-                  <v-card
-                  color="GECC"
-                  class="pa-3 mx-auto"
-                  max-width="800">
-                  <v-subheader
-                      class="text-h6">GECC</v-subheader>
+              
+                  <v-card class="pa-2">
+                  <v-card-title>
+                  New graphic
+                  </v-card-title>
+                  <v-form ref="form" v-model="valid">
                   <v-list-item>
                         <v-list-item-content>
                           <v-text-field
@@ -65,9 +56,9 @@
                         <v-list-item-content>
                           <v-text-field
                               v-model="newItem.creator"
-                              :rules="creatorRules"
                               label="Creator"
                               required
+                              disabled
                           ></v-text-field>
                         </v-list-item-content>
                     </v-list-item>
@@ -91,10 +82,21 @@
                           ></v-text-field>
                         </v-list-item-content>
                     </v-list-item>
+                    <v-crad-actions>
+                  <v-btn 
+                  class="error ma-2"
+                  @click="dialog = false">
+                  Cancle
+                  </v-btn>
+                  <v-btn 
+                  class="green lighten-1 ma-2"
+                  text
+                  :disabled="!valid" 
+                  v-on:click="saveItem(newItem)"
+                  >Save </v-btn>
+              </v-crad-actions>
+              </v-form>
               </v-card>
-                </v-form>
-              </div>
-            </v-card>
         </v-dialog>
 </template>
 
@@ -109,7 +111,6 @@
         data() {
             return {
             newItem: {
-
                 graphic: '',
                 selectType: null,
                 selectState: null,
@@ -123,9 +124,6 @@
                 ],
                 numberRules: [
                   v => Number.isInteger(Number(v)) || 'The input has to be a number',
-                ],
-                creatorRules: [
-                    v => !!v || 'Name is required',
                 ],
                 itemsType: [
                     'Plant graphic',
@@ -146,13 +144,17 @@
                 dialog: false,
             }
         },
-      methods:{
-            saveItem(newItem){
-            this.$emit('add-item', newItem);
-            this.dialog = false;
-            this.$nextTick(() => this.$refs.form.reset())
+        mounted(){
+          this.newItem.creator = this.$store.getters.user.nickname;
+        },
+        methods:{
+              saveItem(newItem){
+              this.$emit('add-item', newItem);
+              this.dialog = false;
+              this.$nextTick(() => this.$refs.form.reset())
 
-          },
+        },
+
       },
     }
 </script>
