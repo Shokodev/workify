@@ -11,9 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         idToken: null,
-        localId: null,
         user: null,
-        role: null,
         posts: null,
         users: null,
         progressData: null,
@@ -22,14 +20,11 @@ export default new Vuex.Store({
     mutations: {
         authUser(state, data) {
             state.idToken = data.accessToken;
-            state.localId = data.user[0]._id
-            state.role = data.user[0].role;
             state.user = data.user[0];
         },
-        storeUser(state, user) {
-            state.idToken = user.idToken;
-            state.userId = user.userId;
-            state.role = user.role;
+        storeUser(state, data) {
+            state.idToken = data.idToken;
+            state.user = data.user;
         },
         clearAuthData(state) {
             state.idToken = null
@@ -73,8 +68,8 @@ export default new Vuex.Store({
                         const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
                         localStorage.setItem('expirationDate', expirationDate.toString())
                         localStorage.setItem('token', res.data.accessToken)
-                        localStorage.setItem('userId', res.data.user[0]._id)
-                        localStorage.setItem('role', res.data.user[0].role)
+                        res.data.user[0].password = "";
+                        localStorage.setItem('user', JSON.stringify(res.data.user[0]))
                         commit('authUser', res.data)
                         dispatch('setLogoutTimer', res.data.expiresIn)
                         router.replace('/datatable')
@@ -96,11 +91,10 @@ export default new Vuex.Store({
             if (now >= new Date(expirationDate)) {
                 return
             }
-            const userId = localStorage.getItem('userId')
+            const user = JSON.parse(localStorage.getItem('user'));
             commit('storeUser', {
                 idToken: idToken,
-                userId: userId,
-                role: localStorage.getItem('role')
+                user: user,
             })
         },
 
@@ -136,7 +130,7 @@ export default new Vuex.Store({
             return state.idToken !== null
         },
         userRole(state) {
-            return state.role
+            return state.user.role
         },
         getPosts(state) {
             return state.posts

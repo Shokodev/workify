@@ -5,7 +5,7 @@
     max-width="400px"
     persistent
     >
-       <v-card class="pa-8 grey lighten-2"> 
+       <v-card class="pa-8 secondary"> 
         <div class="text--lighten-1 text-h3 mb-4">
         Are you sure ?
         </div>
@@ -14,7 +14,7 @@
         color="grey"
         
         x-large
-        @click="cancle()"
+        @click="cancel()"
       >
         Cancel
       </v-btn>
@@ -47,7 +47,7 @@ export default {
             this.$emit("confirm", true);
             
         },
-        cancle(){
+        cancel(){
            this.$emit("confirm", false);
         }
     }
