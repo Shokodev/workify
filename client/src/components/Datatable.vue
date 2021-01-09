@@ -14,10 +14,8 @@
       dense
     >
       <template v-slot:top>
-        <v-toolbar flat
-         class="toolbar">
+        <v-toolbar flat class="toolbar">
           <v-text-field
-
             v-model="search"
             append-icon="mdi-magnify"
             label="Search"
@@ -29,7 +27,30 @@
             <v-icon dark>mdi-table</v-icon>
           </v-btn>
           <AddItem v-on:add-item="createPost($event)"></AddItem>
+
         </v-toolbar>
+                  <v-divider class="mt-5"></v-divider>
+      </template>
+
+      <template v-slot:header>
+        <thead class="table-header">
+          <tr>
+            <th colspan="7" class="text-center parent-header text-uppercase subtitle-1 font-weight-medium">
+              <v-divider class=" divider-left" vertical></v-divider>
+              Siemens
+              <v-divider class=" divider-right" vertical></v-divider>
+            </th>
+
+            <th colspan="4" class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium">
+              GECC
+              <v-divider class="divider-right" vertical></v-divider>
+            </th>
+            <th colspan="4" class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium">
+              Planer
+              <v-divider class=" divider-right" vertical></v-divider>
+            </th>
+          </tr>
+        </thead>
       </template>
 
       <template v-slot:[`item.item.graphic`]="{ item }" v-if="isGECC">
@@ -318,10 +339,10 @@ export default {
           text: "Comments",
           value: "item.planerComments",
         },
-        {
+/*         {
           text: "Actions",
           value: "item.actions",
-        },
+        }, */
       ],
       snack: false,
       snackColor: "",
@@ -426,17 +447,29 @@ export default {
 <style>
 .v-data-table th[role="columnheader"] {
   white-space: nowrap;
-  background-color:  var(--v-background-lighten1) !important;
+  background-color: var(--v-background-lighten1) !important;
 }
 
 .table {
   margin-top: 80px;
-  background-color:  var(--v-background-lighten1) !important;
+  background-color: var(--v-background-lighten1) !important;
   border-radius: 10px;
   box-shadow: 0 15px 30px 0 rgba(33, 33, 33, 0.11),
-  0 5px 15px 0 rgba(17, 27, 39, 0.08);
+    0 5px 15px 0 rgba(17, 27, 39, 0.08);
 }
 .toolbar {
-  background-color:  var(--v-background-lighten1) !important;
+  background-color: var(--v-background-lighten1) !important;
+}
+
+.divider-right {
+  float: right;
+}
+.divider-left {
+  float: left;
+}
+.table-header th {
+  background-color: var(--v-background-lighten1) !important;
+  padding: 0 !important;
+  color: gray;
 }
 </style>

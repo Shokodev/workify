@@ -3,7 +3,7 @@
     <div class="container mt-15">
       <div class="Chart__container">
         <div class="Chart__title">
-          <h3 class="primary--text">Overall</h3>
+          <h3 class="primary--text">Overal</h3>
           <DownloadButton :name="'Overall'" :link="overallPng"/>
         </div>
         <v-divider class="primary"></v-divider>
