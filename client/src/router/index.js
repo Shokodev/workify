@@ -19,16 +19,17 @@ const router = new Router({
 
         return { x: 0, y: 0 }
     },
-    routes: [
-        {
+    routes: [{
             path: '/',
-            component: () => import('@/components/Dashboard.vue'),
+            component: () =>
+                import ('@/components/Dashboard.vue'),
             redirect: '/dashboard'
         },
         {
             path: '/dashboard',
             name: 'dashboard',
-            component: () => import('@/components/Dashboard.vue'),
+            component: () =>
+                import ('@/components/Dashboard.vue'),
         },
         {
             path: '/datatable',
@@ -59,7 +60,7 @@ const router = new Router({
             path: '/userAdministration',
             component: UserAdministration,
             beforeEnter(to, from, next) {
-                if(isAdmin()) {
+                if (isAdmin()) {
                     next();
                 } else {
                     next('/permissionDenied')
@@ -67,15 +68,13 @@ const router = new Router({
             }
         }
     ]
-
-
 })
 
 function isAdmin() {
-    if (store.state.role === "Admin") {
+    if (store.state.user.role === "Admin") {
         return true;
     } else {
-        return false; 
+        return false;
     }
 
 }

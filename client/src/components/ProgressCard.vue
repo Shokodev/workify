@@ -19,13 +19,10 @@
               </v-progress-circular>
               <div class="pa-4">
                 <p class="text-left">
-                  Current:
-                  <strong>{{ data.current }}</strong>
+                  Current:<strong>{{ data.current }}</strong>
                 </p>
                 <p class="text-left">
-                  
-                Expected:<strong>{{ data.expected }}</strong
-                  >
+                Expected: <strong>{{ data.expected }}</strong>
                 </p>
               </div>
      </v-card>
