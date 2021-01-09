@@ -6,12 +6,15 @@
         @cancel="cancel"
         large
     >
-    <v-tooltip bottom>
+    
+    <v-tooltip bottom
+    color="secondary"
+    v-if="propItem[propertyName]"
+    >
           <template v-slot:activator="{ on, attrs }">
             <v-icon
-              v-if="propItem[propertyName]"
               small
-              class="mx-4"
+              class="mx-5"
               v-bind="attrs"
               v-on="on"
             >
@@ -19,9 +22,16 @@
             </v-icon>
           </template>
           <span>{{ propItem[propertyName] }}</span>
-        </v-tooltip>
-      <template v-slot:input >
-          <v-card class="pa-2" >
+    </v-tooltip>
+    <v-icon
+    small
+    class="mx-5"
+    v-if="!propItem[propertyName]"
+    >mdi-comment
+    </v-icon>
+   
+    <template v-slot:input >
+          <v-card class="pa-2 card" >
              <v-card-title>
                  {{label}}
              </v-card-title>  
@@ -33,7 +43,7 @@
             >
             </v-textarea>
           </v-card>
-      </template>
+    </template>
     </v-edit-dialog>
      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
         {{ snackText }}
@@ -81,3 +91,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+  .card {
+    box-shadow: none !important;
+    border-color: transparent !important;
+  }
+</style>

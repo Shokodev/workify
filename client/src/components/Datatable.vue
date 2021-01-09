@@ -110,6 +110,7 @@
 
       <template v-slot:[`item.item.comments`]="{ item }" v-if="isGECC">
         <CommentDialog
+          v-if="item.item.comments"
           :item="item"
           :propName="'comments'"
           @update-item="updateItem($event)"
@@ -138,15 +139,25 @@
       </template>
 
       <template v-slot:[`item.item.siemensAuditor`]="{ item }" v-if="isSiemens">
-        <v-icon
-          v-if="!item.item.siemensAuditor"
-          small
-          icon
-          @click="updateAuditor(item)"
-        >
-          mdi-plus
-        </v-icon>
-        <p v-if="item.item.siemensAuditor">
+         <v-tooltip 
+         top
+         color="secondary"
+         v-if="!item.item.siemensAuditor"
+         >
+          <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            v-on="on"
+            small
+            icon
+            @click="updateAuditor(item, 'siemensAuditor')"
+          >
+            mdi-plus
+          </v-icon>
+          </template>
+          <span>start auditing</span>
+          </v-tooltip>
+          <p v-if="item.item.siemensAuditor">
           {{ item.item.siemensAuditor }}
         </p>
       </template>
@@ -155,37 +166,21 @@
         v-slot:[`item.item.siemensComments`]="{ item }"
         v-if="isSiemens"
       >
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              v-if="item.item.siemensComments"
-              small
-              class="mx-4"
-              v-bind="attrs"
-              v-on="on"
-              @click="commentDialog = true"
-            >
-              mdi-comment-text
-            </v-icon>
-          </template>
-          <span>{{ item.item.siemensComments }}</span>
-        </v-tooltip>
+       <CommentDialog
+          :item="item"
+          :propName="'siemensComments'"
+          @update-item="updateItem($event)"
+          :label="'Siemens Comments'"
+        />
       </template>
       <template v-slot:[`item.item.planerComments`]="{ item }" v-if="isPlaner">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon
-              v-if="item.item.planerComments"
-              small
-              class="mx-4"
-              v-bind="attrs"
-              v-on="on"
-            >
-              mdi-comment-text
-            </v-icon>
-          </template>
-          <span>{{ item.item.planerComments }}</span>
-        </v-tooltip>
+        <CommentDialog
+          v-if="item.item.comments"
+          :item="item"
+          :propName="'planerComments'"
+          @update-item="updateItem($event)"
+          :label="'Planer Comments'"
+        />
       </template>
 
       <template
@@ -209,18 +204,27 @@
       </template>
 
       <template v-slot:[`item.item.planer`]="{ item }" v-if="isPlaner">
-        <table-item
-          :type="'select'"
-          :item="item.item.planer"
-          :state="[
-            'Planer User1',
-            'Planer User2',
-            'Planer User3',
-            'Planer User4',
-          ]"
-          :label="'Planer'"
-        >
-        </table-item>
+        <v-tooltip 
+         top
+         color="secondary"
+         v-if="!item.item.planer"
+         >
+          <template v-slot:activator="{ on, attrs }">
+          <v-icon
+            v-bind="attrs"
+            v-on="on"
+            small
+            icon
+            @click="updateAuditor(item, 'planer')"
+          >
+            mdi-plus
+          </v-icon>
+          </template>
+          <span>Add me as auditor</span>
+        </v-tooltip>
+        <p v-if="item.item.planer">
+          {{ item.item.planer }}
+        </p>
       </template>
 
       <template v-slot:[`item.item.actions`]="{ item }" v-if="isAdmin">
@@ -394,10 +398,10 @@ export default {
       this.snackText = "Data saved";
       this.$store.dispatch("loadPosts");
     },
-    updateAuditor(item) {
+    updateAuditor(item, propName) {
       this.updateItem({
         item: {
-          siemensAuditor: this.$store.getters.user.nickname,
+          [propName]: this.$store.getters.user.nickname,
         },
         _id: item._id,
       });
@@ -449,7 +453,9 @@ export default {
   white-space: nowrap;
   background-color: var(--v-background-lighten1) !important;
 }
-
+.td p {
+ margin-bottom: 0;
+} 
 .table {
   margin-top: 80px;
   background-color: var(--v-background-lighten1) !important;
