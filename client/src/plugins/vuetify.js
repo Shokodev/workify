@@ -10,14 +10,16 @@ const opts = {
         },
         themes: {
         light: {
-                primary: '#212121',
-                secondary: '#C8C8C8',
-                accent: '#C4C8CA',
-                error: '#FF5252',
-                info: '#2CA1C0',
-                success: '#2CA1C0',
-                warning: '#FFC107',
-                background: '#111B27',
+          
+            primary: '#1976D2',
+            secondary: '#4F5566',
+            accent: '#82B1FF',
+            error: '#FF5252',
+            info: '#2196F3',
+            success: '#4CAF50',
+            warning: '#FFC107',
+            background: '#FAFBFE',
+          
 
               },
               dark: {

@@ -1,8 +1,10 @@
 <script>
 import { Line } from 'vue-chartjs'
+import Printable from "@/mixins/Printable";
 
 export default {
   extends: Line,
+  mixins: [Printable],
   props: {
     chartdata: {
       type: Object,
@@ -39,12 +41,13 @@ export default {
       }
     },
 
-  mounted () {
-    this.renderChart(
-      this.chartdata,
-      this.options
-      
-      );
-  }
+  mounted() {
+    this.renderChart(this.chartdata, this.options);
+
+    setTimeout(() => {
+      this.download();
+    }, 500);
+  },
+  
 }
 </script>

@@ -86,7 +86,7 @@
                   <v-btn 
                   class="error ma-2"
                   @click="dialog = false">
-                  Cancle
+                  Cancel
                   </v-btn>
                   <v-btn 
                   class="green lighten-1 ma-2"

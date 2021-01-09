@@ -4,7 +4,7 @@
       <v-progress-circular size="128" indeterminate> </v-progress-circular>
     </v-overlay>
     <v-data-table
-      class="mx-10 pa-2 table secondary"
+      class="mx-10 pa-2 table"
       v-if="getPosts"
       :headers="headers"
       :items="getPosts"
@@ -12,11 +12,12 @@
       :search="search"
       fixed-header
       dense
-      dark
     >
       <template v-slot:top>
-        <v-toolbar flat class="secondary">
+        <v-toolbar flat
+         class="toolbar">
           <v-text-field
+
             v-model="search"
             append-icon="mdi-magnify"
             label="Search"
@@ -425,9 +426,17 @@ export default {
 <style>
 .v-data-table th[role="columnheader"] {
   white-space: nowrap;
+  background-color:  var(--v-background-lighten1) !important;
 }
 
 .table {
   margin-top: 80px;
+  background-color:  var(--v-background-lighten1) !important;
+  border-radius: 10px;
+  box-shadow: 0 15px 30px 0 rgba(33, 33, 33, 0.11),
+  0 5px 15px 0 rgba(17, 27, 39, 0.08);
+}
+.toolbar {
+  background-color:  var(--v-background-lighten1) !important;
 }
 </style>

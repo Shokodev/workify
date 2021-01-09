@@ -37,7 +37,7 @@ export default {
     await this.$store.dispatch("loadPosts");
   },
   async created() {
-    this.$vuetify.theme.dark = true;
+    this.$vuetify.theme.dark = false;
     try {
       this.posts = await PostService.getPosts();
     } catch (e) {
