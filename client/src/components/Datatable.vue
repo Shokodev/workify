@@ -4,6 +4,8 @@
       <v-progress-circular size="128" indeterminate> </v-progress-circular>
     </v-overlay>
     <v-data-table
+
+      class="mx-10 pa-2 table"
       v-if="getPosts"
       :headers="headers"
       :items="getPosts"
@@ -449,5 +451,9 @@ export default {
 <style>
 .v-data-table th[role="columnheader"] {
   white-space: nowrap;
+}
+
+.table {
+  margin-top: 80px;
 }
 </style>

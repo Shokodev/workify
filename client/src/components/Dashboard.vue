@@ -1,10 +1,11 @@
 <template>
-  <div class="content">
-    <div class="container">
+  <div class="content ">
+    <div class="container mt-15">
       <div class="Chart__container">
         <div class="Chart__title">
-          <p class="text-button">Overall</p>
+          <h3 class="secondary--text">Overall</h3>
         </div>
+        <v-divider class="secondary"></v-divider>
         <component
           v-bind:is="component"
           v-if="loaded"
@@ -17,8 +18,9 @@
 
       <div class="Chart__container">
         <div class="Chart__title">
-          <p class="text-button">Weekly</p>
+          <h3 class="secondary--text">Weekly</h3>
         </div>
+        <v-divider class="secondary"></v-divider>
         <component2
           v-bind:is="component2"
           v-if="loaded"
@@ -118,4 +120,19 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+  .Chart__container {
+    border-radius: 10px;
+    background-color: #212121;
+    box-shadow: 0 15px 30px 0 rgba(33, 33, 33, 0.11), 0 5px 15px 0 rgba(17, 27, 39, 0.08);
+    padding: 20px;
+    margin: 50px;
+  }
+
+  .Chart__title {
+    margin-bottom: 20px;
+  }
+
+
+
+</style>

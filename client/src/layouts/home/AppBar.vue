@@ -1,16 +1,16 @@
 <template>
     <div>
         <v-app-bar
+        class="appbar"
                 id="home-app-bar"
                 app
-                color="white"
                 elevation="1"
                 height="60"
         >
 
             <div>
                 <v-toolbar-title
-                class="heading"
+                class="heading info--text font-weight-bold"
                 min-width="96"
                 >WORKIFY</v-toolbar-title>
             </div>
@@ -19,14 +19,15 @@
                 <v-tabs
                         class="hidden-sm-and-down"
                         optional
+                        slider-color="info"
                 >
                     <v-tab
                             v-for="(name, i) in items"
                             :key="i"
                             :to="{ name }"
                             :ripple="false"
-                            active-class="text--primary"
-                            class="font-weight-bold"
+                            active-class="info--text"
+                            class="font-weight-bold white--text"
                             min-width="96"
                             text
                     >
@@ -36,8 +37,8 @@
                       v-if="!auth"
                       :to="'signin'"
                       :ripple="false"
-                      active-class="text--primary"
-                      class="font-weight-bold"
+                      active-class="info--text"
+                      class="font-weight-bold white--text"
                       min-width="96"
                       text
                   >
@@ -47,8 +48,8 @@
                       v-if="!auth"
                       :to="'signup'"
                       :ripple="false"
-                      active-class="text--primary"
-                      class="font-weight-bold"
+                      active-class="info--text"
+                      class="font-weight-bold white--text"
                       min-width="96"
                       text
                   >
@@ -110,5 +111,11 @@ import AreYouSureAlert from "@/components/AreYouSureAlert.vue"
 
 
 <style >
+.appbar {
+  background-color: var(--v-primary-base) !important;
+}
+.v-tab {
+  background: var(--v-primary-base) ;
+}
 
 </style>

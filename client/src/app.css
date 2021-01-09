@@ -1,3 +1,6 @@
 .v-application {
     background-color: var(--v-background-base) !important;
 }
+.my-app.v-application .primary--text {
+    color: white !important;
+}
