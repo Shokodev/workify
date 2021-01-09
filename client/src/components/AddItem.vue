@@ -8,7 +8,7 @@
                 <v-btn
                         class="mx-2"
                         dark
-                        color="indigo"
+                        color="info"
                         v-bind="attrs"
                         v-on="on"
                 >

@@ -4,8 +4,7 @@
       <v-progress-circular size="128" indeterminate> </v-progress-circular>
     </v-overlay>
     <v-data-table
-
-      class="mx-10 pa-2 table"
+      class="mx-10 pa-2 table secondary"
       v-if="getPosts"
       :headers="headers"
       :items="getPosts"
@@ -13,9 +12,10 @@
       :search="search"
       fixed-header
       dense
+      dark
     >
       <template v-slot:top>
-        <v-toolbar flat color="white">
+        <v-toolbar flat class="secondary">
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -24,7 +24,7 @@
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>
-          <v-btn class="mx-2" dark color="indigo" v-on:click="createExcel">
+          <v-btn class="mx-2" dark color="info" v-on:click="createExcel">
             <v-icon dark>mdi-table</v-icon>
           </v-btn>
           <AddItem v-on:add-item="createPost($event)"></AddItem>
@@ -88,11 +88,11 @@
 
       <template v-slot:[`item.item.comments`]="{ item }" v-if="isGECC">
         <CommentDialog
-              :item="item"
-              :propName="'comments'"
-              @update-item="updateItem($event)"
-              :label="'GECC Comments'"
-              />
+          :item="item"
+          :propName="'comments'"
+          @update-item="updateItem($event)"
+          :label="'GECC Comments'"
+        />
       </template>
 
       <template
@@ -117,17 +117,15 @@
 
       <template v-slot:[`item.item.siemensAuditor`]="{ item }" v-if="isSiemens">
         <v-icon
-              v-if="!item.item.siemensAuditor"
-              small
-              icon
-              @click="updateAuditor(item)"
-            >
-              mdi-plus
-          </v-icon>
-        <p
-        v-if="item.item.siemensAuditor"
+          v-if="!item.item.siemensAuditor"
+          small
+          icon
+          @click="updateAuditor(item)"
         >
-          {{item.item.siemensAuditor}}
+          mdi-plus
+        </v-icon>
+        <p v-if="item.item.siemensAuditor">
+          {{ item.item.siemensAuditor }}
         </p>
       </template>
 
@@ -222,22 +220,21 @@
       </template>
     </v-snackbar>
     <AreYouSureAlert
-          v-if="areYouSureAlert" 
-          :showDialog="areYouSureAlert"
-          @confirm="deleteItem($event)"
-        />
+      v-if="areYouSureAlert"
+      :showDialog="areYouSureAlert"
+      @confirm="deleteItem($event)"
+    />
   </div>
-  
 </template>
 
 <script>
 import moment from "moment";
 import PostService from "@/PostService";
-import AreYouSureAlert from "@/components/AreYouSureAlert"
+import AreYouSureAlert from "@/components/AreYouSureAlert";
 import AddItem from "./AddItem";
 import EditItem from "./EditItem";
 import TableItem from "./table/TableItem";
-import CommentDialog from "@/components/table/CommentDialog"
+import CommentDialog from "@/components/table/CommentDialog";
 
 export default {
   name: "Datatable",
@@ -246,7 +243,7 @@ export default {
     EditItem,
     TableItem,
     AreYouSureAlert,
-    CommentDialog
+    CommentDialog,
   },
   props: {
     posts: {
@@ -264,80 +261,65 @@ export default {
           text: "Graphic",
           value: "item.graphic",
           align: "start",
-          class: "GECC",
         },
-        { text: "Type", value: "item.selectType", class: "GECC" },
+        { text: "Type", value: "item.selectType" },
         {
           text: "Regulations",
           value: "item.regulations",
-          class: "GECC",
         },
         {
           text: "Creator",
           value: "item.creator",
-          class: "GECC",
         },
         {
           text: "State",
           value: "item.selectState",
-          class: "GECC",
         },
         {
           text: "Date",
           value: "meta.finished_at",
-          class: "GECC",
         },
 
         {
           text: "Comments",
           value: "item.comments",
-          class: "GECC",
         },
         {
           text: "Auditor",
           value: "item.siemensAuditor",
-          class: "Siemens",
         },
         {
           text: "Tested",
           value: "item.selectSiemensTested",
-          class: "Siemens",
         },
         {
           text: "Date",
           value: "meta.okBySiemens_at",
-          class: "Siemens",
         },
         {
           text: "Comments",
           value: "item.siemensComments",
-          class: "Siemens",
         },
         {
           text: "Planer",
           value: "item.planer",
-          class: "Planer",
         },
         {
           text: "Tested",
           value: "item.selectPlanerTested",
-          class: "Planer",
         },
 
         {
           text: "Date",
           value: "meta.closed_at",
-          class: "Planer",
         },
         {
           text: "Comments",
           value: "item.planerComments",
-          class: "Planer",
         },
         {
           text: "Actions",
           value: "item.actions",
-          class: "accent",
         },
       ],
       snack: false,
@@ -374,7 +356,7 @@ export default {
       this.areYouSureAlert = true;
     },
     async deleteItem(confirm) {
-      if(confirm) {
+      if (confirm) {
         await PostService.deletePost(this.toDeleteItem._id);
         this.loadingActive = true;
         this.$store.dispatch("loadPosts");
@@ -392,11 +374,11 @@ export default {
     },
     updateAuditor(item) {
       this.updateItem({
-                item:{
-                  siemensAuditor: this.$store.getters.user.nickname
-                },
-                _id: item._id
-              })
+        item: {
+          siemensAuditor: this.$store.getters.user.nickname,
+        },
+        _id: item._id,
+      });
     },
     parseDate(date) {
       if (date === undefined || date === null) {

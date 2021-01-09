@@ -29,7 +29,7 @@
 
               <v-btn
                   :disabled="!valid"
-                  color="success"
+                  color="info"
                   class="mr-4"
                   @click="signin"
               >
@@ -55,6 +55,7 @@
     <v-btn
         class="text-capitalize"
         :to="'signup'"
+        color="info"
     >
       Sign up
     </v-btn>

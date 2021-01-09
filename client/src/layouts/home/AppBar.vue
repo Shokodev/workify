@@ -33,6 +33,17 @@
                     >
                         {{ name }}
                     </v-tab>
+                      <v-tab
+                      v-if="auth"
+                      :to="'settings'"
+                      :ripple="false"
+                      active-class="info--text"
+                      class="font-weight-bold white--text"
+                      min-width="96"
+                      text
+                  >
+                    Settings
+                  </v-tab>
                   <v-tab
                       v-if="!auth"
                       :to="'signin'"
@@ -60,8 +71,8 @@
                       v-if="auth"
                       v-on:click="areYouSureAlert = true"
                       :ripple="false"
-                      active-class="text--primary"
-                      class="font-weight-bold"
+                      active-class="info--text"
+                      class="font-weight-bold white--text"
                       min-width="96"
                       text
                   >
@@ -86,7 +97,7 @@ import AreYouSureAlert from "@/components/AreYouSureAlert.vue"
             items: [
                 'dashboard',
                 'datatable',
-                'settings',
+                
             ],
             areYouSureAlert: false,
         }),
@@ -112,10 +123,10 @@ import AreYouSureAlert from "@/components/AreYouSureAlert.vue"
 
 <style >
 .appbar {
-  background-color: var(--v-primary-base) !important;
+  background-color: var(--v-secondary-base) !important;
 }
 .v-tab {
-  background: var(--v-primary-base) ;
+  background: var(--v-secondary-base) ;
 }
 
 </style>

@@ -20,6 +20,17 @@ const opts = {
                 background: '#111B27',
 
               },
+              dark: {
+                primary: '#C8C8C8',
+                secondary: '#212121',
+                accent: '#C4C8CA',
+                error: '#FF5252',
+                info: '#009688',
+                success: '#2CA1C0',
+                warning: '#FFC107',
+                background: '#111B27',
+
+              },
         },
     },
     icons: {

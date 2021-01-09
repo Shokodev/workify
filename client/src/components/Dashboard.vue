@@ -121,18 +121,16 @@ export default {
 </script>
 
 <style>
-  .Chart__container {
-    border-radius: 10px;
-    background-color: #212121;
-    box-shadow: 0 15px 30px 0 rgba(33, 33, 33, 0.11), 0 5px 15px 0 rgba(17, 27, 39, 0.08);
-    padding: 20px;
-    margin: 50px;
-  }
+.Chart__container {
+  border-radius: 10px;
+  background-color: #212121;
+  box-shadow: 0 15px 30px 0 rgba(33, 33, 33, 0.11),
+    0 5px 15px 0 rgba(17, 27, 39, 0.08);
+  padding: 20px;
+  margin: 50px;
+}
 
-  .Chart__title {
-    margin-bottom: 20px;
-  }
-
-
-
+.Chart__title {
+  margin-bottom: 20px;
+}
 </style>

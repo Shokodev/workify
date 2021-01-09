@@ -1,6 +1,7 @@
 <template>
   <v-app
     id="app"
+    dark
   >
     <AppBar></AppBar>
     <div>
@@ -36,6 +37,7 @@ export default {
     await this.$store.dispatch("loadPosts");
   },
   async created() {
+    this.$vuetify.theme.dark = true;
     try {
       this.posts = await PostService.getPosts();
     } catch (e) {

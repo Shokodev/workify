@@ -38,7 +38,7 @@
         label="Total data points"
         required
     ></v-text-field>
-    <v-btn color="indigo"
+    <v-btn color="info"
            class="white--text"
            @click="updateSettings(settings)"
            :loading ="loadingActive"
@@ -48,8 +48,9 @@
   </div>
     <div v-if="isAdmin">
     <v-divider class="my-5"></v-divider>
-      <p>Administrationv</p>
+      <p>Administration</p>
       <v-btn
+      color="info"
       to="/userAdministration">Edit users</v-btn>
     </div>
     <div v-if="!auth">

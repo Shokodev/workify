@@ -8,6 +8,7 @@
           label="Name"
           required
         ></v-text-field>
+        
 
         <v-text-field
           v-model="shortname"
@@ -39,7 +40,7 @@
           @click:append="show1 = !show1"
         ></v-text-field>
 
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="signup">
+        <v-btn :disabled="!valid" color="info" class="mr-4" @click="signup">
           Signup
         </v-btn>
 
