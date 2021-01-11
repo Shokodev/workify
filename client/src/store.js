@@ -11,7 +11,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         idToken: null,
-        user: null,
+        user: { 
+            nickname: null,
+            password: null,
+            role: null,
+            username: null,
+        },
         posts: null,
         users: null,
         progressData: null,
@@ -102,7 +107,7 @@ export default new Vuex.Store({
             commit('clearAuthData')
             localStorage.removeItem('expirationDate')
             localStorage.removeItem('token')
-            localStorage.removeItem('userId')
+            localStorage.removeItem('user')
             router.replace('/signin')
         },
         async loadPosts({ commit }) {
@@ -130,7 +135,7 @@ export default new Vuex.Store({
             return state.idToken !== null
         },
         userRole(state) {
-            return state.user.role
+            return state.user.role 
         },
         getPosts(state) {
             return state.posts

@@ -63,15 +63,10 @@ export default {
     chart2: "BarChart",
     component: "BarChart",
     component2: "BarChart",
-    mainData: {
-      label: null,
-      data: null,
-      backgroundColor: null,
-    },
     main: {
       label: null,
       data: null,
-      backgroundColor: null,
+ 
     },
     weekly: {
       label: null,
@@ -90,7 +85,6 @@ export default {
     async loadChartData(type) {
       this.loaded = false;
       this.chartdata = await PostService.getDashboard(type);
-      this.addChartColors(this.chartdata);
       this.loaded = true;
     },
 
@@ -114,6 +108,7 @@ export default {
     try {
       this.weekly = await PostService.getDashboard("weekly");
       this.main = await PostService.getDashboard("main");
+      console.log(this.main)
       this.loaded = true;
     } catch (e) {
       console.error(e);

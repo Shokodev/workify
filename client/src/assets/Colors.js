@@ -26,6 +26,10 @@ class Colors{
         return colorsArray.slice(offset, amount + offset);
 
     }
+
+    static getColor(offset){
+        return colorsArray[offset]
+    }
 }
 
 

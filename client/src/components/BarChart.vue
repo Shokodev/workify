@@ -51,16 +51,15 @@ export default {
     };
   },
   mounted() {
-    const data = this.chartdata;
-      for (let i = 0; i < data.datasets.length; i++) {
-        data.datasets[i].backgroundColor = Colors.getColors(
-          data.datasets[i].data.length,
-          [i]
-        );
-        
-      }
+    const chart2 = this.chartdata;
+    for (let i = 0; i < chart2.datasets.length; i++) {
+      chart2.datasets[i].backgroundColor = Colors.getColors(
+        chart2.datasets[i].data.length,
+        [i]
+      );
+    }
 
-    this.renderChart(data, this.options);
+    this.renderChart(chart2, this.options);
 
     setTimeout(() => {
       this.download();
