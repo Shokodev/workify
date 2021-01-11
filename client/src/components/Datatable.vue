@@ -37,12 +37,12 @@
           <tr>
             <th colspan="7" class="text-center parent-header text-uppercase subtitle-1 font-weight-medium">
               <v-divider class=" divider-left" vertical></v-divider>
-              Siemens
+              GECC
               <v-divider class=" divider-right" vertical></v-divider>
             </th>
 
             <th colspan="4" class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium">
-              GECC
+              Siemens Schweiz
               <v-divider class="divider-right" vertical></v-divider>
             </th>
             <th colspan="4" class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium">

@@ -40,7 +40,6 @@
 
 <script>
 import PostService from "../PostService";
-import Colors from "@/assets/Colors";
 import BarChart from "./BarChart";
 import LineChart from "./LineChart";
 import PieChart from "./PieChart";
@@ -94,14 +93,7 @@ export default {
       this.addChartColors(this.chartdata);
       this.loaded = true;
     },
-    addChartColors(data) {
-      for (let i = 0; i < data.datasets.length; i++) {
-        data.datasets[i].backgroundColor = Colors.getColors(
-          data.datasets[i].data.length,
-          [i]
-        );
-      }
-    },
+
     changeChart() {
       this.component = this.chart1;
     },
@@ -122,8 +114,6 @@ export default {
     try {
       this.weekly = await PostService.getDashboard("weekly");
       this.main = await PostService.getDashboard("main");
-      this.addChartColors(this.weekly);
-      this.addChartColors(this.main);
       this.loaded = true;
     } catch (e) {
       console.error(e);

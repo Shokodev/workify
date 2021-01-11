@@ -1,5 +1,6 @@
 <script>
 import { Bar } from "vue-chartjs";
+import Colors from "@/assets/Colors";
 import Printable from "@/mixins/Printable";
 
 export default {
@@ -50,7 +51,16 @@ export default {
     };
   },
   mounted() {
-    this.renderChart(this.chartdata, this.options);
+    const data = this.chartdata;
+      for (let i = 0; i < data.datasets.length; i++) {
+        data.datasets[i].backgroundColor = Colors.getColors(
+          data.datasets[i].data.length,
+          [i]
+        );
+        
+      }
+
+    this.renderChart(data, this.options);
 
     setTimeout(() => {
       this.download();
