@@ -4,7 +4,7 @@
       <div class="Chart__container">
         <div class="Chart__title">
           <h3 class="primary--text">Overal</h3>
-          <DownloadButton :name="'Overall'" :link="overallPng"/>
+          <DownloadButton :name="'Overall'" :link="overallPng" />
         </div>
         <v-divider class="primary"></v-divider>
         <component
@@ -21,7 +21,7 @@
       <div class="Chart__container">
         <div class="Chart__title">
           <h3 class="primary--text">Weekly</h3>
-          <DownloadButton :name="'Weekly'" :link="weeklyPng"/>
+          <DownloadButton :name="'Weekly'" :link="weeklyPng" />
         </div>
         <v-divider class="primary"></v-divider>
         <component2
@@ -45,7 +45,7 @@ import BarChart from "./BarChart";
 import LineChart from "./LineChart";
 import PieChart from "./PieChart";
 import RadarChart from "./RadarChart";
-import DownloadButton from "./Download"
+import DownloadButton from "./Download";
 import { Bar } from "vue-chartjs";
 import { Line } from "vue-chartjs";
 import { Pie } from "vue-chartjs";
@@ -106,14 +106,14 @@ export default {
       this.component = this.chart1;
     },
     changeChart2() {
-      this.component2 = this.chart1;
+      this.component2 = this.chart2;
     },
-    setOverallPng (payload) {
-    this.overallPng = payload
-      },
-    setWeeklyPng (payload) {
-    this.weeklyPng = payload
-      },
+    setOverallPng(payload) {
+      this.overallPng = payload;
+    },
+    setWeeklyPng(payload) {
+      this.weeklyPng = payload;
+    },
   },
 
   async mounted() {
@@ -136,7 +136,7 @@ export default {
 <style>
 .Chart__container {
   border-radius: 10px;
-  background-color:  var(--v-background-lighten1);
+  background-color: var(--v-background-lighten1);
   box-shadow: 0 15px 30px 0 rgba(33, 33, 33, 0.11),
     0 5px 15px 0 rgba(17, 27, 39, 0.08);
   padding: 20px;
