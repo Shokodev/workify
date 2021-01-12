@@ -26,7 +26,7 @@
           <v-btn class="mx-2" dark color="info" v-on:click="createExcel">
             <v-icon dark>mdi-table</v-icon>
           </v-btn>
-          <AddItem v-on:add-item="createPost($event)"></AddItem>
+          <AddItem v-if="$store.getters.isAuthenticated" v-on:add-item="createPost($event)"></AddItem>
 
         </v-toolbar>
                   <v-divider class="mt-5"></v-divider>

@@ -48,6 +48,7 @@ export default {
 </script>
 
 <style>
+  @import '../node_modules/typeface-roboto/index.css';
 #app {
   font-family: Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

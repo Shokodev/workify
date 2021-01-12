@@ -11,14 +11,7 @@ import store from "../store"
 Vue.use(Router);
 
 const router = new Router({
-    mode: 'history',
     base: process.env.BASE_URL,
-    scrollBehavior: (to, from, savedPosition) => {
-        if (to.hash) return { selector: to.hash }
-        if (savedPosition) return savedPosition
-
-        return { x: 0, y: 0 }
-    },
     routes: [{
             path: '/',
             component: () =>

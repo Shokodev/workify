@@ -3,7 +3,7 @@
     <v-card class="pa-5">
   <div v-if="isAdmin">
     <p class="text-md-h4">Project Settings</p>
-    <v-from>
+    <v-form>
       <v-row>
         <v-col cols="12" sm="6"> 
           <v-text-field
@@ -71,7 +71,7 @@
           
           </v-col>
       </v-row>
-    </v-from>
+    </v-form>
     <v-btn color="info"
            class="white--text"
            @click="updateSettings(settings)"
