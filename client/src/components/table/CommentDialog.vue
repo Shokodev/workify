@@ -8,9 +8,9 @@
     >
     
     <v-tooltip bottom
-    color="secondary"
-    v-if="propItem[propertyName]"
-    >
+      color="secondary"
+      v-if="hasComment"
+      >
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               small
@@ -26,7 +26,7 @@
     <v-icon
     small
     class="mx-5"
-    v-if="!propItem[propertyName]"
+    v-else
     >mdi-comment
     </v-icon>
    
@@ -88,7 +88,19 @@ export default {
             this.snackText = "Canceled";
         },
 
-    }
+    },
+    computed:{
+      hasComment(){
+      if(this.propItem[this.propertyName] === undefined){
+          return false        
+      } else if(this.propItem[this.propertyName] === ""){
+          return false
+      } else {
+        return true
+      }
+      
+      }
+  }
 }
 </script>
 <style scoped>

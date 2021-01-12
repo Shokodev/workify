@@ -7,6 +7,13 @@
       @save="save"
       @cancel="cancel"
     >
+    <v-icon
+    v-if="propItem === undefined"
+              small
+              class="mx-4"
+            >
+              mdi-clipboard-edit
+            </v-icon>
       {{ propItem }}
       <template v-slot:input>
         <v-select

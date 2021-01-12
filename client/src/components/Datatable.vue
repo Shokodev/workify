@@ -26,8 +26,27 @@
           <v-btn class="mx-2" dark color="info" v-on:click="createExcel">
             <v-icon dark>mdi-table</v-icon>
           </v-btn>
-          <AddItem v-if="$store.getters.isAuthenticated" v-on:add-item="createPost($event)"></AddItem>
-
+           <v-btn
+                        class="mx-2"
+                        dark
+                        color="info"
+                        @click="addItemDialog = true"
+                        v-if="$store.getters.isAuthenticated"
+                        
+                >
+                    <v-icon dark>mdi-plus</v-icon>
+           </v-btn>
+           <v-dialog 
+            v-model="addItemDialog"
+            v-if="addItemDialog"
+            max-width="600px"
+            persistent  
+          >
+          <AddItem 
+          @closeAddItem="addItemDialog = false" 
+          v-on:add-item="createPost($event)">
+          </AddItem>
+         </v-dialog>
         </v-toolbar>
                   <v-divider class="mt-5"></v-divider>
       </template>
@@ -110,7 +129,6 @@
 
       <template v-slot:[`item.item.comments`]="{ item }" v-if="isGECC">
         <CommentDialog
-          v-if="item.item.comments"
           :item="item"
           :propName="'comments'"
           @update-item="updateItem($event)"
@@ -157,7 +175,7 @@
           </template>
           <span>start auditing</span>
           </v-tooltip>
-          <p v-if="item.item.siemensAuditor">
+          <p style="margin-top: 7px; margin-bottom:5px;"  v-if="item.item.siemensAuditor">
           {{ item.item.siemensAuditor }}
         </p>
       </template>
@@ -222,7 +240,8 @@
           </template>
           <span>Add me as auditor</span>
         </v-tooltip>
-        <p v-if="item.item.planer">
+        <p style="margin-top: 7px; margin-bottom:5px;" 
+        v-if="item.item.planer">
           {{ item.item.planer }}
         </p>
       </template>
@@ -282,6 +301,7 @@ export default {
       loadingActive: false,
       areYouSureAlert: false,
       toDeleteItem: null,
+      addItemDialog: false,
       headers: [
         {
           text: "Graphic",

@@ -11,7 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         idToken: null,
-        user: { 
+        user: {
             nickname: null,
             password: null,
             role: null,
@@ -32,9 +32,12 @@ export default new Vuex.Store({
             state.user = data.user;
         },
         clearAuthData(state) {
-            state.idToken = null
-            state.localId = null
-            state.role = null
+            state.idToken = null;
+            state.user = {
+                nickname: null,
+                role: null,
+                username: null,
+            }
         },
         setPosts(state, posts) {
             state.posts = posts;
@@ -133,7 +136,7 @@ export default new Vuex.Store({
             return state.idToken !== null
         },
         userRole(state) {
-            return state.user.role 
+            return state.user.role
         },
         getPosts(state) {
             return state.posts

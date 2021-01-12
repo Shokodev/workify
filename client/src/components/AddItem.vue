@@ -1,22 +1,7 @@
 <template>
-        <v-dialog 
-          v-model="dialog"
-          max-width="600px"
-          persistent  
-        >
-            <template v-slot:activator="{ on, attrs}">
-                <v-btn
-                        class="mx-2"
-                        dark
-                        color="info"
-                        v-bind="attrs"
-                        v-on="on"
-                >
-                    <v-icon dark>mdi-plus</v-icon>
-                </v-btn>
-            </template>
-              
-                  <v-card class="pa-2">
+        <v-card 
+                  class="pa-2"
+                  >
                   <v-card-title>
                   New graphic
                   </v-card-title>
@@ -44,12 +29,13 @@
                     </v-list-item>
                   <v-list-item>
                         <v-list-item-content>
-                          <v-text-field
+                          <v-select
                               v-model="newItem.regulations"
                               label="Regulations"
+                              :items="[0,1,2,3,4,5]"
                               :rules="numberRules"
                               required
-                          ></v-text-field>
+                          ></v-select>
                         </v-list-item-content>
                     </v-list-item>
                   <v-list-item>
@@ -82,10 +68,10 @@
                           ></v-text-field>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-crad-actions>
+                    <v-card-actions>
                   <v-btn 
                   class="error ma-2"
-                  @click="dialog = false">
+                  @click="close">
                   Cancel
                   </v-btn>
                   <v-btn 
@@ -94,10 +80,9 @@
                   :disabled="!valid" 
                   v-on:click="saveItem(newItem)"
                   >Save </v-btn>
-              </v-crad-actions>
+              </v-card-actions>
               </v-form>
-              </v-card>
-        </v-dialog>
+        </v-card>
 </template>
 
 <script>
@@ -106,17 +91,17 @@
         props: {
             post: {
                 type: Object,
-            }
+            },
         },
         data() {
             return {
             newItem: {
                 graphic: '',
                 selectType: null,
-                selectState: null,
-                regulations: "",
+                selectState: "Not started",
+                regulations: 0,
                 creator: null,
-                comments: null,
+                comments: "",
             },
 
                 graphicRules: [
@@ -141,19 +126,21 @@
                     'Faults',
               ],
                 valid: true,
-                dialog: false,
+              
             }
         },
-        mounted(){
+        created(){
           this.newItem.creator = this.$store.getters.user.nickname;
         },
         methods:{
               saveItem(newItem){
               this.$emit('add-item', newItem);
-              this.dialog = false;
-              this.$nextTick(() => this.$refs.form.reset())
-
+              this.$refs.form.reset();
+              this.close();      
         },
+        close(){
+          this.$emit('closeAddItem');
+        }
 
       },
     }

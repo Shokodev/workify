@@ -11,7 +11,7 @@ const finished = postTypes.state.FINISHED;
 const ok = postTypes.tested.OK;
 
 // Get Posts
-router.get('/', async (req, res, next) => {
+router.get('/', async(req, res, next) => {
     logger.info('fetch all posts from db');
     try {
         res.send(await Posts.find({}));
@@ -21,19 +21,15 @@ router.get('/', async (req, res, next) => {
 });
 
 // Add Post
-router.post('/', authenticateToken, async (req, res, next) => {
+router.post('/', authenticateToken, async(req, res, next) => {
     logger.info('add new graphic: ' + req.body.item.graphic);
     try {
-        if (req.user.role === roles.ADMIN || req.user.role === roles.GECC) {
-            req.body.meta = {
-                finished_at: isFinished(req.body.item)
-            };
-            await Posts.create(
-                req.body);
-            res.status(201).send();
-        } else {
-            res.status(403).send({ message: "Permission denied" });
-        }
+        req.body.meta = {
+            finished_at: isFinished(req.body.item)
+        };
+        await Posts.create(
+            req.body);
+        res.status(201).send();
     } catch (err) {
         logger.error("Add post DB failed: " + err.message);
         next(err);
@@ -41,7 +37,7 @@ router.post('/', authenticateToken, async (req, res, next) => {
 });
 
 // Delete Post
-router.delete('/:id', authenticateToken, async (req, res, next) => {
+router.delete('/:id', authenticateToken, async(req, res, next) => {
     logger.info('delete graphic: ' + req.params.id);
     try {
         if (req.user.role === roles.ADMIN) {
@@ -50,33 +46,29 @@ router.delete('/:id', authenticateToken, async (req, res, next) => {
         } else {
             res.status(403).send({ message: "Permission denied" });
         }
-    }
-    catch (err) {
+    } catch (err) {
         logger.error("Delete post failed: " + err.message);
         next(err);
     }
 });
 
-//TODO use just update(remove comparePosts)
-router.put('/:id',authenticateToken, async (req, res, next) => {
+
+router.put('/:id', authenticateToken, async(req, res, next) => {
     logger.info('update graphic: ' + req.body.post.item._id);
     try {
-        if (req.user.role === roles.ADMIN) {
-        //TODO there should be just one db query!
         let finalPost = comparePosts(await Posts.findOne({ _id: req.params.id }), req.body.post);
         for (const [key, value] of Object.entries(req.body.post.item)) {
             let propertyName = 'item.' + key
-            await Posts.updateOne({ _id: req.params.id }, { $set: { [propertyName]: value } });
+            await Posts.updateOne({ _id: req.params.id }, { $set: {
+                    [propertyName]: value } });
         }
         for (const [key, value] of Object.entries(finalPost.meta)) {
             let propertyName = 'meta.' + key
-            await Posts.updateOne({ _id: req.params.id }, { $set: { [propertyName]: value } });
+            await Posts.updateOne({ _id: req.params.id }, { $set: {
+                    [propertyName]: value } });
         }
         await tryToClosePost(await Posts.findOne({ _id: req.params.id }));
         res.status(200).send();
-    } else {
-        res.status(403).send({ message: "Permission denied" });
-    }
     } catch (err) {
         logger.error("Update DB failed: " + err.message);
         next(err);
@@ -111,12 +103,14 @@ function comparePosts(dbPost, newPost) {
     }
     return finalPost;
 }
+
 async function tryToClosePost(post) {
     console.log(post);
     if (post.item.selectState === finished && post.item.selectSiemensTested === ok && post.item.selectPlanerTested === ok) {
         let value = new Date();
         let propertyName = 'meta.closed_at';
-        await Posts.updateOne({ _id: post._id }, { $set: { [propertyName]: value } });
+        await Posts.updateOne({ _id: post._id }, { $set: {
+                [propertyName]: value } });
     }
 }
 module.exports = router;
