@@ -53,9 +53,9 @@ export default new Vuex.Store({
     actions: {
         setLogoutTimer({ commit }, expirationTime) {
             setTimeout(() => {
-                commit('clearAuthData')
+                commit('clearAuthData');
+                router.replace('/signin');
             }, expirationTime * 1000)
-            router.replace('/signin')
         },
         signup({ dispatch }, authData) {
             axios.post('api/users/register',
