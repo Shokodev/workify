@@ -139,7 +139,6 @@ export default {
   },
   methods: {
     async save(param) {
-      console.log(param);
       PostService.editUser(param);
       this.dialog = false;
     },

@@ -24,7 +24,7 @@ router.get('/', async (req, res, next) => {
 router.post('/', authenticateToken, async (req, res, next) => {
     logger.info('add new graphic: ' + req.body.item.graphic);
     try {
-        if (req.user.role === roles.ADMIN) {
+        if (req.user.role === roles.ADMIN || req.user.role === roles.GECC) {
             req.body.meta = {
                 finished_at: isFinished(req.body.item)
             };

@@ -356,7 +356,6 @@ export default {
   methods: {
     async createPost(item) {
       await PostService.insertPost(item);
-      console.log("send new item", item);
       this.$store.dispatch("loadPosts");
     },
     async createExcel() {

@@ -117,7 +117,6 @@ export default {
       this.areYouSureAlert = false;
     },
           toggle_dark_mode: function() {
-        console.log("dark")
         this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
         localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
     },

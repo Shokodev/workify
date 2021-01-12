@@ -108,7 +108,6 @@ export default {
     try {
       this.weekly = await PostService.getDashboard("weekly");
       this.main = await PostService.getDashboard("main");
-      console.log(this.main)
       this.loaded = true;
     } catch (e) {
       console.error(e);
