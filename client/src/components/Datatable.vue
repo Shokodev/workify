@@ -17,9 +17,12 @@
         <v-toolbar flat class="toolbar">
           <v-text-field
             v-model="search"
-            append-icon="mdi-magnify"
+            prepend-inner-icon="mdi-magnify"
             label="Search"
-            single-line
+            clearable
+            style="max-width: 450px"
+            outlined
+            rounded
             hide-details
           ></v-text-field>
           <v-spacer></v-spacer>

@@ -27,7 +27,7 @@
             {{ name }}
           </v-tab>
           <v-tab
-            v-if="auth"
+            v-if="this.$store.getters.userRole === 'Admin'"
             :to="'settings'"
             :ripple="false"
             active-class="info--text"
