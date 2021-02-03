@@ -1,26 +1,17 @@
 # workify
 
-### Build Setup
+## Installation
+ This project was mainly made to run on a OFFLINE Windows machine! 
 
-```bash
-// Backend
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:5000
-npm run dev
-
-// Frontend
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run serve
-
-# build for production
-npm run build
-
-```
+# Prerequisities
+ On the target machine install: 
+ 1. Node https://nodejs.org/en/
+ 2. Mongodb https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
+ 3. Copy latest release of this repo to machine and unzip it @ any direction  
+ 
+# Build Setup
+ 1. Open Command promt as Admin
+ 2. `npm run install` 
 
 ## Technologies
 

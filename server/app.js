@@ -10,6 +10,7 @@ const bodyparser = require('body-parser');
 const middlewares = require('./middlewares');
 const accessLogStream = fs.createWriteStream(path.join(__dirname, '../logs/access.log'), { flags: 'a' });
 const { connectDb } = require("./mongodb");
+const { addDefaultAdmin } = require("./utils/defaultAdmin");
 const app = express();
 
 
@@ -20,7 +21,7 @@ app.use(morgan('combined', { stream: accessLogStream }));
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(bodyparser.json());
 
-if(process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.use(express.static(__dirname + '/public/'));
     app.get(/.*!/, (req, res) =>
         res.sendFile(__dirname + './public/index.html'));
@@ -33,14 +34,15 @@ if(process.env.NODE_ENV === 'production') {
     });
 }
 
-connectDb().then(()=>{
+connectDb().then(() => {
     logger.info("DB connection successful!");
-}).catch(err=>{
+    addDefaultAdmin();
+}).catch(err => {
     logger.error("DB connection failed: " + err)
 });
 
 
-app.use('/api',api);
+app.use('/api', api);
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
