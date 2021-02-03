@@ -51,3 +51,8 @@
  <img src="https://icons.andreas-vogt.ch/workify.png" alt="Fail">
 </p>
  
+# More information
+
+* Nickname of  default admin `dfa`
+* Log file @ `/logs/ServerLog.log `
+
