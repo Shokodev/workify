@@ -9,6 +9,7 @@
  2. Mongodb https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
  3. Clone this repo or latest release to a dev machine(with node installed)
  4. Do the project setup:
+ 
     Install depencies backend  @ `/ ` with:
     ```
     npm install
