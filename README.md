@@ -7,12 +7,25 @@
  On the target machine install: 
  1. Node https://nodejs.org/en/
  2. Mongodb https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
- 3. Copy the latest release of this repo to machine and unzip it @ any directory
-    
-    Please consider that the node modules has to be included if the target machine is offline!
+ 3. Clone this repo or latest realeas to a dev machine(with node installed)
+ 4. Do the Project setup:
+    # Install depencies backend  @ `/ ` with:
+    ```
+    npm install
+    ```
+    # Install depencies frontend @ `/client` with:
+    ```
+    npm install
+    ```
+    ### Compile frontend in backend `public` folder @ `/client` with:  
+    ```
+    npm run build
+    ```
+  5. Copy all files except the client folder to the offline target machine. Since you have to copy the node modules we suggest you to zip the files but its up to you.
+  6. On the target machine you can unzip the files in any directory
  
 ### ENV Settings
- 1. Navigate to the unzippet repo and edit the .env-sample.txt 
+ 1. Navigate to the unzippet project and edit the .env-sample.txt 
   
   ```
   NODE_ENV=production (dev or production)
