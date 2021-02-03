@@ -31,7 +31,7 @@
   ```
   NODE_ENV=production (dev or production)
   PORT= port which you want the app to listen to 
-  DATABASE_URL= URL of previous installed mongodb service / name for db instance
+  DATABASE_URL= URL of previous installed mongodb service / name for db instance example: mongodb://localhost:27017/workify
   TOKEN_SECRET= choose any characters, this is the private key for the jwt token service
   TOKEN_EXPIRES_IN= number in seconds for token expire time 
   DEFAULT_ADMIN_PW= password for the default admin user
