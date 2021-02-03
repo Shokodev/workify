@@ -9,15 +9,15 @@
  2. Mongodb https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
  3. Clone this repo or latest realeas to a dev machine(with node installed)
  4. Do the Project setup:
-    # Install depencies backend  @ `/ ` with:
+    Install depencies backend  @ `/ ` with:
     ```
     npm install
     ```
-    # Install depencies frontend @ `/client` with:
+    Install depencies frontend @ `/client` with:
     ```
     npm install
     ```
-    ### Compile frontend in backend `public` folder @ `/client` with:  
+    Compile frontend in backend `public` folder @ `/client` with:  
     ```
     npm run build
     ```
@@ -38,11 +38,11 @@
   2. Save the file as `.env` 
  
 ### Build Setup
- 1. Open Command promt as Admin in the project directory
+ 1. Open command promt as admin in the project directory
  2. `npm run install` 
 
 ### Unistall 
- 1. Open Command promt as Admin in the project directory
+ 1. Open command promt as admin in the project directory
  2. `npm run uninstall` 
 
 ## Technologies
