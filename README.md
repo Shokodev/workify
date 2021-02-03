@@ -7,8 +7,8 @@
  On the target machine install: 
  1. Node https://nodejs.org/en/
  2. Mongodb https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
- 3. Clone this repo or latest realeas to a dev machine(with node installed)
- 4. Do the Project setup:
+ 3. Clone this repo or latest release to a dev machine(with node installed)
+ 4. Do the project setup:
     Install depencies backend  @ `/ ` with:
     ```
     npm install
