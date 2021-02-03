@@ -3,4 +3,4 @@
 /client/node_modules
 /.idea
 /server/public
-/.env
+.env
