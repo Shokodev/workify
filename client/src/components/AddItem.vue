@@ -100,6 +100,7 @@
                 selectType: null,
                 selectState: "Not started",
                 regulations: 0,
+                iterations: 0,
                 creator: null,
                 comments: "",
             },

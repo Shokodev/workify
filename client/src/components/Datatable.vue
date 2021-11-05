@@ -29,45 +29,54 @@
           <v-btn class="mx-2" dark color="info" v-on:click="createExcel">
             <v-icon dark>mdi-table</v-icon>
           </v-btn>
-           <v-btn
-                        class="mx-2"
-                        dark
-                        color="info"
-                        @click="addItemDialog = true"
-                        v-if="$store.getters.isAuthenticated"
-                        
-                >
-                    <v-icon dark>mdi-plus</v-icon>
-           </v-btn>
-           <v-dialog 
+          <v-btn
+            class="mx-2"
+            dark
+            color="info"
+            @click="addItemDialog = true"
+            v-if="$store.getters.isAuthenticated"
+          >
+            <v-icon dark>mdi-plus</v-icon>
+          </v-btn>
+          <v-dialog
             v-model="addItemDialog"
             v-if="addItemDialog"
             max-width="600px"
-            persistent  
+            persistent
           >
-          <AddItem 
-          @closeAddItem="addItemDialog = false" 
-          v-on:add-item="createPost($event)">
-          </AddItem>
-         </v-dialog>
+            <AddItem
+              @closeAddItem="addItemDialog = false"
+              v-on:add-item="createPost($event)"
+            >
+            </AddItem>
+          </v-dialog>
         </v-toolbar>
-                  <v-divider class="mt-5"></v-divider>
+        <v-divider class="mt-5"></v-divider>
       </template>
 
       <template v-slot:header>
         <thead class="table-header">
           <tr>
-            <th colspan="7" class="text-center parent-header text-uppercase subtitle-1 font-weight-medium">
+            <th
+              colspan="7"
+              class="text-center parent-header text-uppercase subtitle-1 font-weight-medium"
+            >
               <v-divider class=" divider-left" vertical></v-divider>
               GECC
               <v-divider class=" divider-right" vertical></v-divider>
             </th>
 
-            <th colspan="4" class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium">
+            <th
+              colspan="4"
+              class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium"
+            >
               Siemens Schweiz
               <v-divider class="divider-right" vertical></v-divider>
             </th>
-            <th colspan="4" class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium">
+            <th
+              colspan="4"
+              class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium"
+            >
               Planer
               <v-divider class=" divider-right" vertical></v-divider>
             </th>
@@ -111,6 +120,40 @@
           v-on:update-item="updateItem"
         >
         </table-item>
+      </template>
+
+      <template v-slot:[`item.item.iterations`]="{ item }" v-if="isGECC">
+        {{item.item.iterations}}
+        <v-tooltip top color="secondary" >
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-bind="attrs"
+              v-on="on"
+              small
+              icon
+              @click="()=>{
+                item.item.iterations = item.item.iterations+=1;
+                updateItem(item)
+              }"
+            >
+              mdi-plus
+            </v-icon>
+            <v-icon
+              class="mx-1"
+              v-bind="attrs"
+              v-on="on"
+              small
+              icon
+              @click="()=>{
+                item.item.iterations = item.item.iterations-=1;
+                updateItem(item)
+              }"
+            >
+              mdi-minus
+            </v-icon>
+          </template>
+          <span>Iterations</span>
+        </v-tooltip>
       </template>
 
       <template v-slot:[`item.item.selectState`]="{ item }" v-if="isGECC">
@@ -160,25 +203,24 @@
       </template>
 
       <template v-slot:[`item.item.siemensAuditor`]="{ item }" v-if="isSiemens">
-         <v-tooltip 
-         top
-         color="secondary"
-         v-if="!item.item.siemensAuditor"
-         >
+        <v-tooltip top color="secondary" v-if="!item.item.siemensAuditor">
           <template v-slot:activator="{ on, attrs }">
-          <v-icon
-            v-bind="attrs"
-            v-on="on"
-            small
-            icon
-            @click="updateAuditor(item, 'siemensAuditor')"
-          >
-            mdi-plus
-          </v-icon>
+            <v-icon
+              v-bind="attrs"
+              v-on="on"
+              small
+              icon
+              @click="updateAuditor(item, 'siemensAuditor')"
+            >
+              mdi-plus
+            </v-icon>
           </template>
           <span>start auditing</span>
-          </v-tooltip>
-          <p style="margin-top: 7px; margin-bottom:5px;"  v-if="item.item.siemensAuditor">
+        </v-tooltip>
+        <p
+          style="margin-top: 7px; margin-bottom:5px;"
+          v-if="item.item.siemensAuditor"
+        >
           {{ item.item.siemensAuditor }}
         </p>
       </template>
@@ -187,7 +229,7 @@
         v-slot:[`item.item.siemensComments`]="{ item }"
         v-if="isSiemens"
       >
-       <CommentDialog
+        <CommentDialog
           :item="item"
           :propName="'siemensComments'"
           @update-item="updateItem($event)"
@@ -225,26 +267,21 @@
       </template>
 
       <template v-slot:[`item.item.planer`]="{ item }" v-if="isPlaner">
-        <v-tooltip 
-         top
-         color="secondary"
-         v-if="!item.item.planer"
-         >
+        <v-tooltip top color="secondary" v-if="!item.item.planer">
           <template v-slot:activator="{ on, attrs }">
-          <v-icon
-            v-bind="attrs"
-            v-on="on"
-            small
-            icon
-            @click="updateAuditor(item, 'planer')"
-          >
-            mdi-plus
-          </v-icon>
+            <v-icon
+              v-bind="attrs"
+              v-on="on"
+              small
+              icon
+              @click="updateAuditor(item, 'planer')"
+            >
+              mdi-plus
+            </v-icon>
           </template>
           <span>Add me as auditor</span>
         </v-tooltip>
-        <p style="margin-top: 7px; margin-bottom:5px;" 
-        v-if="item.item.planer">
+        <p style="margin-top: 7px; margin-bottom:5px;" v-if="item.item.planer">
           {{ item.item.planer }}
         </p>
       </template>
@@ -291,7 +328,7 @@ export default {
     EditItem,
     TableItem,
     AreYouSureAlert,
-    CommentDialog,
+    CommentDialog
   },
   props: {
     posts: {
@@ -315,6 +352,10 @@ export default {
         {
           text: "Regulations",
           value: "item.regulations",
+        },
+        {
+          text: "Iterations",
+          value: "item.iterations",
         },
         {
           text: "Creator",
@@ -366,7 +407,7 @@ export default {
           text: "Comments",
           value: "item.planerComments",
         },
-/*         {
+        /*         {
           text: "Actions",
           value: "item.actions",
         }, */
@@ -476,8 +517,8 @@ export default {
   background-color: var(--v-background-lighten1) !important;
 }
 .td p {
- margin-bottom: 0;
-} 
+  margin-bottom: 0;
+}
 .table {
   margin-top: 80px;
   background-color: var(--v-background-lighten1) !important;

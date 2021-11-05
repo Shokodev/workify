@@ -85,6 +85,10 @@ const posts = new mongoose.Schema({
             type: Number,
             required: true,
         },
+        iterations: {
+            type: Number,
+            required: true,
+        },
         creator: {
             type: String,
             required: true,
