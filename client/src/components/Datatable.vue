@@ -145,8 +145,10 @@
               small
               icon
               @click="()=>{
+                if(item.item.iterations !== 0){
                 item.item.iterations = item.item.iterations-=1;
                 updateItem(item)
+                }
               }"
             >
               mdi-minus
