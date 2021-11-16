@@ -37,6 +37,7 @@ router.get("/", async(req, res) => {
                 { name: "Type", filterButton: true },
                 { name: "GECC State", filterButton: true },
                 { name: "Regulations", filterButton: true },
+                { name: "Iterations", filterButton: true },
                 { name: "Finished by GECC at", filterButton: true },
                 { name: "Creator", filterButton: true },
                 { name: "GECC comments", filterButton: true },
@@ -60,6 +61,7 @@ router.get("/", async(req, res) => {
                     data.item.selectType,
                     data.item.selectState,
                     data.item.regulations,
+                    data.item.iterations,
                     data.meta.finished_at,
                     data.item.creator,
                     data.item.comments,
@@ -94,11 +96,11 @@ router.get("/", async(req, res) => {
             family: 2,
             size: 14,
         };
-        worksheet.mergeCells("A3:G3");
+        worksheet.mergeCells("A3:H3");
         worksheet.getCell("G3").value = "GECC";
-        worksheet.mergeCells("H3:K3");
+        worksheet.mergeCells("I3:L3");
         worksheet.getCell("K3").value = "Siemens";
-        worksheet.mergeCells("L3:O3");
+        worksheet.mergeCells("M3:Q3");
         worksheet.getCell("O3").value = "Planer";
         worksheet.getCell("P3").value = "Ready";
         worksheet.columns = [
@@ -106,6 +108,7 @@ router.get("/", async(req, res) => {
             { key: 'Type', width: 20, },
             { key: 'GECC State', width: 15 },
             { key: 'Regulations', width: 15 },
+            { key: 'Iterations', width: 15 },
             { key: 'Finished by GECC at', width: 15 },
             { key: 'Creator', width: 15 },
             { key: 'GECC comments', width: 25 },
