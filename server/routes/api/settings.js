@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const logger = require('../../serverlog/logger');
-const { Settings, connectDb } = require('../../mongodb');
+const { Settings } = require('../../mongodb');
 const { authenticateToken } = require('./authtoken');
 const { roles } = require('../../utils/postmanifest');
 

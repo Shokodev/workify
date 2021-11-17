@@ -8,7 +8,7 @@ function notFound(req, res, next) {
 function errorHandler(err, req, res, next) {
     /* eslint-enable no-unused-vars */
     const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-
+    require('./serverlog/logger').error(`[${statusCode}] Access error ${err}`);
     res.status(statusCode);
     res.json({
         message: err.message,

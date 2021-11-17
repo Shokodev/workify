@@ -54,7 +54,7 @@ router.delete('/:id', authenticateToken, async(req, res, next) => {
 
 
 router.put('/:id', authenticateToken, async(req, res, next) => {
-    logger.info('update graphic: ' + req.body.post.item._id);
+    logger.info('update graphic: ' + req.params.id);
     try {
         let finalPost = comparePosts(await Posts.findOne({ _id: req.params.id }), req.body.post);
         for (const [key, value] of Object.entries(req.body.post.item)) {
@@ -105,7 +105,6 @@ function comparePosts(dbPost, newPost) {
 }
 
 async function tryToClosePost(post) {
-    console.log(post);
     if (post.item.selectState === finished && post.item.selectSiemensTested === ok && post.item.selectPlanerTested === ok) {
         let value = new Date();
         let propertyName = 'meta.closed_at';

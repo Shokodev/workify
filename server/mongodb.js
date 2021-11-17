@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
+const logger = require('./serverlog/logger');
 const postTypes = require("./utils/postmanifest");
-require("dotenv").config();
 
-const connectDb = () => {
-    return mongoose.connect(process.env.DATABASE_URL, {
+const connectDb = (url) => {
+    return mongoose.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false,

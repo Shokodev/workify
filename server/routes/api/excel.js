@@ -122,7 +122,7 @@ router.get("/", async(req, res) => {
             { key: 'Planer comments', width: 25 },
             { key: 'Closed at', width: 15 },
         ];
-        await workbook.xlsx.writeFile("./exports/graphics.xlsx").then(function() {
+        await workbook.xlsx.writeFile(path.join(__dirname, "../../../exports/graphics.xlsx")).then(function() {
             logger.info("Excel file saved");
             res.download(path.join(__dirname, "../../../exports/graphics.xlsx"));
         });

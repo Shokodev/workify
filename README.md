@@ -28,8 +28,7 @@
 ### ENV Settings
  1. Navigate to the unzippet project and edit the .env-sample.txt 
   
-  ```
-  NODE_ENV=production (dev or production)
+  ```env
   PORT= port which you want the app to listen to 
   DATABASE_URL= URL of previous installed mongodb service / name for db instance example: mongodb://localhost:27017/workify
   TOKEN_SECRET= choose any characters, this is the private key for the jwt token service
@@ -38,13 +37,13 @@
   ```
   2. Save the file as `.env` 
  
-### Build Setup
+### Install as Windows service
  1. Open command promt as admin in the project directory
- 2. `npm run install` 
+ 2. `npm run addWinSrv` 
 
-### Unistall 
+### Unistall as Windows service 
  1. Open command promt as admin in the project directory
- 2. `npm run uninstall` 
+ 2. `npm run rmWinSrv` 
 
 ## Technologies
 <p align="center">
@@ -54,5 +53,6 @@
 # More information
 
 * Nickname of  default admin `dfa`
-* Log file @ `/logs/ServerLog.log `
+* Log @ `./server/deamon/*.log `
+* Exported excel @ `./exports` (overwritten by each download)
 
