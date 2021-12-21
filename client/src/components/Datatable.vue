@@ -58,7 +58,7 @@
         <thead class="table-header">
           <tr>
             <th
-              colspan="7"
+              colspan="8"
               class="text-center parent-header text-uppercase subtitle-1 font-weight-medium"
             >
               <v-divider class=" divider-left" vertical></v-divider>
@@ -240,7 +240,6 @@
       </template>
       <template v-slot:[`item.item.planerComments`]="{ item }" v-if="isPlaner">
         <CommentDialog
-          v-if="item.item.comments"
           :item="item"
           :propName="'planerComments'"
           @update-item="updateItem($event)"
