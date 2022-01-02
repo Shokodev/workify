@@ -56,3 +56,23 @@
 * Log @ `./server/deamon/*.log `
 * Exported excel @ `./exports` (overwritten by each download)
 
+
+# Migrations
+
+## Iterations Porperty
+
+Adds an iterations property `item.iterations = 0` to all graphics where it is missing.  
+
+### Start Script
+
+```shell
+npm run migrate
+```
+> **Optional pereparation:**
+> - stop the main app while migrate
+> - create a backup of the db before you start with:
+> ```shell
+> mongodump -d <database name> -o <backup-folder>
+> ``` 
+>---
+ 

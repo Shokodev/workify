@@ -7,7 +7,8 @@
         "addWinSrv": "set WINDOWS=install&& node server/windows/windows.js",
         "rmWinSrv": "set WINDOWS=uninstall&& node server/windows/windows.js",
         "start": "node server/index.js",
-        "dev": "nodemon server/index.js"
+        "dev": "nodemon server/index.js",
+        "migrate":"node server/migrate.js"
     },
     "author": "Daniel Reiter",
     "license": "MIT",
