@@ -80,6 +80,14 @@
               Planer
               <v-divider class=" divider-right" vertical></v-divider>
             </th>
+            <th
+              v-if="isAdmin"
+              colspan="1"
+              class="text-center parent-header  text-uppercase subtitle-1 font-weight-medium"
+            >
+              Actions
+              <v-divider class=" divider-right" vertical></v-divider>
+            </th>
           </tr>
         </thead>
       </template>
@@ -288,7 +296,7 @@
       </template>
 
       <template v-slot:[`item.item.actions`]="{ item }" v-if="isAdmin">
-        <EditItem :edit-item="item" v-on:change-item="updateItem($event)">
+        <EditItem v-if="false" :edit-item="item" v-on:change-item="updateItem($event)">
         </EditItem>
         <v-icon small @click="setToDeleteItem(item)">
           mdi-delete
@@ -408,10 +416,6 @@ export default {
           text: "Comments",
           value: "item.planerComments",
         },
-        /*         {
-          text: "Actions",
-          value: "item.actions",
-        }, */
       ],
       snack: false,
       snackColor: "",
@@ -508,6 +512,12 @@ export default {
   },
   mounted() {
     this.$store.dispatch("loadPosts");
+    if(this.isAdmin){
+      this.headers.push({
+          text: "Actions",
+          value: "item.actions",
+        })
+    }
   },
 };
 </script>
