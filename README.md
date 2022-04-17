@@ -47,7 +47,7 @@
 
 ## Technologies
 <p align="center">
- <img src="https://icons.andreas-vogt.ch/workify.png" alt="Fail">
+ <img src="https://icons.r2v.ch/workify.png" alt="Fail">
 </p>
  
 # More information
